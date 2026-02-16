@@ -1,0 +1,65 @@
+name: Silent Hill 3 (USA)
+sha1: dbb94538294b21be38035c0ce6b78354bdfdf2a7
+options:
+  basename: SLUS_206.22
+  target_path: rom/SLUS_206.22
+  elf_path: SLUS_206.22
+  find_file_boundaries: True
+  asm_path: asm
+  rodata_string_guesser_level: 0
+  symbol_addrs_path: 
+    - symbol_addrs.txt
+    - shim_addrs.txt
+  reloc_addrs_path: reloc_addrs.txt
+  gp_value: 0x3d09f0
+  ld_script_path: linkers/SLUS_206.22.ld
+  undefined_funcs_auto_path: linkers/sh3_undefined_funcs_auto.main.txt
+  undefined_syms_auto_path: linkers/sh3_undefined_syms_auto.main.txt
+  asm_nonmatching_label_macro: ""
+  migrate_rodata_to_functions: True
+  pair_rodata_to_text: True
+  section_order: [".text", ".vutext", ".data", ".rodata", ".lit4", ".sdata", ".bss"]
+  symbol_name_format: $VRAM
+segments:
+  - [0x0]
+  - type: code
+    start: 0x580
+    vram: 0x00100000
+    bss_size: 0x1BA4B00
+    subsegments:
+      - [0x000580, asm,     crt0]
+      - [0x000760, asm,     text_0]
+      - [0x0022c8, asm,     sce]
+      - [0x0220b0, asm,     sdk/libdbc]
+      - [0x022b10, asm,     sdk/libgcc]
+      - [0x02bfe8, asm,     unk]
+      - [0x02cff0, c,       main]
+      - [0x02d2a0, asm,     text_1]
+      - [0x02f3e0, c,       Chacter/m3_sc]
+      - [0x030140, asm,     text_2]
+      - [0x03baa0, c,       DS_Pad/ds_sequencer]
+      - [0x03d290, asm,     text_3]
+      - [0x043460, c,       Chacter/m3_bgobj]
+      - [0x043638, asm,     text_4]
+      - [0x057150, asm,     Font/dic]
+      - [0x0582b0, c,       Font/font]
+      - [0x05e0f0, asm,     text_5]
+      - [0x0d33f0, c,       Chacter_Draw/model3_n]
+      - [0x0d3d00, asm,     text_6]
+      - [0x0dc4d0, asm,     sdk/kernel]
+      - [0x0dc970, asm,     text_7]
+      - [0x0fdfa0, asm,     cri/cri_0] 
+      - [0x10eff0, asm,     text_8]
+      - [0x238080, textbin, vutext]
+      - [0x23aa80, data,    data]
+      - [0x24f4c0, rodata,  rodata_0]
+      - [0x2be000, .rodata, DS_Pad/ds_sequencer]
+      - [0x2be020, rodata,  rodata_1]
+      - [0x2be940, .rodata, Font/font]
+      - [0x2be970, rodata,  rodata_2]
+      - [0x2c8f80, lit4,    lit4]
+      - [0x2c8fb0, sdata,   sdata]
+      - {vram: 0x3C8B00,   type: bss,  name: bss}
+      - {vram: 0x1D0EFB0,  type: .bss, name: Font/font}
+      - {vram: 0x1D30570,  type: bss,  name: bss_rest}
+  - [0x2C9080]
