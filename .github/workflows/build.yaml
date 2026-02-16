@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - actions
 
 jobs:
   build:
@@ -46,6 +47,18 @@ jobs:
 
     runs-on: ubuntu-latest
 
+    strategy:
+      matrix:
+        TARGET:
+          - {
+              GAME: "Silent Hill 3",
+              SERIAL: "SLUS_206.22"
+            }
+          - {
+              GAME: "Silent Hill 2",
+              SERIAL: "SLUS_202.28"
+            }
+
     permissions:
       contents: read
       packages: read
@@ -63,11 +76,16 @@ jobs:
       - name: copy files
         run: cp -r /home/* .
 
-      - name: make
-        run: make -j $(nproc) report
+      - name: make report
+        run: |
+          if [ "${{ matrix.TARGET.GAME }}" = "Silent Hill 3" ]; then
+            make -j $(nproc) sh3-report
+          else
+            make -j $(nproc) sh2-report
+          fi
 
       - name: upload progress
         uses: actions/upload-artifact@v4
         with:
-          name: SLUS_206.22_report
-          path: build/SLUS_206.22/report.json
+          name: ${{ matrix.TARGET.SERIAL }}_report
+          path: build/${{ matrix.TARGET.SERIAL }}/report.json
