@@ -5,7 +5,7 @@ options:
   elf_path: motel_00.bin
   target_path: rom/overlay/motel_00.bin
   find_file_boundaries: False
-  asm_path: asm/motel_00
+  asm_path: asm
   rodata_string_guesser_level: 0
   symbol_addrs_path:
    - overlay/motel_00_symbol_addrs.txt

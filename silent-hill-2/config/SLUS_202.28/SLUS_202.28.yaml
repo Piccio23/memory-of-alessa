@@ -17,7 +17,7 @@ options:
   pair_rodata_to_text: True
 segments:
   - [0x0]
-  - name: main
+  - name: engine
     type: code
     start: 0x700
     vram: 0x00100000

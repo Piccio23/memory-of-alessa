@@ -22,7 +22,8 @@ options:
   symbol_name_format: $VRAM
 segments:
   - [0x0]
-  - type: code
+  - name: engine
+    type: code
     start: 0x580
     vram: 0x00100000
     bss_size: 0x1BA4B00

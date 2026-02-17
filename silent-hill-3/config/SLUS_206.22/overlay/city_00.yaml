@@ -5,7 +5,7 @@ options:
   elf_path: city_00.bin
   target_path: rom/overlay/city_00.bin
   find_file_boundaries: False
-  asm_path: asm/city_00
+  asm_path: asm
   rodata_string_guesser_level: 0
   symbol_addrs_path:
    - overlay/city_00_symbol_addrs.txt

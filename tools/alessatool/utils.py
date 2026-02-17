@@ -30,3 +30,8 @@ def to_expected_path(base_path: str):
     base_path = base_path.replace(".c.o", ".s.o")
     base_path = base_path.replace(f"{SRC}/", f"{ASM}/")
     return Path(base_path)
+
+def ensure_path_and_write(output_path: Path, contents: str):
+    output_path.parent.mkdir(exist_ok=True, parents=True)
+    with open(output_path, "w") as f:
+        f.write(contents)

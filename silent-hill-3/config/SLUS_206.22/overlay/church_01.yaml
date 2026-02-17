@@ -5,7 +5,7 @@ options:
   elf_path: church_01.bin
   target_path: rom/overlay/church_01.bin
   find_file_boundaries: False
-  asm_path: asm/church_01
+  asm_path: asm
   rodata_string_guesser_level: 0
   symbol_addrs_path:
    - overlay/church_01_symbol_addrs.txt

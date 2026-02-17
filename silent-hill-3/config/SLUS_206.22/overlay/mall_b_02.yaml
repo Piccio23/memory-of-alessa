@@ -5,7 +5,7 @@ options:
   elf_path: mall_b_02.bin
   target_path: rom/overlay/mall_b_02.bin
   find_file_boundaries: False
-  asm_path: asm/mall_b_02
+  asm_path: asm
   rodata_string_guesser_level: 0
   symbol_addrs_path:
    - overlay/mall_b_02_symbol_addrs.txt

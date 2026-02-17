@@ -11,24 +11,24 @@ class ExtractionArgs:
     output_dir: Path
     verbose: bool
 
-def _write_mfa_file(request: ExtractionArgs, overlay: Mfa.File):
+def _write_mfa_file(args: ExtractionArgs, overlay: Mfa.File):
     name = overlay.filename.strip()
-    path = Path(request.output_dir, name)
+    path = Path(args.output_dir, name)
     path.parent.mkdir(exist_ok=True, parents=True)
-    verbose = request.verbose
+    verbose = args.verbose
 
     with open(path, "wb") as f:
         if verbose:
             print(path)
-            _parse_overlay_header(request, overlay, path)
+            _parse_overlay_header(args, overlay, path)
 
         f.write(overlay.data)
 
-def _parse_overlay_header(request: ExtractionArgs, overlay: Mfa.File, path: Path):
+def _parse_overlay_header(args: ExtractionArgs, overlay: Mfa.File, path: Path):
     header = MwOverlayHeader.from_bytes(overlay.data)
     magical = header.identifier == b"MWo"
 
-    if request.verbose:
+    if args.verbose:
         if not magical:
             print(f"alessatool/extract: {path}'s identifier string is empty.")
 
@@ -48,8 +48,8 @@ def _parse_overlay_header(request: ExtractionArgs, overlay: Mfa.File, path: Path
             value = type(value) == int and f"0x{value:X}" or value;
             print(f"{key.ljust(0x10)}: {value}")
 
-def extract_mfa(request: ExtractionArgs):
-    with request.archive_path.open("rb") as archive:
+def extract_mfa(args: ExtractionArgs):
+    with args.archive_path.open("rb") as archive:
         mfa = Mfa(KaitaiStream(archive))
         for overlay in mfa.files:
-            _write_mfa_file(request, overlay)
+            _write_mfa_file(args, overlay)

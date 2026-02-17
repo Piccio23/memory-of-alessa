@@ -1,7 +1,7 @@
 import json
 from pathlib import Path
 from dataclasses import dataclass, asdict
-from utils import normalize_object_path, to_expected_path
+from utils import ensure_path_and_write, normalize_object_path, to_expected_path
 
 import splat.scripts.split as split
 import splat.util.options as splat_options
@@ -20,7 +20,8 @@ SECTION_ALIGNMENT_PAIRS: list[tuple[str, int]] = [
 @dataclass
 class GenerationArgs:
     template_path: Path
-    output_path: Path
+    lcf_output_path: Path
+    objdiff_output_path: Path
     build_path: Path
     expected_path: Path
     verbose: bool
@@ -42,31 +43,31 @@ class Unit:
     target_path: str
     metadata: UnitMetadata
 
-def split_yaml(request: GenerationArgs) -> None:
+def split_yaml(args: GenerationArgs) -> None:
     '''
     Split a YAML with splat. Outputs a linker command file (.LCF) for MWLD, an
     `objdiff.json`, both, or neither.
     '''
 
     split.main(
-        request.yamls,
+        args.yamls,
         modes="all",
-        verbose=request.verbose,
-        use_cache=request.use_cache,
-        make_full_disasm_for_code=request.make_full_disasm_for_code
+        verbose=args.verbose,
+        use_cache=args.use_cache,
+        make_full_disasm_for_code=args.make_full_disasm_for_code
     )
 
-    generate_linker_dependencies(request)
+    generate_linker_dependencies(args)
 
-    if not request.no_lcf:
-        generate_lcf(request)
+    if not args.no_lcf:
+        generate_lcf(args)
     
-    if not request.no_objdiff:
-        generate_objdiff_json(request)
+    if not args.no_objdiff:
+        generate_objdiff_units(args)
 
-def generate_linker_dependencies(request: GenerationArgs):
+def generate_linker_dependencies(args: GenerationArgs):
     linker_writer = split.linker_writer
-    build_path = request.build_path
+    build_path = args.build_path
     path_strs = []
 
     output = f"{(build_path / clean_up_path(splat_options.opts.elf_path)).as_posix()}:"
@@ -84,7 +85,7 @@ def generate_linker_dependencies(request: GenerationArgs):
 
     write_file_if_different(splat_options.opts.ld_script_path.with_suffix(".d"), output)
 
-def generate_lcf(request: GenerationArgs):
+def generate_lcf(args: GenerationArgs):
     '''
     Generate a linker command file. It uses an oversimplified method of looping
     over the linker entries emitted by Splat and looking for splits that are
@@ -128,8 +129,8 @@ def generate_lcf(request: GenerationArgs):
 
     generated_lcf = "\n\n".join(lcf_blocks)
 
-    template_path = request.template_path
-    output_path = request.output_path
+    template_path = args.template_path
+    output_path = args.lcf_output_path
 
     template = template_path.read_text()
     output = template.replace(
@@ -138,10 +139,10 @@ def generate_lcf(request: GenerationArgs):
     )
     output_path.write_text(output)
 
-    if request.verbose:
+    if args.verbose:
         print(f"✅ alessatool/generate: wrote LCF to {output_path}")
 
-def generate_objdiff_json(request: GenerationArgs):
+def generate_objdiff_units(args: GenerationArgs):
     units: list[dict] = []
 
     for entry in split.linker_writer.entries:
@@ -176,8 +177,8 @@ def generate_objdiff_json(request: GenerationArgs):
             source_path=is_code and source_path or None
         )
 
-        base_path = is_code and normalize_object_path(Path(object_path), request.build_path) or None
-        target_path = normalize_object_path(to_expected_path(object_path), request.expected_path)
+        base_path = is_code and normalize_object_path(Path(object_path), args.build_path) or None
+        target_path = normalize_object_path(to_expected_path(object_path), args.expected_path)
         unit = Unit(
             name=entry.segment.name,
             base_path=base_path,
@@ -186,16 +187,8 @@ def generate_objdiff_json(request: GenerationArgs):
         )
 
         units.append(asdict(unit))
-    
-    result = json.dumps({
-        "$schema": "https://raw.githubusercontent.com/encounter/objdiff/main/config.schema.json",
-        "build_base": False,
-        "build_target": False,
-        "units": units,
-    })
 
-    with open("objdiff.json", "w") as f:
-        f.write(result)
+    ensure_path_and_write(args.objdiff_output_path, json.dumps(units))
 
-    if request.verbose:
-        print(f"🟣 alessatool/generate: wrote objdiff.json")
+    if args.verbose:
+        print(f"🟣 alessatool/generate: wrote objdiff fragment to {args.objdiff_output_path}")

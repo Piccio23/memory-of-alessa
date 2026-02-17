@@ -5,7 +5,7 @@ options:
   elf_path: overlay_align.bin
   target_path: rom/overlay/overlay_align.bin
   find_file_boundaries: False
-  asm_path: asm/overlay_align
+  asm_path: asm
   rodata_string_guesser_level: 0
   symbol_addrs_path:
    - overlay/overlay_align_symbol_addrs.txt

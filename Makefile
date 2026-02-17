@@ -123,22 +123,29 @@ BINUTILS_TAR := binutils-$(BINUTILS_FLAVOR)-$(OS).tar.gz
 OBJCOPY := $(BINUTILS)/$(BINUTILS_FLAVOR)-objcopy
 OBJDIFF_BINARY := objdiff-cli-$(PLATFORM)-$(ARCH)
 OBJDIFF := $(TOOLS)/$(OBJDIFF_BINARY)
+OBJDIFF_CONFIG := objdiff.json
+OBJDIFF_FRAGMENTS = $(patsubst $(CONFIG)/%.yaml, $(BUILD)/objdiff/%.json, $(YAMLS))
 
 ALESSATOOL := $(PYTHON) $(TOOLS)/alessatool/alessatool.py --verbose
-GENERATE := generate \
-	--template_path $(INCLUDE)/$(SERIAL).inc.lcf \
-	--output_path $(LINKERS)/$(SERIAL).lcf \
-	--build_path $(BUILD) \
-	--expected_path $(EXPECTED)
+GENERATE := $(ALESSATOOL) generate \
+	--template-path $(INCLUDE)/$(SERIAL).inc.lcf \
+	--lcf-output-path $(LINKERS)/$(SERIAL).lcf \
+	--build-path $(BUILD) \
+	--expected-path $(EXPECTED)
 
-
-SPLAT := $(ALESSATOOL) $(GENERATE) --no-lcf --no-objdiff
+GENERATE_FLAGS =
+GENERATE_OVERLAY_FLAGS = --no-lcf
 ifeq ($(GENERATE_REPORT),0)
-	SPLAT_AND_WRITE_LCF = $(ALESSATOOL) $(GENERATE) --no-objdiff
+	GENERATE_FLAGS += --no-objdiff
+	GENERATE_OVERLAY_FLAGS += --no-objdiff
+else
+	GENERATE_FLAGS += --objdiff-output-path=$(BUILD)/objdiff/$*.json
+	GENERATE_OVERLAY_FLAGS += --objdiff-output-path=$(BUILD)/objdiff/overlay/$*.json
 endif
-ifeq ($(GENERATE_LCF),1)
-	SPLAT_AND_WRITE_LCF := $(ALESSATOOL) $(GENERATE)
+ifeq ($(GENERATE_LCF),0)
+	GENERATE_FLAGS += --no-lcf
 endif
+GENERATE_EXPECTED := $(GENERATE) --no-lcf --no-objdiff --make-full-disasm-for-code
 
 CHECK_MATCH_PERCENT :=
 ifneq ($(NON_MATCHING),1)
@@ -163,8 +170,8 @@ clean:
 	rm -rf $(LINKERS)
 
 report: $(SETUP) $(OBJDIFF) $(EXPECTED)
-	@$(MAKE) GENERATE_REPORT=1 NON_MATCHING=1
-	@$(OBJDIFF) report generate -o $(BUILD)/report.json
+	@$(MAKE) GENERATE_REPORT=1 NON_MATCHING=1 GENERATE_LCF=0
+	$(MAKE) $(BUILD)/report.json
 
 split: $(D_FILES)
 
@@ -185,6 +192,7 @@ death:
 	@$(MAKE) clean
 	rm -rf $(OVERLAY_SOURCE_DIR)
 	rm -rf $(BINUTILS)
+	rm -f $(OBJDIFF_CONFIG)
 	$(foreach tool,$(TOOLCHAIN),rm -f "$(tool)";)
 	unlink $(ROM_SYMLINK)
 	$(GIT) submodule foreach --recursive $(GIT) reset --hard
@@ -224,10 +232,10 @@ sh2-clean:
 	$(MAKE) PROJECT="silent-hill-2" clean
 ###############################################################
 $(LINKERS)/%.d: $(CONFIG)/overlay/%.yaml $(SPLAT_CONFIG) $(SETUP)
-	$(SPLAT) $(SPLAT_CONFIG) $<
+	$(GENERATE) $(GENERATE_OVERLAY_FLAGS) $(SPLAT_CONFIG) $<
 
 $(LINKERS)/%.d: $(CONFIG)/%.yaml $(SPLAT_CONFIG) $(SETUP)
-	$(SPLAT_AND_WRITE_LCF) $(SPLAT_CONFIG) $<
+	$(GENERATE) $(GENERATE_FLAGS) $(SPLAT_CONFIG) $<
 
 $(BUILD)/$(SERIAL): $(SETUP) $(OVERLAY_TARGETS) $(LINKER_SCRIPT)
 	$(LD)
@@ -241,9 +249,9 @@ $(BUILD)/%.s.o: $(CONFIG)/%.s
 	@mkdir -p "$(@D)"
 	$(AS) $(AS_FLAGS) -o "$@" "$<"
 
-$(EXPECTED):
+$(EXPECTED): $(YAMLS)
 	@mkdir -p "$(@D)"
-	@$(foreach yaml,$(YAMLS),$(SPLAT) --make-full-disasm-for-code $(SPLAT_CONFIG) "$(yaml)";)
+	@$(foreach yaml,$(YAMLS),$(GENERATE_EXPECTED) $(SPLAT_CONFIG) "$(yaml)";)
 	@rm -rf $(ASM)/matchings
 	@rm -rf $(ASM)/nonmatchings
 	@rm -rf $(ASM)/**/matchings
@@ -254,7 +262,16 @@ $(EXPECTED):
 	@mv $(BUILD) $(EXPECTED)
 
 $(LINKER_SCRIPT): $(SPLAT_CONFIG) $(CONFIG)/$(SERIAL).yaml
-	$(SPLAT_AND_WRITE_LCF) $(SPLAT_CONFIG) $(CONFIG)/$(SERIAL).yaml
+	$(GENERATE) $(GENERATE_FLAGS) $(SPLAT_CONFIG) $(CONFIG)/$(SERIAL).yaml
+
+$(OBJDIFF_CONFIG): $(OBJDIFF_FRAGMENTS)
+	$(ALESSATOOL) merge $^
+
+$(BUILD)/objdiff/%.json: $(CONFIG)/%.yaml
+	$(GENERATE) --no-lcf --objdiff-output-path=$(BUILD)/objdiff/$*.json $(SPLAT_CONFIG) $<
+
+$(BUILD)/report.json: $(OBJDIFF_CONFIG)
+	@$(OBJDIFF) report generate -o $(BUILD)/report.json
 ###############################################################
 $(WIBO):
 	wget -O $@ $(WIBO_HOST)/$(WIBO_BINARY)

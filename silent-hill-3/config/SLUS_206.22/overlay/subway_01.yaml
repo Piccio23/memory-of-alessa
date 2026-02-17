@@ -5,7 +5,7 @@ options:
   elf_path: subway_01.bin
   target_path: rom/overlay/subway_01.bin
   find_file_boundaries: False
-  asm_path: asm/subway_01
+  asm_path: asm
   rodata_string_guesser_level: 0
   symbol_addrs_path:
    - overlay/subway_01_symbol_addrs.txt

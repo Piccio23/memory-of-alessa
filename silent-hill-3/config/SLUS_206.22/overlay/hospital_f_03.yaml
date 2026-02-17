@@ -5,7 +5,7 @@ options:
   elf_path: hospital_f_03.bin
   target_path: rom/overlay/hospital_f_03.bin
   find_file_boundaries: False
-  asm_path: asm/hospital_f_03
+  asm_path: asm
   rodata_string_guesser_level: 0
   symbol_addrs_path:
    - overlay/hospital_f_03_symbol_addrs.txt

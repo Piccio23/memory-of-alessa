@@ -5,7 +5,7 @@ options:
   elf_path: hospital_turning_00.bin
   target_path: rom/overlay/hospital_turning_00.bin
   find_file_boundaries: False
-  asm_path: asm/hospital_turning_00
+  asm_path: asm
   rodata_string_guesser_level: 0
   symbol_addrs_path:
    - overlay/hospital_turning_00_symbol_addrs.txt

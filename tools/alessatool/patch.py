@@ -1,5 +1,5 @@
 from pathlib import Path
-from dataclasses import dataclass, asdict
+from dataclasses import dataclass
 
 @dataclass
 class PatchArgs:

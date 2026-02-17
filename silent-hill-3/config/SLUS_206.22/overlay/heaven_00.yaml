@@ -5,7 +5,7 @@ options:
   elf_path: heaven_00.bin
   target_path: rom/overlay/heaven_00.bin
   find_file_boundaries: False
-  asm_path: asm/heaven_00
+  asm_path: asm
   rodata_string_guesser_level: 0
   symbol_addrs_path:
    - overlay/heaven_00_symbol_addrs.txt

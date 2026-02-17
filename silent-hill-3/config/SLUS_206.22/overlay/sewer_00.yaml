@@ -5,7 +5,7 @@ options:
   elf_path: sewer_00.bin
   target_path: rom/overlay/sewer_00.bin
   find_file_boundaries: False
-  asm_path: asm/sewer_00
+  asm_path: asm
   rodata_string_guesser_level: 0
   symbol_addrs_path:
    - overlay/sewer_00_symbol_addrs.txt

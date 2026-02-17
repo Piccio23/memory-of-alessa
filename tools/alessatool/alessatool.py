@@ -5,6 +5,7 @@ from generate import GenerationArgs, split_yaml
 from extract import ExtractionArgs, extract_mfa
 from annotate import AnnotationArgs, annotate_asm
 from patch import PatchArgs, patch_relocations
+from merge import MergeArgs, merge_objdiff_units
 
 def extract(args: ExtractionArgs):
     extract_mfa(args)
@@ -17,6 +18,9 @@ def annotate(args: AnnotationArgs):
 
 def patch(args: PatchArgs):
     patch_relocations(args)
+
+def merge(args: MergeArgs):
+    merge_objdiff_units(args)
 
 def main():
     parser = argparse.ArgumentParser(  
@@ -61,23 +65,28 @@ def main():
         help="split yaml and generate artifacts from the result"
     )
     generate_parser.add_argument(
-        "--template_path",
+        "--template-path",
         type=Path,
         default=Path(INCLUDE) / f"{SERIAL}.inc.lcf"
     )
     generate_parser.add_argument(
-        "--output_path",
+        "--lcf-output-path",
         type=Path,
         default=Path(LINKERS) / f"{SERIAL}.lcf"
     )
     generate_parser.add_argument(
-        "--build_path",
+        "--objdiff-output-path",
+        type=Path,
+        default="objdiff.json"
+    )
+    generate_parser.add_argument(
+        "--build-path",
         type=Path,
         default=Path(BUILD) / SERIAL,
         help="path to build directory"
     )
     generate_parser.add_argument(
-        "--expected_path",
+        "--expected-path",
         type=Path,
         default=Path(EXPECTED) / SERIAL,
         help="path to target object files directory"
@@ -187,6 +196,23 @@ def main():
         default="reloc_addrs.txt"
     )
     patch_parser.set_defaults(func=patch)
+
+    merge_parser = subparsers.add_parser(
+        "merge",
+        help="merge objdiff.json fragments"
+    )
+    merge_parser.add_argument(
+        "--output-path",
+        type=Path,
+        default="objdiff.json"
+    )
+    merge_parser.add_argument(
+        "objdiff_fragments",
+        type=Path,
+        nargs="+",
+        help="list of json files to merge"
+    )
+    merge_parser.set_defaults(func=merge)
 
     args = parser.parse_args()
     if hasattr(args, "func"):
