@@ -39,7 +39,6 @@ def annotate_asm(args: AnnotationArgs):
         current_line_number = int(line[separator_index+1:])
 
         if current_line_number == prev_line_number:
-            prev_line_number = current_line_number
             current_vram_addr += 0x4
             continue
 
@@ -49,15 +48,21 @@ def annotate_asm(args: AnnotationArgs):
         else:
             prev_tu_name = current_tu_name
 
-        asm_line = asm_lines[asm_line_index]
+        vram_addr_str = f"{current_vram_addr:X}"
 
-        while asm_line_index < len(asm_lines) and f"{current_vram_addr:X}" not in asm_line:
-            annotated_asm_lines.append(asm_line)
-            asm_line_index += 1
+        while True:
+            if asm_line_index >= len(asm_lines):
+                raise AssertionError(
+                    f"address 0x{current_vram_addr:X} not found in asm"
+                )
+
             asm_line = asm_lines[asm_line_index]
 
-        if asm_line_index >= len(asm_lines):
-            raise AssertionError(f"address {current_vram_addr:X} not found in asm")
+            if line_has_vram_addr(asm_line, vram_addr_str):
+                break
+
+            annotated_asm_lines.append(asm_line)
+            asm_line_index += 1
 
         annotated_asm_lines.append(f"\t.loc 1 {current_line_number}")    
         annotated_asm_lines.append(asm_line)
@@ -86,3 +91,9 @@ def annotate_asm(args: AnnotationArgs):
 
     if args.verbose:
         print(f"alessatool/annotate: wrote asm to {args.out_path}")
+
+def line_has_vram_addr(line: str, addr_str: str) -> bool:
+    if addr_str not in line or "*/" not in line:
+        return False
+
+    return line.index("*/") > line.index(addr_str)
