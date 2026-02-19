@@ -96,6 +96,14 @@ Node_Current_Search = 0x13C890;
 Node_Next_Search = 0x13C840;
 Sequence_Different_Time_Get = 0x13BAD0;
 
+// model3_vu0_n.c
+InitTriangleNormal = 0x001d3d50;
+DrawPart0 = 0x001d65d0;
+DrawParts0 = 0x001d66d0;
+
+// model3_vu1_n.c
+Model3LoadMpg1 = 0x001d6870;
+
 // sce
 sceVu0CopyMatrix = 0x1210A8;
 
