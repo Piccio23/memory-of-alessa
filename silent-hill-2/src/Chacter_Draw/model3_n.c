@@ -1,4 +1,5 @@
 #include "common.h"
+#include "model3_sub_n.h"
 #include "model3_n.h"
 
 s8 *Model3SkeletonStructure(sh_Model *model)

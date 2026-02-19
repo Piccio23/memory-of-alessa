@@ -50,7 +50,6 @@ TOOLS := tools
 CONFIG = $(PROJECT)/config/$(SERIAL)
 ASM = $(CONFIG)/asm
 ASSETS = $(CONFIG)/assets
-EXPECTED = expected/$(SERIAL)
 LINKERS = $(CONFIG)/linkers
 ROM = rom/$(SERIAL)
 
@@ -130,11 +129,10 @@ ALESSATOOL := $(PYTHON) $(TOOLS)/alessatool/alessatool.py --verbose
 GENERATE := $(ALESSATOOL) generate \
 	--template-path $(INCLUDE)/$(SERIAL).inc.lcf \
 	--lcf-output-path $(LINKERS)/$(SERIAL).lcf \
-	--build-path $(BUILD) \
-	--expected-path $(EXPECTED)
+	--build-path $(BUILD)
 
-GENERATE_FLAGS =
-GENERATE_OVERLAY_FLAGS = --no-lcf
+GENERATE_FLAGS = --make-full-disasm-for-code
+GENERATE_OVERLAY_FLAGS = --no-lcf --make-full-disasm-for-code
 ifeq ($(GENERATE_REPORT),0)
 	GENERATE_FLAGS += --no-objdiff
 	GENERATE_OVERLAY_FLAGS += --no-objdiff
@@ -145,7 +143,7 @@ endif
 ifeq ($(GENERATE_LCF),0)
 	GENERATE_FLAGS += --no-lcf
 endif
-GENERATE_EXPECTED := $(GENERATE) --no-lcf --no-objdiff --make-full-disasm-for-code
+GENERATE_EXPECTED := $(GENERATE) --no-lcf --make-full-disasm-for-code
 
 CHECK_MATCH_PERCENT :=
 ifneq ($(NON_MATCHING),1)
@@ -166,16 +164,13 @@ clean:
 	rm -rf $(ASM)
 	rm -rf $(ASSETS)
 	rm -rf $(BUILD)
-	rm -rf $(EXPECTED)
 	rm -rf $(LINKERS)
 
-report: $(SETUP) $(OBJDIFF) $(EXPECTED)
-	@$(MAKE) GENERATE_REPORT=1 NON_MATCHING=1 GENERATE_LCF=0
-	$(MAKE) $(BUILD)/report.json
+report: $(SETUP) $(OBJDIFF) $(OBJDIFF_CONFIG)
+	@$(MAKE) expected
+	@$(OBJDIFF) report generate -o $(BUILD)/report.json
 
 split: $(D_FILES)
-
-expected: $(EXPECTED)
 
 setup: $(SETUP)
 
@@ -206,6 +201,12 @@ debug:
 
 diff:
 	$(CHECK_MATCH_PERCENT)
+
+expected: $(YAMLS)
+	@mkdir -p "$(@D)"
+	$(MAKE) $(OBJDIFF_CONFIG)
+	$(MAKE) NON_MATCHING=1 $(call get_c_objects)
+	$(MAKE) $(call get_asm_objects)
 
 compiler-info:
 	$(WIBO) $(MWCC) -help
@@ -249,18 +250,6 @@ $(BUILD)/%.s.o: $(CONFIG)/%.s
 	@mkdir -p "$(@D)"
 	$(AS) $(AS_FLAGS) -o "$@" "$<"
 
-$(EXPECTED): $(YAMLS)
-	@mkdir -p "$(@D)"
-	@$(foreach yaml,$(YAMLS),$(GENERATE_EXPECTED) $(SPLAT_CONFIG) "$(yaml)";)
-	@rm -rf $(ASM)/matchings
-	@rm -rf $(ASM)/nonmatchings
-	@rm -rf $(ASM)/**/matchings
-	@rm -rf $(ASM)/**/nonmatchings
-	$(MAKE) $$(find $(ASM) -name '*.s' \
-		| sed 's|^$(ASM)/|$(BUILD)/asm/|' \
-		| sed 's|\.s$$|.s.o|')
-	@mv $(BUILD) $(EXPECTED)
-
 $(LINKER_SCRIPT): $(SPLAT_CONFIG) $(CONFIG)/$(SERIAL).yaml
 	$(GENERATE) $(GENERATE_FLAGS) $(SPLAT_CONFIG) $(CONFIG)/$(SERIAL).yaml
 
@@ -268,10 +257,7 @@ $(OBJDIFF_CONFIG): $(OBJDIFF_FRAGMENTS)
 	$(ALESSATOOL) merge $^
 
 $(BUILD)/objdiff/%.json: $(CONFIG)/%.yaml
-	$(GENERATE) --no-lcf --objdiff-output-path=$(BUILD)/objdiff/$*.json $(SPLAT_CONFIG) $<
-
-$(BUILD)/report.json: $(OBJDIFF_CONFIG)
-	@$(OBJDIFF) report generate -o $(BUILD)/report.json
+	$(GENERATE_EXPECTED) --objdiff-output-path=$(BUILD)/objdiff/$*.json --make-full-disasm-for-code $(SPLAT_CONFIG) $<
 ###############################################################
 $(WIBO):
 	wget -O $@ $(WIBO_HOST)/$(WIBO_BINARY)
@@ -309,11 +295,22 @@ $(ROM_SYMLINK):
 $(SOURCE_OVERLAY_ARCHIVE) $(SOURCE_EXECUTABLE):
 	@echo "$@ is missing, please provide this file."
 ###############################################################
+define get_c_objects
+$(patsubst $(SRC)/%.c,$(BUILD)/src/%.c.o, \
+	$(shell find $(SRC) -type f -name '*.c'))
+endef
+define get_asm_objects
+$(patsubst $(ASM)/%.s,$(BUILD)/asm/%.s.o, \
+	$(shell find $(ASM) \
+		-type d \( -name matchings -o -name nonmatchings \) \
+		-prune -false -o -type f -name '*.s'))
+endef
+###############################################################
 PHONY_TARGETS := \
 	alessatool clean compiler-info death debug deep-clean \
 	diff expected heaven hell progress rebuild report setup \
 	sh2 sh3 sh2-clean sh3-clean sh2-report sh3-report split
 .PHONY: $(PHONY_TARGETS)
-ifeq ($(filter $(PHONY_TARGETS),$(MAKECMDGOALS)),)
+ifeq ($(filter $(PHONY_TARGETS) $(OBJDIFF_CONFIG),$(MAKECMDGOALS)),)
 -include $(BINARIES:%=$(LINKERS)/%.d)
 endif

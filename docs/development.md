@@ -12,7 +12,6 @@ silent-hill-2/ --- silent hill 2 engine project directory
    config/
    include/
 build/         --- final build output
-expected/      --- target build directory, what we aim to match
 docs/          --- documentation
 rom/           --- contains game files, gets symlinked to `config/<serial>/rom`
 tools/         --- shared tooling including compilers, binutils, Python scripts

@@ -23,7 +23,6 @@ class GenerationArgs:
     lcf_output_path: Path
     objdiff_output_path: Path
     build_path: Path
-    expected_path: Path
     verbose: bool
     no_lcf: bool
     no_objdiff: bool
@@ -178,7 +177,7 @@ def generate_objdiff_units(args: GenerationArgs):
         )
 
         base_path = is_code and normalize_object_path(Path(object_path), args.build_path) or None
-        target_path = normalize_object_path(to_expected_path(object_path), args.expected_path)
+        target_path = normalize_object_path(to_expected_path(object_path), args.build_path)
         unit = Unit(
             name=entry.segment.name,
             base_path=base_path,

@@ -86,12 +86,6 @@ def main():
         help="path to build directory"
     )
     generate_parser.add_argument(
-        "--expected-path",
-        type=Path,
-        default=Path(EXPECTED) / SERIAL,
-        help="path to target object files directory"
-    )
-    generate_parser.add_argument(
         "--no-lcf",
         action="store_true",
         help="don't generate a linker command file."

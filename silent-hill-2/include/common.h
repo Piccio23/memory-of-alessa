@@ -25,7 +25,7 @@ typedef unsigned long u_long;
 
 #define DEBUG
 #ifdef DEBUG
-int fjAssert_(s8 *file, int line, s8 *str)
+int fjAssert_(const char* file, int line, const char* str) __attribute__((noreturn))
 {
     printf("assertion \"%s\" failed: file \"%s\", line %d\n", str, file, line);
     ABORT();
