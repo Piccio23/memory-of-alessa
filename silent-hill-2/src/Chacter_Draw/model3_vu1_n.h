@@ -1,7 +1,6 @@
 #ifndef MODEL3_VU1_N_H
 #define MODEL3_VU1_N_H
 
-// E:\work\sh2(CVS全取得)\src\Chacter_Draw\model3_vu1_n.c
 typedef struct Model3Junk
 {
     // total size: 0x1C0

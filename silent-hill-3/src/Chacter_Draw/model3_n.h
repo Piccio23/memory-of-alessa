@@ -2,7 +2,6 @@
 #define MODEL3_N_H
 
 #include "common.h"
-#include "Chacter_Draw/model3_vu1_n.h"
 #include "Chacter_Draw/sh3gfw_CharacterOT.h"
 #include "Chacter_Draw/model_common.h"
 
