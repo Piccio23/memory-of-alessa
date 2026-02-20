@@ -71,7 +71,7 @@ void InitTriangleNormalSpecular(TriangleNormalSpecular* p) {
         GIF_REG(SCE_GIF_PACKED_AD, 11) | 
         GIF_REG(SCE_GIF_PACKED_AD, 12);
 
-  p->s_tex0.u64[0] = D_01EE8090[0xc54]; // model_common_work->specular_mapping_tex0
+  p->s_tex0.u64[0] = ((u_long*) D_01EE8090)[0xc54]; // model_common_work->specular_mapping_tex0
   p->s_tex0.u64[1] = 6;
   p->s_clamp.u64[0] = 5;
   p->s_clamp.u64[1] = 8;

@@ -1,3 +1,6 @@
+#ifndef MODEL3_VU0_N_H
+#define MODEL3_VU0_N_H
+
 #define GIF_REG(reg, n) ((u_long)(reg) << ((n) * 4))
 
 #define DMArefe (0<<28)
@@ -100,3 +103,5 @@ typedef struct TriangleNormalSpecular {
     union Q S_alpha; // offset 0x190, size 0x10
     union Q S_fogcol; // offset 0x1A0, size 0x10
 } TriangleNormalSpecular;
+
+#endif

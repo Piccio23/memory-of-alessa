@@ -4,6 +4,7 @@
 #include "common.h"
 #include "Chacter_Draw/model3_vu1_n.h"
 #include "Chacter_Draw/sh3gfw_CharacterOT.h"
+#include "Chacter_Draw/model_common.h"
 
 typedef struct sh_Model
 {
@@ -111,6 +112,5 @@ extern int func_0025CF20();
 extern int func_002D7B20();
 extern int D_00366900;
 extern int D_00366908;
-extern int D_01EE8090;
 
 #endif

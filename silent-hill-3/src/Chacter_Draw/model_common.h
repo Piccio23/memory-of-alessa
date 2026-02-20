@@ -25,6 +25,6 @@ typedef struct ModelCommonWork
 } ModelCommonWork;
 
 // ModelCommonWork *model_common_work;
-u_long* D_01EE8090;
+extern int *D_01EE8090;
 
 #endif
