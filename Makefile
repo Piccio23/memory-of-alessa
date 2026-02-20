@@ -55,6 +55,7 @@ ROM = rom/$(SERIAL)
 
 INCLUDE = $(PROJECT)/include
 SRC = $(PROJECT)/src
+COMMON_INCLUDE = include
 
 include $(PROJECT)/Makefile
 ###############################################################
@@ -86,7 +87,8 @@ AS := $(BINUTILS)/$(BINUTILS_FLAVOR)-as
 MWCCGAP_AS_FLAGS := -mno-pdr
 AS_FLAGS := \
 	-EL -march=r5900 -mabi=eabi -G=0 \
-	$(MWCCGAP_AS_FLAGS) -I$(INCLUDE) -I$(CONFIG)
+	$(MWCCGAP_AS_FLAGS) -I$(INCLUDE) -I$(CONFIG) \
+	-I$(COMMON_INCLUDE)
 
 LD :=
 ifneq ($(NON_MATCHING),1)
@@ -161,12 +163,6 @@ OBJDIFF_HOST := https://github.com/encounter/objdiff/releases/download/v3.6.0
 ###############################################################
 all: $(TARGETS)
 
-clean:
-	rm -rf $(ASM)
-	rm -rf $(ASSETS)
-	rm -rf $(BUILD)
-	rm -rf $(LINKERS)
-
 report: $(SETUP) $(OBJDIFF) $(OBJDIFF_CONFIG)
 	@$(MAKE) expected
 	@$(OBJDIFF) report generate -o $(BUILD)/report.json
@@ -178,11 +174,6 @@ setup: $(SETUP)
 rebuild:
 	rm -rf $(BUILD)
 	$(MAKE)
-
-deep-clean:
-	$(MAKE) PROJECT=silent-hill-3 clean
-	$(MAKE) PROJECT=silent-hill-2 clean
-	rm -rf expected
 
 death:
 	@$(MAKE) clean
@@ -214,6 +205,16 @@ compiler-info:
 
 alessatool:
 	$(ALESSATOOL)
+
+clean:
+	@$(MAKE) PROJECT=silent-hill-3 clean-project
+	@$(MAKE) PROJECT=silent-hill-2 clean-project
+
+clean-project:
+	rm -rf $(ASM)
+	rm -rf $(ASSETS)
+	rm -rf $(BUILD)
+	rm -rf $(LINKERS)
 
 sh3:
 	$(MAKE) PROJECT="silent-hill-3"
@@ -308,9 +309,10 @@ $(patsubst $(ASM)/%.s,$(BUILD)/asm/%.s.o, \
 endef
 ###############################################################
 PHONY_TARGETS := \
-	alessatool clean compiler-info death debug deep-clean \
-	diff expected heaven hell progress rebuild report setup \
-	sh2 sh3 sh2-clean sh3-clean sh2-report sh3-report split
+	alessatool clean clean-project compiler-info death debug \
+	deep-clean diff expected heaven hell progress rebuild \
+	report setup sh2 sh3 sh2-clean sh3-clean sh2-report \
+	sh3-report split
 .PHONY: $(PHONY_TARGETS)
 ifeq ($(filter $(PHONY_TARGETS) $(OBJDIFF_CONFIG),$(MAKECMDGOALS)),)
 -include $(BINARIES:%=$(LINKERS)/%.d)

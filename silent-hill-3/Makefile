@@ -46,7 +46,7 @@ SOURCE_OVERLAY_ARCHIVE := $(ROM)/B0.MFA
 MWCC := $(TOOLS)/mwcps2/3.0.3/mwccps2.exe
 MWCC_TAR := mwcps2-3.0.3-020716.tar.gz
 MWCC_FLAGS := -O3,p -sym=off,noelf -sdatathreshold 0 \
-	-cwd source -i "$(SRC)" -i "$(INCLUDE)"
+	-cwd source -i "$(SRC)" -i "$(INCLUDE)" -i "$(COMMON_INCLUDE)"
 
 MWLD := $(TOOLS)/mwcps2/2.4/mwldps2.exe
 MWLD_TAR := mwcps2-2.4-001213.tar.gz

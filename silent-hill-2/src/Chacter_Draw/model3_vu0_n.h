@@ -1,5 +1,14 @@
 #define GIF_REG(reg, n) ((u_long)(reg) << ((n) * 4))
 
+#define DMArefe (0<<28)
+#define DMAcnt  (1<<28)
+#define DMAnext (2<<28)
+#define DMAref  (3<<28)
+#define DMArefs (4<<28)
+#define DMAcall (5<<28)
+#define DMAret  (6<<28)
+#define DMAend  (7<<28)
+
 union Q
 {
     __int128 u128;         // offset 0x0, size 0x10
