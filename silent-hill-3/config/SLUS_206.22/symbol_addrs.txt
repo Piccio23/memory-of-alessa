@@ -100,6 +100,7 @@ Sequence_Different_Time_Get = 0x13BAD0;
 InitTriangleNormal = 0x001d3d50;
 DrawPart0 = 0x001d65d0;
 DrawParts0 = 0x001d66d0;
+InitTriangleNormalSpecular = 0x001d3db0;
 
 // model3_vu1_n.c
 Model3LoadMpg1 = 0x001d6870;
