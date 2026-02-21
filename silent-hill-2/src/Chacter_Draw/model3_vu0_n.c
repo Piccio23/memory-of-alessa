@@ -7,6 +7,7 @@
 #include "model_common.h"
 #include "libdmapk.h"
 #include "light_n.h"
+#include "GFW/sh2gfw_Init_ModelDrawData.h"
 
 void InitTriangleNormal(TriangleNormal* p) {
     int qwc = 12;
@@ -226,7 +227,60 @@ static void MakeData0(void)
     sceVu0CopyVector(psdata->rgba_max, model3_junk.rgba_max);
 }
 
-INCLUDE_ASM("asm/nonmatchings/Chacter_Draw/model3_vu0_n", MakePartTransferPacket_Vu0);
+static void MakePartTransferPacket_Vu0(Part *part, sceVif0Packet *pk)
+{
+    sceVif0PkRef(
+        pk,
+        (u_long128 *)((u_char *)part + part->packet_offset),
+        part->packet_qwc, 0, 0, 0
+    );
+    {
+        int n_cluster_data = part->n_cluster_data;
+        ClusterData *cluster_data_top = (ClusterData *)((u_char *)part + part->cluster_data_offset);
+        float (*cluster_nodes)[4] = model3_junk.cluster_nodes;
+        int i;
+        for (i = 0; i < n_cluster_data; i++) {
+            ClusterData *cluster_data = &cluster_data_top[i];
+            u32 src = cluster_data->src;
+            u32 dst = cluster_data->dst;
+            u32 n = cluster_data->n;
+            sceVif0PkRef(
+                pk,
+                (u_long128 *)((u_char *)cluster_nodes + (src << 4)),
+                n, 0x01000104, dst | (n << 16) | 0x6C000000, 0
+            );
+        }
+    }
+    {
+        float (*matrices)[4][4] = model_common_work->skeleton_matrices;
+        u_short *skeletons = (u_short *)((u_char *)part + part->skeletons_offset);
+        int skeleton_no = part->n_skeletons;
+        int dst_top = part->data_skeletons_offset;
+        int i;
+        for (i = 0; i < part->n_skeletons; i++) {
+            u16 idx = skeletons[i];
+            sceVif0PkRef(
+                pk,
+                (u_long128 *)(matrices[idx]), 4, 0x01000101,
+                (dst_top + i * 4) | 0x6C040000, 0
+            );
+        }
+    }
+    {
+        u16 *pairs = (u16 *)((u_char *)part + part->skeleton_pairs_offset);
+        int dst_top = part->data_skeleton_pairs_offset;
+        int i;
+        for (i = 0; i < part->n_skeleton_pairs; i++) {
+            u16 idx = pairs[i];
+            float (*src)[4] = (float (*)[4]) & model_common_work->envelope_matrices[idx];
+            sceVif0PkRef(
+                pk,
+                (u_long128 *)(src), 4, 0x01000101,
+                (dst_top + i * 4) | 0x6C040000, 0
+            );
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Chacter_Draw/model3_vu0_n", MakeLambertShadingPacket);
 
