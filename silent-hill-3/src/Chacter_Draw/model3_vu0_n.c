@@ -1,14 +1,4 @@
-#include "common.h"
-#include "eestruct.h"
-#include "eeregs.h"
-#include "libgraph.h"
 #include "model3_vu0_n.h"
-#include "model_common.h"
-#include "libdma.h"
-#include "libdmapk.h"
-#include "GFW/sh3gfw_Init_ModelDrawData.h"
-#include "vifot/sh_kt_vif0.h"
-#include "light_n.h"
 
 void InitTriangleNormal(TriangleNormal* p) {
     int qwc = 12;
@@ -532,4 +522,18 @@ INCLUDE_ASM("asm/nonmatchings/Chacter_Draw/model3_vu0_n", DrawPart0);
 
 INCLUDE_ASM("asm/nonmatchings/Chacter_Draw/model3_vu0_n", DrawParts0);
 
-INCLUDE_ASM("asm/nonmatchings/Chacter_Draw/model3_vu0_n", func_001D67E0);
+void Model3DrawVu0Parts(Model* model, ModelWork* work) {
+    ktVif1Ot2* ot = CharacterOt_KtVif1Ot2(model);
+
+    func_001CC5B0();
+    func_001CC5F0();
+    func_0025C1C0();
+
+    D_01EE3DE0 = 0;
+    calc_base = 0;
+    D_01EE3DD0 = 0;
+
+    // arguments 2 & 3 seem to be function pointers:
+    DrawParts0(ot, work, func_0025CF10(), func_0025CF00());
+}
+

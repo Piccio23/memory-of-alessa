@@ -110,7 +110,7 @@ void Model3Draw_n(void* scp_d_, void* model_, void* work_, float (*mwm)[4]) {
         func_001D8B00(model, mwork);
         if (func_001D0DA0() != 0) {
             func_001D0F10();
-            func_001D67E0(model, mwork);
+            Model3DrawVu0Parts(model, mwork);
             if (func_001D1080() != 0) {
                 func_001D1190();
                 func_001C5D70(0);

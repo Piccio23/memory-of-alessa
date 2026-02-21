@@ -30,18 +30,18 @@ segments:
     subsegments:
       - [0x000580, asm,     crt0]
       - [0x000760, asm,     text_0]
-      - [0x0022c8, asm,     sce]
+      - { start: 0x0022c8, type: asm, name: sce,  ld_align_segment_start: 0x8  }
       - [0x0220b0, asm,     sdk/libdbc]
       - [0x022b10, asm,     sdk/libgcc]
       - [0x02bfe8, asm,     unk]
-      - [0x02cff0, c,       main]
+      - { start: 0x02cff0, type: c,   name: main, ld_align_segment_start: 0x10 }
       - [0x02d2a0, asm,     text_1]
       - [0x02f3e0, c,       Chacter/m3_sc]
       - [0x030140, asm,     text_2]
       - [0x03baa0, c,       DS_Pad/ds_sequencer]
       - [0x03d290, asm,     text_3]
       - [0x043460, c,       Chacter/m3_bgobj]
-      - [0x043638, asm,     text_4]
+      - [0x043680, asm,     text_4]
       - [0x057150, asm,     Font/dic]
       - [0x0582b0, c,       Font/font]
       - [0x05e0f0, asm,     text_5]

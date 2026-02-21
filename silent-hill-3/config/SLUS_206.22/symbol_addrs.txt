@@ -108,8 +108,9 @@ MakePartTransferPacket_Vu0 = 0x001d44f0;
 MakeLambertShadingPacket = 0x001D4760;
 MakeClipPacket = 0x001d4bd0;
 FlipXMTOP = 0x001d4c80;
-KickCalcPartPacket = 0x001D4CA0;
+KickCalcPartPacket = 0x001d4ca0;
 MakeCalcPartPacket = 0x001d6110;
+Model3DrawVu0Parts = 0x001d67e0;
 TransferToSPR = 0x001D4CD0;
 PrepareSort = 0x001D4D30;
 xmtop = 0x01ee3dc0;
@@ -147,7 +148,8 @@ sceVif0PkReserve = 0x0011FF48;
 ktVif0Wait2 = 0x001d8ba0;
 ktVif0Send = 0x001d8be0;
 ktVif0PkBufCurrent = 0x001c5d00;
-ktVif0PkBufNext = 0x1C5C80;
+ktVif0PkBufNext = 0x001c5c80;
+CharacterOt_KtVif1Ot2 = 0x001d0fe0;
 
 // light_n.c
 LightNValidParallelMatrices = 0x001C4DB0;

@@ -64,3 +64,5 @@ void RObjectFunction(SubCharacter *this)
         }
     }
 }
+
+INCLUDE_ASM("asm/nonmatchings/Chacter/m3_bgobj", func_001430C0);

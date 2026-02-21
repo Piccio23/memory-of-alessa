@@ -1,10 +1,18 @@
 #ifndef MODEL3_VU0_N_H
 #define MODEL3_VU0_N_H
 
-#include "eetypes.h"
 #include "common.h"
+#include "eestruct.h"
+#include "eeregs.h"
+#include "libgraph.h"
+#include "model3_vu0_n.h"
 #include "model_common.h"
+#include "libdma.h"
 #include "libdmapk.h"
+#include "GFW/sh3gfw_Init_ModelDrawData.h"
+#include "vifot/sh_kt_vif0.h"
+#include "light_n.h"
+#include "model3_sub_n.h"
 
 #define GIF_REG(reg, n) ((u_long)(reg) << ((n) * 4))
 
@@ -255,6 +263,7 @@ typedef struct Data {
 
 
 void FlipXMTOP();
+static void DrawParts0(ktVif1Ot2 * ot /* r17 */, ModelWork * work /* r2 */, s32 func0, s32 func1);
 
 extern u_int model3_mpg0_skel_load[];
 extern signed int initialized; // @ 0x00419FA0
@@ -299,6 +308,9 @@ extern u_int D_003B6080; // vutext
 extern u_int D_003BAB80; // vutext
 extern u_int D_003BAD80; // vutext
 extern int func_001C91F0();
+
+extern int D_01EE3DE0;
+extern int D_01EE3DD0;
 
 extern u32 xmtop;
 extern AllPacket* all_packet;
