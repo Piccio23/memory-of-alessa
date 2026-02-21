@@ -42,12 +42,13 @@ typedef struct Model3Junk
     float wsm[4][4];         // offset 0x120, size 0x40
 
     // float vwm[4][4];           // offset 0x160, size 0x40
-    char unk[0x38];
+    char unk[0x34];
+    void *xtop;
     float (*cluster_nodes)[4];
     float (*cluster_nodes2)[4];
 
     void *vi00;                // offset 0x1A0, size 0x4
-    void *xtop;                // offset 0x1A4, size 0x4
+    // void *xtop;                // offset 0x1A4, size 0x4
 
     // float (*cluster_nodes)[4]; // offset 0x1A8, size 0x4
     float (*_unknown)[4]; // offset 0x1A8, size 0x4

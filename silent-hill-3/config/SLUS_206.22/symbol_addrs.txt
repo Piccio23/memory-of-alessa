@@ -105,14 +105,19 @@ InitAllPacket0 = 0x001d4090;
 LoadProgram_Vu0 = 0x001d40f0;
 MakeData0 = 0x001d41f0;
 MakePartTransferPacket_Vu0 = 0x001d44f0;
+MakeLambertShadingPacket = 0x001D4760;
 MakeClipPacket = 0x001d4bd0;
 FlipXMTOP = 0x001d4c80;
 KickCalcPartPacket = 0x001D4CA0;
+MakeCalcPartPacket = 0x001d6110;
 TransferToSPR = 0x001D4CD0;
 PrepareSort = 0x001D4D30;
 xmtop = 0x01ee3dc0;
 calc_base = 0x001ee3dd8;
 all_packet = 0x3669e0;
+xitop = 0x1EE3DC8;
+pAllData_Vu0 = 0x01EE3100;
+model3_mpg0_specular_size = 0x003B6A50;
 
 // model_common.c
 model_common_work = 0x1EE8090;
@@ -128,11 +133,17 @@ sceVif0PkAddCode = 0x0011FF60;
 sceVif0PkRefMpg = 0x0011FF90;
 sceDmaSendN = 0x00100390;
 sceDmaGetChan = 0x00115890;
+sceVif0PkEnd = 0x0011FEF0;
+sceVif0PkInit = 0x11FD28;
+sceVif0PkTerminate = 0x0011FD38;
+sceVif0PkAddData = 0x0011FF78;
+sceVif0PkReserve = 0x0011FF48;
 
 // sh_kt_vif0.c
 ktVif0Wait2 = 0x001d8ba0;
 ktVif0Send = 0x001d8be0;
 ktVif0PkBufCurrent = 0x001c5d00;
+ktVif0PkBufNext = 0x1C5C80;
 
 // utilheap.c
 utilHeapFree                                                                     = 0x1c1d00;

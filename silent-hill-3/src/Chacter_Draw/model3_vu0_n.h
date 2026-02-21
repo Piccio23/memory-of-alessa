@@ -190,12 +190,69 @@ typedef struct AllPacket {
     struct TriangleSpecularNormal specular_normal[2]; // offset 0xC80, size 0x360
 } AllPacket;
 
+typedef struct PersData {
+    // total size: 0x70
+    float vsp[2][4]; // offset 0x0, size 0x20
+    float vcp[2][4]; // offset 0x20, size 0x20
+    float xyz_min[4]; // offset 0x40, size 0x10
+    float xyz_max[4]; // offset 0x50, size 0x10
+    float rgba_max[4]; // offset 0x60, size 0x10
+} PersData;
+typedef struct PLightData {
+    // total size: 0x80
+    float nlm[4][4]; // offset 0x0, size 0x40
+    float lcm[4][4]; // offset 0x40, size 0x40
+} PLightData;
+typedef struct Lambert0Data {
+    // total size: 0x80
+    float nlm[4][4]; // offset 0x0, size 0x40
+    float lcm[4][4]; // offset 0x40, size 0x40
+} Lambert0Data;
+typedef struct Lambert1Data {
+    // total size: 0x10
+    float global_ambient[4]; // offset 0x0, size 0x10
+} Lambert1Data;
+typedef struct ELightData {
+    // total size: 0x40
+    float pos[4]; // offset 0x0, size 0x10
+    float dir[4]; // offset 0x10, size 0x10
+    float col[4]; // offset 0x20, size 0x10
+    float param[4]; // offset 0x30, size 0x10
+} ELightData;
+typedef struct EMapData {
+    // total size: 0x60
+    float vwm[4][4]; // offset 0x0, size 0x40
+    float mag[4]; // offset 0x40, size 0x10
+    float offset[4]; // offset 0x50, size 0x10
+} EMapData;
+typedef struct SMapData {
+    // total size: 0x40
+    float nhm[4][4]; // offset 0x0, size 0x40
+} SMapData;
+typedef struct AllData_Vu0 {
+    // total size: 0x600
+    struct PLightData plight[4]; // offset 0x0, size 0x200
+    struct ELightData elight[8]; // offset 0x200, size 0x200
+    struct Lambert0Data lambert0; // offset 0x400, size 0x80
+    struct Lambert1Data lambert1; // offset 0x480, size 0x10
+    struct SMapData smap __attribute__((aligned(64)));
+    struct PersData pers __attribute__((aligned(64)));
+    char unknown_0x580[0x64]; // guessed size
+    struct EMapData emap __attribute__((aligned(64)));
+} AllData_Vu0;
+
 typedef struct ClusterData {
     // total size: 0x6
     unsigned short src; // offset 0x0, size 0x2
     unsigned short dst; // offset 0x2, size 0x2
     unsigned short n; // offset 0x4, size 0x2
 } ClusterData;
+
+typedef struct Data {
+    // total size: 0x10
+    union Q rgba; // offset 0x0, size 0x10
+} Data;
+
 
 void FlipXMTOP();
 
@@ -212,6 +269,25 @@ extern int D_003B5280;
 extern u_int D_003B53B0;
 extern int D_003B55C0;
 extern u_int D_003B57D0;
+
+extern s32 xitop;
+extern AllData_Vu0 * pAllData_Vu0;
+extern u32 _vu_0_0x00380640;
+extern u32 _vu_0_0x00380F00;
+extern u32 _vu_0_0x00381200;
+
+extern u32 model3_mpg0_specular_size;
+// extern u32 model3_mpg0_persfvg_size;
+// extern u32 model3_mpg0_venvmap_size;
+extern u32 D_003BAEB0;
+
+extern int D_003B61C0;
+extern int D_003BAD60;
+extern u_int D_003B6940; // vutext
+extern u_int D_003B6080; // vutext
+extern u_int D_003BAB80; // vutext
+extern u_int D_003BAD80; // vutext
+extern int func_001C91F0();
 
 extern u32 xmtop;
 extern AllPacket* all_packet;
