@@ -14,3 +14,5 @@ MWLD_OVERLAY_FLAGS :=
 MWLD_FLAGS := \
 	-main "entry" -map -sym on,elf \
 	-noinhibit-exec $(MWLD_OVERLAY_FLAGS)
+
+CREATE_OBJDIFF_CONFIG = $(ALESSATOOL) merge
