@@ -103,6 +103,7 @@ DrawParts0 = 0x001d66d0;
 InitTriangleNormalSpecular = 0x001d3db0;
 InitAllPacket0 = 0x001d4090;
 LoadProgram_Vu0 = 0x001d40f0;
+MakeData0 = 0x001d41f0;
 
 // model3_vu1_n.c
 Model3LoadMpg1 = 0x001d6870;
@@ -443,7 +444,7 @@ func_0012B398 = 0x12B398;
 func_001E2070 = 0x1E2070;
 func_00143610 = 0x143610;
 func_001C2C10 = 0x1C2C10;
-func_00121098 = 0x121098;
+sceVu0CopyVector = 0x121098;
 func_0015DFC0 = 0x15DFC0;
 func_001C2B80 = 0x1C2B80;
 func_0015DFE0 = 0x15DFE0;

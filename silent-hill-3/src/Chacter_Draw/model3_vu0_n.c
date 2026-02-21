@@ -135,7 +135,7 @@ static void LoadProgram_Vu0(void) {
     while (*D0_CHCR & 0x100);
 }
 
-INCLUDE_ASM("asm/nonmatchings/Chacter_Draw/model3_vu0_n", func_001D41F0);
+INCLUDE_ASM("asm/nonmatchings/Chacter_Draw/model3_vu0_n", MakeData0);
 
 INCLUDE_ASM("asm/nonmatchings/Chacter_Draw/model3_vu0_n", func_001D44F0);
 
