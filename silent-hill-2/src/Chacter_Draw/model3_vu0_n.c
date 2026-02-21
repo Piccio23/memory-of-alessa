@@ -284,9 +284,33 @@ static void MakePartTransferPacket_Vu0(Part *part, sceVif0Packet *pk)
 
 INCLUDE_ASM("asm/nonmatchings/Chacter_Draw/model3_vu0_n", MakeLambertShadingPacket);
 
-INCLUDE_ASM("asm/nonmatchings/Chacter_Draw/model3_vu0_n", MakeClipPacket);
+void MakeClipPacket(Part* part, sceVif0Packet* pk) {
+    if ((part->backclip != 0) || (model3_junk.view_clip_or != 0)) {
+        if (part->backclip == 0) {
+            if (model3_junk.view_clip_or != 0) {
+                FlipXMTOP(part->backclip);
+                sceVif0PkRefMpg(pk, xmtop, &_vu_0_0x0037F980, model3_mpg0_clip0v_size, 0);
+                sceVif0PkCnt(pk, 0U);
+                sceVif0PkAddCode(pk, xmtop | 0x14000000);
+            }
+        } else {
+            FlipXMTOP(part->backclip);
+            sceVif0PkRefMpg(pk, xmtop, &_vu_0_0x0037FB80, model3_mpg0_clip1_size, 0);
+            sceVif0PkCnt(pk, 0U);
+            sceVif0PkAddCode(pk, xmtop | 0x14000000);
+            if (model3_junk.view_clip_or != 0) {
+                FlipXMTOP();
+                sceVif0PkRefMpg(pk, xmtop, &_vu_0_0x0037FDC0, model3_mpg0_clipv_size, 0);
+                sceVif0PkCnt(pk, 0U);
+                sceVif0PkAddCode(pk, xmtop | 0x14000000);
+            }
+        }
+    }
+}
 
-INCLUDE_ASM("asm/nonmatchings/Chacter_Draw/model3_vu0_n", FlipXMTOP);
+static void FlipXMTOP() {
+    xmtop ^= 0x80;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Chacter_Draw/model3_vu0_n", MakeCalcPartPacket);
 
