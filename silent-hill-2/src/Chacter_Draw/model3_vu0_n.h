@@ -3,6 +3,7 @@
 
 #include "eetypes.h"
 #include "sh2_common.h"
+#include "libdma.h"
 
 #define GIF_REG(reg, n) ((u_long)(reg) << ((n) * 4))
 
@@ -202,14 +203,6 @@ typedef struct ktVif1Ot2 {
     unsigned int length_2; // offset 0x14, size 0x4
     unsigned int mask_1; // offset 0x18, size 0x4
     unsigned int mask_2; // offset 0x1C, size 0x4
-};
-typedef struct _sceDmaTag {
-    // total size: 0x10
-    unsigned short qwc; // offset 0x0, size 0x2
-    unsigned char mark; // offset 0x2, size 0x1
-    unsigned char id; // offset 0x3, size 0x1
-    struct _sceDmaTag * next; // offset 0x4, size 0x4
-    unsigned int p[2]; // offset 0x8, size 0x8
 };
 typedef struct PersData {
     // total size: 0x70
