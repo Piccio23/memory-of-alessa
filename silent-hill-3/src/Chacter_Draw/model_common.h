@@ -48,6 +48,8 @@ typedef struct Model3Junk
     float (*cluster_nodes2)[4];
 
     void *vi00;                // offset 0x1A0, size 0x4
+
+    void *_unknown_xtop;
     // void *xtop;                // offset 0x1A4, size 0x4
 
     // float (*cluster_nodes)[4]; // offset 0x1A8, size 0x4

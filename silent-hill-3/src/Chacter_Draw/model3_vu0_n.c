@@ -120,14 +120,14 @@ static void LoadProgram_Vu0(void) {
     sceVif0Packet sp20;
     sceVif0Packet* pk = &sp20;
 
-    func_0011FD28(pk, (u_long128*) READ_UNCACHED(&D_01EE30C0));
+    sceVif0PkInit(pk, (u_long128*) READ_UNCACHED(&D_01EE30C0));
     if (model3_junk.cluster_nodes2 == 0) {
         func_0011FE80(pk, &D_003B63C0, 0);
     } else {
         func_0011FE80(pk, &D_003BA2C0, 0);
     }
-    func_0011FEF0(pk, 0);
-    func_0011FD38(pk);
+    sceVif0PkEnd(pk, 0);
+    sceVif0PkTerminate(pk);
 
     while (*D0_CHCR & 0x100);
 
@@ -229,7 +229,7 @@ static void MakePartTransferPacket_Vu0(Part *part, sceVif0Packet *pk)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Chacter_Draw/model3_vu0_n", func_001D4760);
+INCLUDE_ASM("asm/nonmatchings/Chacter_Draw/model3_vu0_n", MakeLambertShadingPacket);
 
 static void MakeClipPacket(Part* part, sceVif0Packet* pk) {
     FlipXMTOP();
@@ -279,7 +279,7 @@ INCLUDE_ASM("asm/nonmatchings/Chacter_Draw/model3_vu0_n", func_001D5C50);
 
 INCLUDE_ASM("asm/nonmatchings/Chacter_Draw/model3_vu0_n", func_001D6000);
 
-static void MakeCalcPartPacket(Part *part)
+void MakeCalcPartPacket(Part *part)
 {
     __int128 *packet_buffer = (__int128 *)ktVif0PkBufNext();
     sceVif0Packet packet;        // r29+0x30
