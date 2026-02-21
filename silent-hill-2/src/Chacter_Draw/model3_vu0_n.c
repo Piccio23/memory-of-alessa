@@ -3,8 +3,10 @@
 #include "eeregs.h"
 #include "libgraph.h"
 #include "model3_vu0_n.h"
+#include "model3_n.h"
 #include "model_common.h"
 #include "libdmapk.h"
+#include "light_n.h"
 
 void InitTriangleNormal(TriangleNormal* p) {
     int qwc = 12;
@@ -138,7 +140,91 @@ static void LoadProgram_Vu0(void) {
     } while (*D0_CHCR & 0x100);
 }
 
-INCLUDE_ASM("asm/nonmatchings/Chacter_Draw/model3_vu0_n", MakeData0);
+static void MakeData0(void)
+{
+    Lambert0Data *lmdata;
+    Lambert1Data *lm1data;
+    EMapData *emap;
+    SMapData *smap;
+    PersData *psdata;
+
+    pAllData_Vu0 = &alldata_Vu0_Dblbuffer[(alldata_Vu0_page ^= 1)];
+
+    /* parallel lights */
+    {
+        int n = LightNValidParallelMatrices();
+        int i;
+        for (i = 0; i < n; i++) {
+            PLightData *pl =
+                (PLightData *) READ_UNCACHED(&pAllData_Vu0->plight[i]);
+
+
+            LightGetNthViewNLM(pl->nlm, i);
+
+            LightGetNthLCM(pl->lcm, i);
+        }
+    }
+
+    /* extra lights */
+    {
+        int n = LightNValidExtras();
+        int i;
+        for (i = 0; i < n; i++) {
+            Light *light = LightNthValidExtra(i);
+            ELightData *eldata =
+                (ELightData *) READ_UNCACHED(&pAllData_Vu0->elight[i]);
+
+
+            /* position & direction */
+            sceVu0CopyVector(eldata->pos, light->vpos);
+            sceVu0CopyVector(eldata->dir, light->vdir);
+            /* color */
+            sceVu0CopyVector(eldata->col, light->color);
+            eldata->param[0] = light->f_ra;
+            eldata->param[1] = light->f_rb;
+            eldata->param[2] = light->s_a;
+            eldata->param[3] = light->s_b;
+        }
+    }
+
+    /* lambert0 */
+    lmdata = (Lambert0Data *) READ_UNCACHED(&pAllData_Vu0->lambert0);
+
+    LightGetNthViewNLM(lmdata->nlm, 0);
+    LightGetNthLCM(lmdata->lcm, 0);
+
+    /* lambert1 */
+    lm1data = (Lambert1Data *) READ_UNCACHED(&pAllData_Vu0->lambert1);
+
+    sceVu0CopyVector(lm1data->global_ambient,
+                     model3_junk.global_ambient);
+
+    lm1data->global_ambient[3] = 128.0f;
+
+    /* environment map */
+    emap = (EMapData *) READ_UNCACHED(&pAllData_Vu0->emap);
+
+    sceVu0CopyMatrix(emap->vwm, model3_junk.vwm);
+    sceVu0CopyVector(emap->mag, &mag_114);
+    sceVu0CopyVector(emap->offset, &offset_115);
+
+    /* shadow map */
+    smap = (SMapData *) READ_UNCACHED(&pAllData_Vu0->smap);
+
+    LightGetNthViewNHM(smap->nhm, 0);
+    
+    /* perspective data */
+    psdata = (PersData *) READ_UNCACHED(&pAllData_Vu0->pers);
+
+    sceVu0CopyVector(psdata->vsp[0], model_common_work->vsp[0]);
+    sceVu0CopyVector(psdata->vsp[1], model_common_work->vsp[1]);
+    sceVu0CopyVector(psdata->vcp[0], model_common_work->vcp[0]);
+    sceVu0CopyVector(psdata->vcp[1], model_common_work->vcp[1]);
+
+    sceVu0CopyVector(psdata->xyz_min, model3_junk.xyz_min_wide);
+    sceVu0CopyVector(psdata->xyz_max, model3_junk.xyz_max_wide);
+    sceVu0CopyVector(psdata->rgba_max, model3_junk.rgba_max);
+}
 
 INCLUDE_ASM("asm/nonmatchings/Chacter_Draw/model3_vu0_n", MakePartTransferPacket_Vu0);
 

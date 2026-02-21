@@ -116,10 +116,9 @@ static void LoadProgram_Vu0(void) {
 
     sceVif0Packet sp20;
     sceVif0Packet* pk = &sp20;
-    int initialized;
 
     func_0011FD28(pk, (u_long128*) READ_UNCACHED(&D_01EE30C0));
-    if (model3_junk.initialized == 0) {
+    if (model3_junk.unk_0x160 == 0) {
         func_0011FE80(pk, &D_003B63C0, 0);
     } else {
         func_0011FE80(pk, &D_003BA2C0, 0);
