@@ -159,7 +159,7 @@ def generate_objdiff_units(args: GenerationArgs):
 
         if segment.name == "sce":
             continue
-        if segment.name.startswith("sdk/"):
+        if segment.name.startswith("sdk/") or segment.name == "sdk":
             continue
         if segment.name.startswith("cri/"):
             continue
