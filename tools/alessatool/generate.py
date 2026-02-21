@@ -6,10 +6,10 @@ from utils import ensure_path_and_write, normalize_object_path, to_expected_path
 
 import splat.scripts.split as split
 import splat.util.options as splat_options
-from splat.segtypes.linker_entry import write_file_if_different, clean_up_path
+from splat.segtypes.linker_entry import LinkerEntry, write_file_if_different, clean_up_path
 
 SECTION_ALIGNMENT_PAIRS: list[tuple[str, int]] = [
-    (".text", 0x8),
+    (".text", 0x10),
     (".data", 0x8),
     (".rodata", 0x8),
     (".lit4", 0x4),
@@ -102,9 +102,9 @@ def generate_lcf(args: GenerationArgs):
     Expects a template file with the extension `.inc.lcf`.
     '''
 
-    objects_by_section_type: dict[str, list[str]] = dict()
+    entries_by_section_type: dict[str, list[LinkerEntry]] = dict()
     for section_type, _ in SECTION_ALIGNMENT_PAIRS:
-        objects_by_section_type[section_type] = []
+        entries_by_section_type[section_type] = []
 
     for entry in split.linker_writer.entries:
         segment = entry.segment
@@ -114,15 +114,15 @@ def generate_lcf(args: GenerationArgs):
             continue
 
         section_type = entry.section_link_type
-        if section_type not in objects_by_section_type:
+        if section_type not in entries_by_section_type:
             continue
 
-        objects_by_section_type[section_type].append(entry.object_path.name)
+        entries_by_section_type[section_type].append(entry)
 
     lcf_blocks: list[str] = []
 
     for section_type, alignment in SECTION_ALIGNMENT_PAIRS:
-        objects = objects_by_section_type[section_type]
+        objects = entries_by_section_type[section_type]
         if not objects:
             continue
 
@@ -130,8 +130,14 @@ def generate_lcf(args: GenerationArgs):
             f"\t\t# {section_type}",
             f"\t\tALIGNALL(0x{alignment:X});",
         ]
+        for entry in objects:
+            alignment = entry.segment.ld_align_segment_start 
+            if alignment is not None:
+                block.append(f"\t\tALIGNALL(0x{alignment:X});")
 
-        block.extend(f"\t\t{object_name} ({section_type})" for object_name in objects)
+            object_name = entry.object_path.name
+            block.append(f"\t\t{object_name} ({section_type})")
+
         lcf_blocks.append("\n".join(block))
 
     generated_lcf = "\n\n".join(lcf_blocks)
