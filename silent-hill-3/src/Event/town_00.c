@@ -1,9 +1,8 @@
 #include "town_00.h"
 
-s32 func_01F6D680_town_00(void) {
-    s32 var_s0;
+int func_01F6D680_town_00(void) {
+    int var_s0  = 0;
 
-    var_s0 = 0;
     switch (D_01F6E000_town_00) {                   
     case 0:
         if (func_00190A20(2) != 0) {
@@ -33,10 +32,10 @@ s32 func_01F6D680_town_00(void) {
 }
 
 
-s32 func_01F6D7A0_town_00(void) {
-    s32 var_s0 = 0;
+int func_01F6D7A0_town_00(void) {
+    int var_s0 = 0;
 
-    switch (D_01F6E000_town_00) {                   /* irregular */
+    switch (D_01F6E000_town_00) {
     case 0:
         if (func_00190A20(2) != 0) {
             D_01F6E000_town_00 += 1;
@@ -63,14 +62,12 @@ s32 func_01F6D7A0_town_00(void) {
 
 
 void func_01F6D8A0_town_00(void) {
-    s32 value;
+    int value;
     u8 byte;
-    s32 temp_v0;
-    s32 count;
-    s32* cur;
+    int temp_v0;
+    int count = 0;
 
-    count = 0;
-
+    int* cur;
     for (cur = &D_01F6DF90_town_00; *cur != 0; cur++) {
         temp_v0 = func_0012FD80(0x200, (s16)*cur);
         if (!temp_v0) {
@@ -130,7 +127,7 @@ void func_01F6DA00_town_00(void) {
     if (D_01F6E008_town_00 == 0) {
         func_01F6D9F0_town_00();
     }
-    if (((u32) D_1D31684 >> 3) & 1) {
+    if ((D_1D31684 >> 3) & 1) {
         func_001AF0B0();
         return;
     }

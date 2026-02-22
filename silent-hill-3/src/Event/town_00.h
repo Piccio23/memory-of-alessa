@@ -3,31 +3,31 @@
 
 #include "common.h"
 
-extern void PlayerEventMove(f32*);                            
-extern s32 func_0016C1C0(s32);                               
-extern s32 func_00190690();                                
-extern void func_001908A0(f32*, f32*);                        
-extern s32 func_00190A20(s32);                               
+extern void PlayerEventMove(float*);                            
+extern int func_0016C1C0(int);                               
+extern int func_00190690();                                
+extern void func_001908A0(float*, float*);                        
+extern int func_00190A20(int);                               
 extern void func_00190AD0();   
 
-extern f32 D_01F6DF70_town_00;
-extern s32 D_01F6DF74_town_00;
-extern f32 D_01F6DF78_town_00;
+extern float D_01F6DF70_town_00;
+extern int D_01F6DF74_town_00;
+extern float D_01F6DF78_town_00;
 
-extern s32 D_01F6E000_town_00;
-extern s32 D_01F6E008_town_00;
+extern int D_01F6E000_town_00;
+extern int D_01F6E008_town_00;
                                
-extern f32 D_01F6DF80_town_00;
-extern s32 D_01F6DF84_town_00;
-extern f32 D_01F6DF88_town_00;
-extern s32 D_01F6DF90_town_00;
+extern float D_01F6DF80_town_00;
+extern int D_01F6DF84_town_00;
+extern float D_01F6DF88_town_00;
+extern int D_01F6DF90_town_00;
 
-extern s32 func_0012FD80(s32, s64);                         
-extern s32 func_00199770(s32);                             
-extern s32 func_001E2110(s32);                             
-extern void shCharacter_Manage_Delete(s32, u16);                
+extern int func_0012FD80(int, long);                         
+extern int func_00199770(int);                             
+extern int func_001E2110(int);                             
+extern void shCharacter_Manage_Delete(int, u_short);                
 
-extern u32 D_1D31684;
+extern u_int D_1D31684;
 
 extern void func_01F6D8A0_town_00();                          
 
