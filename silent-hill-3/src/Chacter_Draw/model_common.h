@@ -64,7 +64,6 @@ typedef struct Model3Junk
     u_char gs_clip_or;         // offset 0x1B3, size 0x1
 } Model3Junk;
 
-// Chacter_Draw\model3_vu1_n.c
 typedef struct Model
 {
     // total size: 0x80

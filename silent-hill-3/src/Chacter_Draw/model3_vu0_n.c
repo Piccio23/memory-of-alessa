@@ -613,7 +613,34 @@ void DrawPart0(ktVif1Ot2* ot, Part* part, ModelWork* work) {
     draw_base ^= 0x1000;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Chacter_Draw/model3_vu0_n", DrawParts0);
+static void DrawParts0(ktVif1Ot2 * ot /* r17 */, ModelWork * work /* r2 */, void (*make)(Part*), void (*draw)(ktVif1Ot2*, Part*, ModelWork*)) {
+    Part * part;
+    int i;
+    int n_parts;
+
+    part = func_001D0EC0();
+    n_parts = func_001D0EA0();
+
+    if (n_parts != 0) { 
+
+        LoadProgram_Vu0();
+        MakeData0();
+        make(part);
+        KickCalcPartPacket();
+        PrepareSort();
+
+        for (i = 1; i < n_parts; i++) {
+            Part* next = (Part*)((u_int) part + part->size);
+            make(next);
+            TransferToSPR();
+            KickCalcPartPacket();
+            draw(ot, part, work);
+            part = next;
+        }
+        TransferToSPR();
+        draw(ot, part, work);
+    }
+}
 
 void Model3DrawVu0Parts(Model* model, ModelWork* work) {
     ktVif1Ot2* ot = CharacterOt_KtVif1Ot2(model);
@@ -626,7 +653,6 @@ void Model3DrawVu0Parts(Model* model, ModelWork* work) {
     calc_base = 0;
     draw_base = 0;
 
-    // arguments 2 & 3 seem to be function pointers:
-    DrawParts0(ot, work, func_0025CF10(), func_0025CF00());
+    DrawParts0(ot, work, (void*) func_0025CF10(), (void*) func_0025CF00());
 }
 

@@ -263,7 +263,7 @@ typedef struct Data {
 
 
 void FlipXMTOP();
-static void DrawParts0(ktVif1Ot2 * ot /* r17 */, ModelWork * work /* r2 */, s32 func0, s32 func1);
+static void DrawParts0(ktVif1Ot2 * ot /* r17 */, ModelWork * work /* r2 */, void (*make)(Part*), void (*draw)(ktVif1Ot2*, Part*, ModelWork*));
 
 extern u_int model3_mpg0_skel_load[];
 extern signed int initialized; // @ 0x00419FA0
@@ -308,6 +308,8 @@ extern u_int D_003B6080; // vutext
 extern u_int D_003BAB80; // vutext
 extern u_int D_003BAD80; // vutext
 extern int func_001C91F0();
+extern int func_001D0EA0(); // gets model n parts?
+extern Part* func_001D0EC0();
 
 extern int D_01EE3DE0;
 extern int draw_base;
@@ -315,7 +317,6 @@ extern int draw_base;
 extern u32 xmtop;
 extern AllPacket* all_packet;
 extern int calc_base;
-extern int draw_base;
 extern void (* sort_functions[8])(struct ktVif1Ot2 *, struct Part *); // size: 0x20, address: 0x2A9730
 
 extern void func_0011FD28(sceVif0Packet *pPacket, u_long128 *pBase);
