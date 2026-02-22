@@ -89,8 +89,8 @@ def generate_linker_dependencies(args: GenerationArgs):
     output += "\n"
     for path_str in path_strs:
         output += f"{path_str}:\n"
-
-    write_file_if_different(splat_options.opts.ld_script_path.with_suffix(".d"), output)
+    
+    ensure_path_and_write(splat_options.opts.ld_script_path.with_suffix(".d"), output)
 
 def generate_lcf(args: GenerationArgs):
     '''

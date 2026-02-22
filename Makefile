@@ -78,6 +78,8 @@ YAMLS := $(shell find $(CONFIG) -name "*.yaml" ! -name "*.config.yaml")
 SPLAT_CONFIG := $(CONFIG)/splat.config.yaml
 D_FILES := \
 	$(patsubst $(CONFIG)/%.yaml, $(LINKERS)/%.d, $(YAMLS))
+SPLAT_FILES := $(SPLAT_CONFIG) $(wildcard $(CONFIG)/*.txt)
+OVERLAY_SPLAT_FILES = $(CONFIG)/overlay/%_symbol_addrs.txt
 ###############################################################
 
 BINUTILS_FLAVOR := mips-ps2-decompals
@@ -167,7 +169,7 @@ report: $(SETUP) $(OBJDIFF) $(OBJDIFF_CONFIG)
 	@$(MAKE) expected
 	@$(OBJDIFF) report generate -o $(BUILD)/report.json
 
-split: $(D_FILES)
+split: $(D_FILES) $(SPLAT_FILES)
 
 setup: $(SETUP)
 
@@ -234,17 +236,17 @@ sh3-clean:
 sh2-clean:
 	$(MAKE) PROJECT="silent-hill-2" clean
 ###############################################################
-$(LINKERS)/%.d: $(CONFIG)/overlay/%.yaml $(SPLAT_CONFIG) $(SETUP)
+$(LINKERS)/%.d: $(CONFIG)/overlay/%.yaml $(OVERLAY_SPLAT_FILES) $(SETUP)
 	$(GENERATE) $(GENERATE_OVERLAY_FLAGS) $(SPLAT_CONFIG) $<
 
-$(LINKERS)/%.d: $(CONFIG)/%.yaml $(SPLAT_CONFIG) $(SETUP)
+$(LINKERS)/%.d: $(CONFIG)/%.yaml $(SPLAT_FILES) $(SETUP)
 	$(GENERATE) $(GENERATE_FLAGS) $(SPLAT_CONFIG) $<
 
 $(BUILD)/$(SERIAL): $(SETUP) $(OVERLAY_TARGETS) $(LINKER_SCRIPT)
 	$(LD)
 	$(CHECK_MATCH_PERCENT)
 
-$(BUILD)/%.c.o: $(PROJECT)/%.c
+$(BUILD)/%.c.o: $(PROJECT)/%.c $(wildcard $(PROJECT)/%.h)
 	@mkdir -p "$(@D)"
 	$(CC)
 
