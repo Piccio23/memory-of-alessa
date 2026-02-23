@@ -66,7 +66,7 @@ a _disassembler_, this project uses
 
 Splat allow us to describe the structure of our file using a markdown format.
 For example, see the Silent Hill 3 project YAML at
-[SLUS_206.22.yaml](../silent-hill-2/config/SLUS_202.28/SLUS_202.28.yaml), and
+[SLUS_206.22.yaml](../silent-hill-3/config/SLUS_206.22/SLUS_206.22.yaml), and
 also see the Silent Hill 2 YAML,
 [SLUS_202.28.yaml](../silent-hill-2/config/SLUS_202.28/SLUS_202.28.yaml).
 Because we have debug information in Silent Hill 2 from a 2001 demo release, the
