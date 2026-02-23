@@ -5,11 +5,11 @@ on:
     branches:
       - main
     paths-ignore:
-      - "**.md"
+      - '**.md'
 
 jobs:
   build:
-    if: github.repository == "dreamingmoths/memory-of-alessa"
+    if: github.repository == 'dreamingmoths/memory-of-alessa'
     container:
       image: ghcr.io/dreamingmoths/alessa:latest
       credentials:
@@ -39,7 +39,7 @@ jobs:
         run: make -j $(nproc)
 
   progress:
-    if: github.repository == "dreamingmoths/memory-of-alessa"
+    if: github.repository == 'dreamingmoths/memory-of-alessa'
     container:
       image: ghcr.io/dreamingmoths/alessa:latest
       credentials:
