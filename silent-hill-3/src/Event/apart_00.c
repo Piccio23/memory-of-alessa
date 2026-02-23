@@ -2,7 +2,13 @@
 
 INCLUDE_ASM("asm/nonmatchings/Event/apart_00", func_01F6D680_apart_00);
 
-INCLUDE_ASM("asm/nonmatchings/Event/apart_00", func_01F6D7B0_apart_00);
+void func_01F6D680_apart_00(void);
+
+int func_001DE5B0(void (*cb)(void), int arg, int flag);
+
+int func_01F6D7B0_apart_00(int arg0) {
+    return func_001DE5B0(func_01F6D680_apart_00, arg0, 1);
+}
 
 INCLUDE_ASM("asm/nonmatchings/Event/apart_00", func_01F6D7D0_apart_00);
 
