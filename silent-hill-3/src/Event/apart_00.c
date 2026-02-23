@@ -10,43 +10,108 @@ int func_01F6D7B0_apart_00(int arg0) {
     return func_001DE5B0(func_01F6D680_apart_00, arg0, 1);
 }
 
-typedef int s32;
-typedef float f32;
-
-extern void func_001C2290(s32, s32, f32);
+extern void func_001C2290(int, int, float);
 
 void func_01F6D7D0_apart_00(void* arg0) {
     char* base;
     char* temp_v1;
-    s32 temp_a0;
-    s32 temp_a1;
-    s32 addr;
+    int temp_a0;
+    int temp_a1;
+    int addr;
 
     base = (char*)arg0;
 
-    temp_a1 = *(s32*)(base + 0x1A8);
+    temp_a1 = *(int*)(base + 0x1A8);
 
     addr = temp_a1 * 0xC;
-    addr += (s32)base;
+    addr += (int)base;
     temp_v1 = (char*)addr;
 
-    temp_a0 = *(s32*)(temp_v1 + 0x1BC);
+    temp_a0 = *(int*)(temp_v1 + 0x1BC);
 
     if ((temp_a0 != 0) &&
-        !(*(f32*)(base + 0x1B4) < *(f32*)(temp_v1 + 0x1C0))) {
+        !(*(float*)(base + 0x1B4) < *(float*)(temp_v1 + 0x1C0))) {
 
         func_001C2290(
             temp_a0,
             temp_a1,
-            *(f32*)(temp_v1 + 0x1C4)
+            *(float*)(temp_v1 + 0x1C4)
         );
 
-        *(s32*)(base + 0x1A8) =
-            *(s32*)(base + 0x1A8) + 1;
+        *(int*)(base + 0x1A8) =
+            *(int*)(base + 0x1A8) + 1;
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Event/apart_00", func_01F6D840_apart_00);
+extern void func_0016F550(int, int);
+extern void func_0019B240(void*, int);
+
+extern char D_01F6FB80_apart_00[];
+
+void func_01F6D840_apart_00(void* arg0) {
+    register int s0;
+    register int s1;
+    register char* s2;
+    register char* s3;
+
+    int a0;
+    int off;
+    char* v1;
+
+    float f0;
+    float f1;
+    float t;
+
+    s3 = (char*)arg0;
+
+    func_0019B240(arg0, 0x240);
+
+    s2 = D_01F6FB80_apart_00;
+    s0 = 0;
+    s1 = 0;
+
+    do {
+        func_0016F550(*(int*)(s2 + 0x4), s0);
+
+        a0 = *(int*)(s2 + 0x10);
+        if (a0 != 0) {
+            off = s1 * 0xC;
+            s1 = s1 + 1;
+
+            v1 = s3 + off;
+            *(int*)(v1 + 0x1BC) = a0;
+
+            f0 = *(float*)(s2 + 0x8);
+            *(float*)(v1 + 0x1C0) = f0;
+
+            f0 = *(float*)(s2 + 0x14);
+            *(float*)(v1 + 0x1C4) = f0;
+        }
+
+        a0 = *(int*)(s2 + 0x18);
+        if (a0 != 0) {
+            off = s1 * 0xC;
+            s1 = s1 + 1;
+
+            v1 = s3 + off;
+            *(int*)(v1 + 0x1BC) = a0;
+
+            t  = *(float*)(s2 + 0x1C);
+            f1 = *(float*)(s2 + 0x0C);
+            f0 = f1 - t;
+            *(float*)(v1 + 0x1C0) = f0;
+
+            f0 = *(float*)(s2 + 0x1C);
+            *(float*)(v1 + 0x1C4) = f0;
+        }
+
+        s0 = s0 + 1;
+        s2 = s2 + 0x20;
+    } while (s0 < 5);
+
+    f0 = *(float*)(s2 + 0x8);
+    *(float*)(s3 + 0x1B8) = f0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Event/apart_00", func_01F6D920_apart_00);
 
