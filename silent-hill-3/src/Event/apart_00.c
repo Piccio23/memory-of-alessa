@@ -10,7 +10,41 @@ int func_01F6D7B0_apart_00(int arg0) {
     return func_001DE5B0(func_01F6D680_apart_00, arg0, 1);
 }
 
-INCLUDE_ASM("asm/nonmatchings/Event/apart_00", func_01F6D7D0_apart_00);
+typedef int s32;
+typedef float f32;
+
+extern void func_001C2290(s32, s32, f32);
+
+void func_01F6D7D0_apart_00(void* arg0) {
+    char* base;
+    char* temp_v1;
+    s32 temp_a0;
+    s32 temp_a1;
+    s32 addr;
+
+    base = (char*)arg0;
+
+    temp_a1 = *(s32*)(base + 0x1A8);
+
+    addr = temp_a1 * 0xC;
+    addr += (s32)base;
+    temp_v1 = (char*)addr;
+
+    temp_a0 = *(s32*)(temp_v1 + 0x1BC);
+
+    if ((temp_a0 != 0) &&
+        !(*(f32*)(base + 0x1B4) < *(f32*)(temp_v1 + 0x1C0))) {
+
+        func_001C2290(
+            temp_a0,
+            temp_a1,
+            *(f32*)(temp_v1 + 0x1C4)
+        );
+
+        *(s32*)(base + 0x1A8) =
+            *(s32*)(base + 0x1A8) + 1;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Event/apart_00", func_01F6D840_apart_00);
 
