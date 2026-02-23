@@ -115,8 +115,8 @@ static void InitTriangleUnknown(TriangleNormalUnknown* p) {
         GIF_REG(SCE_GS_RGBAQ,      9)  |
         GIF_REG(SCE_GS_XYZF2,      10) |
         GIF_REG(SCE_GS_PRIM,       11);
-  (p->unknown_0x20).u64[1] = 6;
-  (p->unknown_0x30).u64[1] = 8;
+  (p->n_tex0).u64[1] = 6;
+  (p->n_clamp).u64[1] = 8;
   (p->u_giftag).u64[0] = SCE_GIF_SET_TAG(
         1,
         SCE_GS_TRUE,
@@ -141,18 +141,18 @@ static void InitTriangleUnknown(TriangleNormalUnknown* p) {
         GIF_REG(SCE_GIF_PACKED_AD, 12);
 
     func_0025BF10(&p->unknown_0xe0, 6, 0x8001);
-    func_0025C000(&p->unknown_0x100);
+    func_0025C000(&p->u_rgba2);
 
-    p->unknown_0xf0.u64[1] = 8;
-    p->unknown_0xf0.u64[0] = 0;
+    p->u_stq2.u64[1] = 8;
+    p->u_stq2.u64[0] = 0;
 
     func_0025C0D0(&q);
 
     // @todo: is there a better match?
     q_adr = (u_int)&q;
     p->unknown_0x180.u128 = ((Q*)q_adr)->u128;
-    p->unknown_0x150.u128 = ((Q*)q_adr)->u128;
-    p->unknown_0x120.u128 = ((Q*)q_adr)->u128;
+    p->u_stq0.u128 = ((Q*)q_adr)->u128;
+    p->u_stq1.u128 = ((Q*)q_adr)->u128;
 
     p->unknown_0x1a0.u64[0] = 0x44;
     p->unknown_0x1a0.u64[1] = 0x42;
