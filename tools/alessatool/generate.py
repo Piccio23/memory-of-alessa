@@ -184,9 +184,7 @@ def generate_objdiff_units(args: GenerationArgs):
         is_code = source_path.endswith(".c")
 
         metadata = UnitMetadata(
-            progress_categories=[
-                parent.name
-            ],
+            progress_categories=[parent.name == "engine" and "engine" or "stages"],
             source_path=is_code and source_path or None
         )
 
