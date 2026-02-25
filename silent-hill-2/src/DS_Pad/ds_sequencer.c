@@ -45,3 +45,30 @@ void Sequencer_Type_Hispeed(EntryRecord *pER)
             now_act_lv_i);
     }
 }
+
+static int Node_Next_Search(Record_Info* pInfo, float Time) {
+    u_int node_num = pInfo->pObject->DataNode_num;
+    DS_Record * pDSR = pInfo->pAddress;
+
+    int result = -1;
+    u_int i;
+    for (i = 0; i < node_num; i++, pDSR++) {
+        if (Time < pDSR->Time) {
+            result = i;
+            break;
+        }
+    }
+
+    return result;
+}
+
+static int Node_Current_Search(Record_Info * pInfo /* r2 */, float Time /* r29+0x10 */) {
+    signed int result = -1; // r7
+    signed int num = Node_Next_Search(pInfo, Time); // r2
+
+    if (num > 0) {
+        result = num - 1;
+    }
+
+    return result;
+}
