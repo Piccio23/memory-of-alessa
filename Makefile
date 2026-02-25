@@ -94,8 +94,10 @@ AS_FLAGS := \
 
 LD :=
 ifneq ($(NON_MATCHING),1)
+ifneq ($(LINK),0)
 	LD = $(WIBO) $(MWLD) -o "$@" $(MWLD_FLAGS) \
 			"$(LINKER_SCRIPT)" $(shell find $(BUILD) -name "*.o")
+endif
 endif
 
 WIBO_BINARY := wibo-$(if $(filter $(ARCH),arm64),macos,$(ARCH))
@@ -152,8 +154,10 @@ GENERATE_EXPECTED := $(GENERATE) --no-lcf --make-full-disasm-for-code
 
 CHECK_MATCH_PERCENT :=
 ifneq ($(NON_MATCHING),1)
+ifneq ($(LINK),0)
 	CHECK_MATCH_PERCENT = @$(TOOLS)/scripts/diff.sh $(SERIAL) $(CONFIG) $(BUILD) $(OBJCOPY)
-endif 
+endif
+endif
 
 TOOLCHAIN := $(WIBO) $(MWCCGAP_ENTRYPOINT) $(MWCC) $(MWLD) $(AS)
 SETUP := $(SOURCE_PREREQS) $(TOOLCHAIN)

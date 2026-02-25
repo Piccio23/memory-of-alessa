@@ -40,6 +40,7 @@ OVERLAYS ?= \
 	subway_01 \
 	subway_02 \
 	town_00
+LINK ?= 1
 
 SOURCE_OVERLAY_ARCHIVE := $(ROM)/B0.MFA
 

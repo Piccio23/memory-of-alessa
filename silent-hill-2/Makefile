@@ -1,5 +1,6 @@
 SERIAL := SLUS_202.28
 OVERLAYS := 
+LINK ?= 0
 
 TOOLS := tools
 
