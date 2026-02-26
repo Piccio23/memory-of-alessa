@@ -65,20 +65,34 @@ sh2gfw_ModelDraw_MAN *sh2gfw_Get_pMD(int chara_id);
 void SCSetModel(SubCharacter *scp, int model, int anime);
 int shCharacter_Manage_SetDataAdresss(SubCharacter *scp);
 
-extern int Node_Current_Search(struct Record_Info *pInfo /* r2 */, float Time /* r29+0x10 */);
+extern int Node_Current_Search(Record_Info *pInfo /* r2 */, float Time /* r29+0x10 */);
 
-extern int Node_Next_Search(struct Record_Info *pInfo /* r2 */, float Time /* r29 */);
+extern int Node_Next_Search(Record_Info *pInfo /* r2 */, float Time /* r29 */);
 extern float Sequence_Different_Time_Get();
 extern void TotalActuaterLV_Keeper(u_int ControllerID /* r2 */, u_int ActuaterType /* r2 */, float ActuaterLV /* r29 */);
-extern void Sequencer_Type_Hispeed(struct EntryRecord *pER /* r16 */);
+extern void Sequencer_Type_Hispeed(EntryRecord *pER /* r16 */);
 
 static u_int EntryRecord_EntryFreeCount_Get();
 static u_int EntryRecord_EntryCount_Increment();
 static u_int EntryRecord_Handle_Create();
 static u_int EntryRecord_ID_Search(u_int ID /* r18 */);
 static u_int EntryRecord_Attribute_Search(u_int Attribute /* r18 */);
-static struct EntryRecord * EntryRecordTable_FreeSpace_Search();
-static u_int DSR_FileFormat_ErrorChecker(struct DS_Record_Header * pHeader /* r16 */);
-static u_int EntryRecord_Entry(u_int * pHandleArray /* r21 */, struct DS_Record_Header * pHeader /* r20 */, u_int ControllerID /* r19 */, float Ratio /* r20 */);
+static EntryRecord * EntryRecordTable_FreeSpace_Search();
+static u_int DSR_FileFormat_ErrorChecker(DS_Record_Header * pHeader /* r16 */);
+static u_int EntryRecord_Entry(u_int * pHandleArray /* r21 */, DS_Record_Header * pHeader /* r20 */, u_int ControllerID /* r19 */, float Ratio /* r20 */);
+
+
+static void Sequencer_Type_Hispeed(EntryRecord * pER /* r16 */);
+static void Sequencer_Type_Lowspeed(EntryRecord * pER /* r18 */);
+static void Sequencer_Type_Hispeed_Edit(EntryRecord * pER /* r16 */);
+static void Sequencer_Type_Lowspeed_Edit(EntryRecord * pER /* r16 */);
+static u_int EntryRecord_Enable_Check(EntryRecord * pER /* r2 */);
+static u_int EntryRecord_TimeOver_Check(EntryRecord * pER /* r2 */);
+static u_int EntryRecord_Type_Get(EntryRecord * pER /* r2 */);
+static u_int EntryRecord_Condition_Get(EntryRecord * pER /* r2 */);
+static u_int EntryRecord_Handle_Get(EntryRecord * pER /* r2 */);
+static EntryRecord * EntryRecord_Get_fromTableIndex(u_int EntryTable_Index /* r2 */);
+static u_int EventMessage_Post(u_int Handle /* r2 */, u_int EventID /* r2 */, float Value /* r29+0x30 */);
+
 
 #endif

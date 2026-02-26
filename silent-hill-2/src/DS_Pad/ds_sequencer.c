@@ -1,6 +1,64 @@
 // E:\work\sh2(CVS全取得)\src\DS_Pad\ds_sequencer.c
 #include "ds_sequencer.h"
 
+void SequencerManager() {
+    u_int i;
+    EntryRecord *pER;
+    u_int Handle;
+    for (i = 0; i < 0x14U; i++) {
+        pER = EntryRecord_Get_fromTableIndex(i);
+
+
+        if (EntryRecord_Enable_Check(pER) != 0) {
+            Handle = EntryRecord_Handle_Get(pER);
+
+
+            switch (EntryRecord_Condition_Get(pER)) {
+                case 2:
+
+                    
+                switch (EntryRecord_Type_Get(pER)) {
+                    case 0:
+                        Sequencer_Type_Hispeed(pER);
+                        break;
+                    case 1:
+                        Sequencer_Type_Lowspeed(pER);
+                        break;
+                    case 2:
+                        Sequencer_Type_Hispeed_Edit(pER);
+                        break;
+                    case 3:
+                        Sequencer_Type_Lowspeed_Edit(pER);
+                        break;
+                }
+
+                EventMessage_Post(Handle, 2U, 0.0f);
+
+                if (EntryRecord_TimeOver_Check(pER) != 0) {
+                    switch (EntryRecord_Type_Get(pER))
+                    {
+                    case 0:
+                    case 1:
+                        EventMessage_Post(Handle, 1U, 0.0f);
+                        break;
+                    case 2:
+                    case 3:
+                        EventMessage_Post(Handle, 6U, 0.0f);
+                        EventMessage_Post(Handle, 3U, 0.0f);
+                        break;
+                    }
+                }
+                
+                case 1:
+                case 3:
+                case 0: {
+                    break;
+                }
+            }
+        }
+    }
+}
+
 void Sequencer_Type_Hispeed(EntryRecord *pER)
 {
     DS_Record *pDSR;
