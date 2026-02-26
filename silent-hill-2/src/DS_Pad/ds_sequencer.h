@@ -49,9 +49,9 @@ typedef struct DS_Record
 typedef struct DS_Record_Header {
     // total size: 0x20
     unsigned char DataName[16]; // offset 0x0, size 0x10
-    unsigned int Revision; // offset 0x10, size 0x4
-    unsigned int Object_Num; // offset 0x14, size 0x4
-    unsigned int Reserved[2]; // offset 0x18, size 0x8
+    u_int Revision; // offset 0x10, size 0x4
+    u_int Object_Num; // offset 0x14, size 0x4
+    u_int Reserved[2]; // offset 0x18, size 0x8
 } DS_Record_Header;
 
 typedef struct DS_Record_Edit {
@@ -71,5 +71,14 @@ extern int Node_Next_Search(struct Record_Info *pInfo /* r2 */, float Time /* r2
 extern float Sequence_Different_Time_Get();
 extern void TotalActuaterLV_Keeper(u_int ControllerID /* r2 */, u_int ActuaterType /* r2 */, float ActuaterLV /* r29 */);
 extern void Sequencer_Type_Hispeed(struct EntryRecord *pER /* r16 */);
+
+static u_int EntryRecord_EntryFreeCount_Get();
+static u_int EntryRecord_EntryCount_Increment();
+static u_int EntryRecord_Handle_Create();
+static u_int EntryRecord_ID_Search(u_int ID /* r18 */);
+static u_int EntryRecord_Attribute_Search(u_int Attribute /* r18 */);
+static struct EntryRecord * EntryRecordTable_FreeSpace_Search();
+static u_int DSR_FileFormat_ErrorChecker(struct DS_Record_Header * pHeader /* r16 */);
+static u_int EntryRecord_Entry(u_int * pHandleArray /* r21 */, struct DS_Record_Header * pHeader /* r20 */, u_int ControllerID /* r19 */, float Ratio /* r20 */);
 
 #endif
