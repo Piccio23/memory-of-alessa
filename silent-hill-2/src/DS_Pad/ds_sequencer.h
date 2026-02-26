@@ -1,3 +1,4 @@
+// E:\work\sh2(CVS全取得)\src\DS_Pad\ds_sequencer.c
 #ifndef DS_SEQUENCER_H
 #define DS_SEQUENCER_H
 
@@ -44,6 +45,21 @@ typedef struct DS_Record
     u_char Complement_Enable; // offset 0x5, size 0x1
     u_char Reserved[2];       // offset 0x6, size 0x2
 } DS_Record;
+
+typedef struct DS_Record_Header {
+    // total size: 0x20
+    unsigned char DataName[16]; // offset 0x0, size 0x10
+    unsigned int Revision; // offset 0x10, size 0x4
+    unsigned int Object_Num; // offset 0x14, size 0x4
+    unsigned int Reserved[2]; // offset 0x18, size 0x8
+} DS_Record_Header;
+
+typedef struct DS_Record_Edit {
+    // total size: 0x10
+    struct DS_Record Record; // offset 0x0, size 0x8
+    struct DS_Record_Edit * pPrev; // offset 0x8, size 0x4
+    struct DS_Record_Edit * pNext; // offset 0xC, size 0x4
+} DS_Record_Edit;
 
 sh2gfw_ModelDraw_MAN *sh2gfw_Get_pMD(int chara_id);
 void SCSetModel(SubCharacter *scp, int model, int anime);

@@ -1,4 +1,4 @@
-#include "sh2_common.h"
+// E:\work\sh2(CVS全取得)\src\DS_Pad\ds_sequencer.c
 #include "ds_sequencer.h"
 
 void Sequencer_Type_Hispeed(EntryRecord *pER)
@@ -70,5 +70,118 @@ static int Node_Current_Search(Record_Info * pInfo /* r2 */, float Time /* r29+0
         result = num - 1;
     }
 
+    return result;
+}
+
+// | Permission | Meaning                            |
+// | ---------- | ---------------------------------- |
+// | 0          | always allowed                     |
+// | 1          | block if attribute already exists  |
+// | 2          | block if ID already exists         |
+// | 3          | block if attribute OR ID exists    |
+// | 4          | block if attribute AND ID exists   |
+#define DSR_PERMISSION_NONE        0
+#define DSR_PERMISSION_ATTRIBUTE   1
+#define DSR_PERMISSION_ID          2
+#define DSR_PERMISSION_ATTR_OR_ID  3
+#define DSR_PERMISSION_ATTR_AND_ID 4
+
+u_int EntryRecord_Entry(u_int* pHandleArray, DS_Record_Header* pHeader, u_int ControllerID, f32 Ratio) {
+    unsigned int result = 0; // r16
+    unsigned int i; // r16
+
+    // validate header & check that we have room for this record
+    if ((DSR_FileFormat_ErrorChecker(pHeader) == 0) && (EntryRecord_EntryFreeCount_Get() >= pHeader->Object_Num)) {    
+        unsigned int permission_check = 1;
+        DS_Object_Info * pObject_Info = (DS_Object_Info*) (pHeader + 1);
+
+        // check if we have permission to create the record
+
+        switch (pObject_Info->Permission) {        
+        case DSR_PERMISSION_ATTRIBUTE:
+            if (EntryRecord_Attribute_Search(pObject_Info->Attribute) != 0) {
+                permission_check = 0;
+            }
+            break;
+        case DSR_PERMISSION_ID:
+            if (EntryRecord_ID_Search(pObject_Info->ID) != 0) {
+                permission_check = 0;
+            }
+            break;
+        case DSR_PERMISSION_ATTR_OR_ID:
+            if ((EntryRecord_Attribute_Search(pObject_Info->Attribute) != 0) || (EntryRecord_ID_Search(pObject_Info->ID) != 0)) {
+                permission_check = 0;
+            }
+            break;
+        case DSR_PERMISSION_ATTR_AND_ID:
+            if ((EntryRecord_Attribute_Search(pObject_Info->Attribute) != 0) && (EntryRecord_ID_Search(pObject_Info->ID) != 0)) {
+                permission_check = 0;
+            }
+            break;
+        case DSR_PERMISSION_NONE:
+            break;
+        }
+
+        // 0 & 1 are of a fixed size, and 2 & 3 have dynamic size
+        if (permission_check != 0) {
+            switch (pObject_Info->Type) {
+                case 0:
+                case 1: {
+                    for (i = 0; i < pHeader->Object_Num; i++, pObject_Info++) {
+                        EntryRecord * pER = EntryRecordTable_FreeSpace_Search();
+                        pER->Enable = 1;
+                        pER->Controller_ID = (u_short) ControllerID;
+    
+                        pER->Handle = EntryRecord_Handle_Create();
+                        pER->Ratio = Ratio;
+                        pER->Info.pObject = pObject_Info;
+                        pER->Info.pAddress = (void*)((u_int)pHeader + pObject_Info->Offset);
+    
+                        pER->Time_Max = ((DS_Record*)pER->Info.pAddress + pER->Info.pObject->DataNode_num - 1)->Time;
+    
+                        if (pHandleArray != NULL) {
+                            pHandleArray[i] = pER->Handle;
+                        }
+    
+                        EntryRecord_EntryCount_Increment();
+                    }
+                    break;
+                }
+                case 2:
+                case 3: {
+                    for (i = 0; i < pHeader->Object_Num; i++, pObject_Info++) {
+                        EntryRecord * pER = EntryRecordTable_FreeSpace_Search();
+                        DS_Record_Edit * pTail; // r2
+                        pER->Enable = 1;
+                        pER->Controller_ID = (u_short) ControllerID;
+                        pER->Handle = EntryRecord_Handle_Create();
+                        pER->Ratio = Ratio;
+                        pER->Info.pObject = pObject_Info;
+                        pER->Info.pAddress = (void* ) pObject_Info->Offset;
+    
+    
+                        pTail = pER->Info.pAddress;
+
+                        while (pTail->pNext != NULL) {
+                            pTail = pTail->pNext;
+                        }
+                        pER->Time_Max = pTail->Record.Time;
+    
+                        
+                        if (pHandleArray != NULL) {
+                            pHandleArray[i] = pER->Handle;
+                        }
+    
+                        EntryRecord_EntryCount_Increment();
+                    }
+                    break;
+                }
+            }
+    
+            result = 1;
+
+
+        }
+    }
     return result;
 }
