@@ -96,6 +96,9 @@ Node_Current_Search = 0x13C890;
 Node_Next_Search = 0x13C840;
 Sequence_Different_Time_Get = 0x13BAD0;
 
+RoomName  = 0x170810;
+room_name = 0x1d41ef0; // type:s64
+
 // model3_vu0_n.c
 InitTriangleNormal = 0x001d3d50;
 DrawPart0 = 0x001d65d0;
@@ -374,7 +377,6 @@ func_00332F10 = 0x332F10;
 func_0012D080 = 0x12D080;
 func_001D1C20 = 0x1D1C20;
 func_00332D20 = 0x332D20;
-func_00170810 = 0x170810;
 func_0016C9C0 = 0x16C9C0;
 func_00160520 = 0x160520;
 func_0019A940 = 0x19A940;

@@ -1,29 +1,30 @@
 #include "building_f_02.h"
 
 void func_01F6D680_building_f_02(void) {
-    switch (func_00170810()) {                              
-        case 0x7A:
-            if (!(((u32)D_1D3166C >> 1) & 1)) {
+    switch (RoomName()) {    
+        case BUILDING_KMN_JACK_ROOM:
+            if (!((D_1D3166C >> 1) & 1)) { // if you don't have the jack
                 func_0016CA40(7);
-                D_1D31710 |= 0x200;
+                D_1D31710 |= 0x200; 
             } else {
-                D_1D31710 &= ~0x200;
+                D_1D31710 &= ~0x200; // jack grabbed
             }
         break;
-        case 0x7C:
-            if ((func_00199820() & 0xFF) && !(((u32)D_1D31668 >> 0x1E) & 1)) {
+        case BUILDING_MONICAS_OFFICE:
+            // riddle diff is normal+(???) & if you don't have the screwdriver
+            if (((u_char) func_00199820()) && !((D_1D31668 >> 0x1E) & 1)) {
                 func_0016CA40(4);
                 D_1D31710 |= 0x1000;
             } else {
-                D_1D31710 &= ~0x1000;
+                D_1D31710 &= ~0x1000; // screwdriver grabbed
             }
         break;
-        case 0x7D:
-            if (!(D_1D3166C & 1)) {
+        case BUILDING_GALLERY_KATANA_ROOM:
+            if (!(D_1D3166C & 1)) { // if you don't have the katana
                 func_0016CA40(3);
                 D_1D31710 |= 0x2000;
             } else {
-                D_1D31710 &= ~0x2000;
+                D_1D31710 &= ~0x2000; // katana grabbed
             }
         break;
     }

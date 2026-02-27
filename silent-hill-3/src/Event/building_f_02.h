@@ -3,6 +3,10 @@
 
 #include "common.h"
 
+#define BUILDING_KMN_JACK_ROOM              0x7A
+#define BUILDING_MONICAS_OFFICE             0x7C
+#define BUILDING_GALLERY_KATANA_ROOM        0x7D
+
 void func_0016CA40(int);                                 
 int func_00170810();                                
 int func_00199820();                                
