@@ -10,7 +10,7 @@ void func_01F6D680_building_f_02(void) {
                 D_1D31710 &= ~0x200; // jack grabbed
             }
         break;
-        case BUILDING_MONICAS_OFFICE:
+        case BUILDING_5F_SCREWDRIVER_CORRIDOR:
             // riddle diff is normal+(???) & if you don't have the screwdriver
             if (((u_char) func_00199820()) && !((D_1D31668 >> 0x1E) & 1)) {
                 func_0016CA40(4);
