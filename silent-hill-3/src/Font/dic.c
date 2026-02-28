@@ -6,7 +6,34 @@ INCLUDE_ASM("asm/nonmatchings/Font/dic", func_00157570);
 
 INCLUDE_ASM("asm/nonmatchings/Font/dic", dicCodeAsc);
 
-INCLUDE_ASM("asm/nonmatchings/Font/dic", dicCode81);
+u_short dicCode81(u_char c) {
+    if (!IS_VALID_SJIS_81(c)) {
+        return DICTIONARY_INVALID;
+    }
+
+    if (c == SJIS_81_SPECIAL) {
+        return 0xFFFEU;
+    }
+    if (c < SJIS_81_DEL) {
+        return c + 0x9F;
+    }
+    if (c < SJIS_81_ROW1_MIN) {
+        return c + 0x9E;
+    }
+    if (c < SJIS_81_ROW2_MIN) {
+        return c + 0x93;
+    }
+    if (c < SJIS_81_ROW3_MIN) {
+        return c + 0x8B;
+    }
+    if (c < SJIS_81_ROW4_MIN) {
+        return c + 0x80;
+    }
+    if (c < SJIS_81_ROW5_MIN) {
+        return c + 0x79;
+    }
+    return 0x171;
+}
 
 u_short func_00157A90(u_char c) {
     if (!IS_VALID_SJIS_82(c))
