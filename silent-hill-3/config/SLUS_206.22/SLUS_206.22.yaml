@@ -42,7 +42,7 @@ segments:
       - [0x03d290, asm,     text_3]
       - [0x043460, c,       Chacter/m3_bgobj]
       - [0x043680, asm,     text_4]
-      - [0x057150, asm,     Font/dic]
+      - [0x057150, c,       Font/dic]
       - [0x0582b0, c,       Font/font]
       - [0x05e0f0, asm,     text_5]
       - [0x0c2130, c,       Heap/utilheap]
