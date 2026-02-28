@@ -54,7 +54,6 @@ INCLUDE_ASM("asm/nonmatchings/Chacter_Draw/model3_vu1_n", func_001D7A00);
 
 INCLUDE_ASM("asm/nonmatchings/Chacter_Draw/model3_vu1_n", func_001D7AA0);
 
-// MakeSpecularPacketBase?
 void func_001D7B40(Part* part, sceVif1Packet* pk) {
     int mpg = (part->backclip == 0) ? 0x2e : 0x30;
 

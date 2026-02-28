@@ -6,9 +6,6 @@
 #include "libdma.h"
 #include "model_common.h"
 
-// MakeSpecularPacketBase? or swapped with MakeSpecularPacket
-void func_001D7B40(Part* part, sceVif1Packet* pk);
-
 typedef struct Part
 {
     // total size: 0x90
