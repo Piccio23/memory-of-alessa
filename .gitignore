@@ -19,6 +19,6 @@ tools/objdiff-*
 !.vscode/c_cpp_properties.json
 .splache
 __pycache__
-decorated.s
+*decorated.s
 tmp*.c
 *.log
