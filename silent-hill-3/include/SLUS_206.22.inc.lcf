@@ -326,7 +326,7 @@ SECTIONS
 		. = ALIGN(0x80);
 		subway_02_overlay_header.s.o (.data)
 		
-		subway_02.s.o (.text)
+		subway_02.c.o (.text)
 
 		. = ALIGN(0x80);
 
@@ -495,7 +495,7 @@ SECTIONS
 		. = ALIGN(0x80);
 		hospital_f_01_overlay_header.s.o (.data)
 		
-		hospital_f_01.s.o (.text)
+		hospital_f_01.c.o (.text)
 
 		. = ALIGN(0x80);
 
@@ -631,7 +631,7 @@ SECTIONS
 		. = ALIGN(0x80);
 		amusement_01_overlay_header.s.o (.data)
 		
-		amusement_01.s.o (.text)
+		amusement_01.c.o (.text)
 
 		. = ALIGN(0x80);
 

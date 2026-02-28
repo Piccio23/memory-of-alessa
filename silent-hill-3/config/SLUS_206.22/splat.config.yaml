@@ -12,3 +12,5 @@ options:
   asm_inc_header: |
     .set noat      /* allow manual use of $at */
     .set noreorder /* don't insert nops after branches */
+    .set ACC, $ACC
+    .set Q, $Q
