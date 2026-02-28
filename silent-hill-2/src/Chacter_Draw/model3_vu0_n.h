@@ -16,7 +16,7 @@
 #define DMAret  (6<<28)
 #define DMAend  (7<<28)
 
-union Q
+typedef union Q
 {
     __int128 u128;         // offset 0x0, size 0x10
     unsigned long u64[2];  // offset 0x0, size 0x8
@@ -30,7 +30,7 @@ union Q
     signed int q[4];       // offset 0x0, size 0x10
     float fv[4];           // offset 0x0, size 0x10
     signed int iv[4];      // offset 0x0, size 0x10
-};
+} Q;
 
 typedef struct TriangleNormal
 {
