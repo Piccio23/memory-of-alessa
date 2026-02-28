@@ -102,4 +102,10 @@ typedef struct Model
 
 extern ModelCommonWork *model_common_work;
 
+typedef struct Data {
+    // total size: 0x10
+    union Q rgba; // offset 0x0, size 0x10
+} Data;
+
+
 #endif

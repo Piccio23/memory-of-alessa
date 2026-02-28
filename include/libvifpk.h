@@ -47,4 +47,6 @@ void sceVif0PkRefMpg(sceVif0Packet *pPacket, u_short vuaddr, u_long128 *pMicro, 
 u_long128 *sceVif0PkTerminate(sceVif0Packet *pPacket);
 
 
+u_int *sceVif1PkReserve(sceVif1Packet *pPacket, u_int count);
+
 #endif

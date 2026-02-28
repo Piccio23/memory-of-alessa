@@ -56,7 +56,35 @@ INCLUDE_ASM("asm/nonmatchings/Chacter_Draw/model3_vu1_n", func_001D7AA0);
 
 INCLUDE_ASM("asm/nonmatchings/Chacter_Draw/model3_vu1_n", func_001D7B40);
 
-INCLUDE_ASM("asm/nonmatchings/Chacter_Draw/model3_vu1_n", func_001D7C00);
+void MakeSpecularPacket(Part* part, sceVif1Packet* pk) {
+    int mpg; // r16
+    struct Data * data; // r2
+
+    mpg = (part->backclip == 0) ? 0x1e : 0x20;
+
+    sceVif1PkCnt(pk, 0U);
+    sceVif1PkAddCode(pk, 0x11000000U);
+    sceVif1PkRef(pk, (u_long128*)(all_data + 0x580), 
+                 9, 0x01000101U, D_01EE8088 | 0x6c090000, 0);
+
+    sceVif1PkCnt(pk, 0U);
+    sceVif1PkAddCode(pk, 0x01000101U);
+    sceVif1PkAddCode(pk, (D_01EE8088 + 9) | 0x6C010000);
+    data = (Data*) sceVif1PkReserve(pk, 4U);
+
+#ifdef DEBUG
+    if (!(((u_int)data & 0x03) == 0)) {
+        printf("model3_vu1_n.c:945> assert:(%s)\n", "((u_int)data & 0x03) == 0");
+        do {} while (1);
+    }
+#endif
+
+    sceVu0CopyVector(data->rgba.fv, part->specular);
+    data->rgba.fv[3] = 128.0f;
+    
+    sceVif1PkAddCode(pk, D_01EE8088 | 0x04000000);
+    sceVif1PkAddCode(pk, mpg | 0x14000000);
+}
 
 INCLUDE_ASM("asm/nonmatchings/Chacter_Draw/model3_vu1_n", func_001D7D20);
 

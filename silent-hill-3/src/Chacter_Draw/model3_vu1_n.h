@@ -65,11 +65,11 @@ typedef struct SprData {
     struct NDrawData odraw[2]; // offset 0x100, size 0x100
 } SprData;
 
-extern int D_01EE8088; // fake extern, xitop
+extern u_int D_01EE8088; // fake extern, xitop
 
 extern SprData* spr_data;
-extern u_int xitop_0x0041BF08;
 
+extern int all_data; // @todo add the AllData type
 
 #endif
 

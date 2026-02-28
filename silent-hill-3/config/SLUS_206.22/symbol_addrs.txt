@@ -137,6 +137,8 @@ MakeNormalPacket = 0x001D7840;
 Model3LoadMpg1 = 0x001d6870;
 // xitop = 0x1EE8088; // allow_duplicated:True visibility:local
 spr_data = 0x00366A18; // size:4
+MakeSpecularPacket = 0x001D7C00;
+all_data = 0x01EE4040;
 
 // model3_equip_n.c
 Model3WorkEquipmentFlag = 0x001D3790;
@@ -162,6 +164,7 @@ sceDmaSync = 0x001004A0;
 sceVif1PkCnt = 0x001200D0;
 sceVif1PkAddCode = 0x00120468;
 sceVif1PkReserve = 0x001203D0;
+sceVif1PkRef = 0x00120128;
 
 // sdk
 litodp = 0x00124b50;

@@ -270,12 +270,6 @@ typedef struct ClusterData {
     unsigned short n; // offset 0x4, size 0x2
 } ClusterData;
 
-typedef struct Data {
-    // total size: 0x10
-    union Q rgba; // offset 0x0, size 0x10
-} Data;
-
-
 void FlipXMTOP();
 static void DrawParts0(ktVif1Ot2 * ot /* r17 */, ModelWork * work /* r2 */, void (*make)(Part*), void (*draw)(ktVif1Ot2*, Part*, ModelWork*));
 
