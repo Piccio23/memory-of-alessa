@@ -60,6 +60,8 @@ segments:
       - [0x0dc970, asm,     text_B]
       - [0x0fdfa0, asm,     cri/cri_0] 
       - [0x10eff0, asm,     text_C]
+      - [0x110b40, asm,     Effect2/hh_class_blood_05]
+      - [0x111420, asm,     text_D]
       - [0x238080, textbin, vutext]
       - [0x23aa80, data,    data]
       - [0x24f4c0, rodata,  rodata_0]

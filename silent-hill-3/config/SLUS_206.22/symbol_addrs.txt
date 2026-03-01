@@ -215,8 +215,32 @@ printf = 0x00100590;
 shCharacterGetSkeletons = 0x00140d80;
 close_to_angle_target = 0x00150c80;
 // event_heather_? = 0x00190410;
-Effect_Object_Initialize = 0x1c1de0;
-InstanceTable_All_Initialize = 0x141db0;
+Effect_Object_Initialize = 0x001c1de0;
+InstanceTable_All_Initialize = 0x00141db0;
+ImpactDescriptor_Post = 0x00141e50;
+QueueObject_enQueue = 0x00141550;
+rand = 0x001122c0;
+
+Object_Initialize = 0x002105c0; // allow_duplicated:True visibility:local
+Object_Draw = 0x002109d0; // allow_duplicated:True visibility:local
+ParabolaMotion_Calculator = 0x00210660; // allow_duplicated:True visibility:local
+Object_Motion_00 = 0x002106d0; // allow_duplicated:True visibility:local
+HH_Class_Suffix_Blood_01 = 0x00210c50;
+HH_Class_Prefix_Blood_01 = 0x00210c60;
+HH_Class_Blood_01 = 0x00210ce0;
+
+// could be wrong
+// Object_Initialize = 0x002f4130; // allow_duplicated:True visibility:local
+HH_Class_Plural_Phenomenon_00 = 0x002f4270;
+
+// HH_Class_Blood_Pool_Phenomenon_00
+// Object_Initialize = 0x00211690; // allow_duplicated:True visibility:local
+HH_Class_Blood_Pool_Phenomenon_00 = 0x002116e0;
+
+// smoke or flame?
+// Object_Initialize = 0x00212e20; // allow_duplicated:True visibility:local
+HH_Class_Unknown_00 = 0x00213620;
+
 
 ImpactManager = 0x001410c0;
 Object_Group_InstanceTableInfomeation_Set = 0x00142030;
