@@ -277,8 +277,8 @@ extern u_int model3_mpg0_skel_load[];
 extern signed int initialized; // @ 0x00419FA0
 
 extern __int128* D_01EE30C0; // packet buffer
-extern __int128 D_003B63C0;
-extern __int128 D_003BA2C0;
+extern u_long128 D_003B63C0;
+extern u_long128 D_003BA2C0;
 
 extern Model3Junk model3_junk;
 

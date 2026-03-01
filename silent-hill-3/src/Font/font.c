@@ -40,7 +40,7 @@ void fontSetStreamMax(u16 s_max, u16 ws_max, u16 ms_max)
 
 INCLUDE_ASM("asm/nonmatchings/Font/font", fontLoad);
 
-INCLUDE_ASM("asm/nonmatchings/Font/font", func_001585E0);
+INCLUDE_ASM("asm/nonmatchings/Font/font", fontGetData);
 
 void fontSet(u16 code, u16 x, u16 y)
 {

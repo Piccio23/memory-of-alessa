@@ -241,9 +241,9 @@ static void LoadProgram_Vu0(void) {
 
     sceVif0PkInit(pk, (u_long128*) READ_UNCACHED(&D_01EE30C0));
     if (model3_junk.cluster_nodes2 == 0) {
-        func_0011FE80(pk, &D_003B63C0, 0);
+        sceVif0PkCall(pk, &D_003B63C0, 0);
     } else {
-        func_0011FE80(pk, &D_003BA2C0, 0);
+        sceVif0PkCall(pk, &D_003BA2C0, 0);
     }
     sceVif0PkEnd(pk, 0);
     sceVif0PkTerminate(pk);

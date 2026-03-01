@@ -67,7 +67,7 @@ void func_01F6D840_apart_00(void* arg0)
 
     s3 = (Apart00Struct*)arg0;
 
-    func_0019B240(arg0, 0x240);
+    shQzero(arg0, 0x240);
 
     s2 = D_01F6FB80_apart_00;
     s0 = 0;

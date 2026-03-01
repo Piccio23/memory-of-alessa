@@ -7,7 +7,7 @@ typedef struct {
 
 extern void func_001C2290(int, float);
 extern void func_0016F550(int, int);
-extern void func_0019B240(void*, int);
+extern void shQzero(void*, int);
 extern void func_0016DCE0(int);
 extern int func_0016C540(void*, void*);
 extern int func_00199C70(int);

@@ -42,8 +42,8 @@ rom:0x381D8 reloc:MIPS_PC16 symbol:.L00137D0C addend:0x4
 rom:0x3820C reloc:MIPS_PC16 symbol:.L00137D0C addend:0x4
 rom:0x3822C reloc:MIPS_PC16 symbol:.L00137D0C addend:0x4
 rom:0x38270 reloc:MIPS_PC16 symbol:.L00137D0C addend:0x4
-rom:0x3A420 reloc:MIPS_PC16 symbol:func_00139CC0 addend:0x4
-rom:0x3A610 reloc:MIPS_PC16 symbol:func_00139EB0 addend:0x4
+rom:0x3A420 reloc:MIPS_PC16 symbol:ot_qsort_asm addend:0x4
+rom:0x3A610 reloc:MIPS_PC16 symbol:ot_qsort_asm2 addend:0x4
 // rom:0x3CEBC reloc:MIPS_PC16 symbol:.L0013C9FC addend:0x4
 // rom:0x3CECC reloc:MIPS_PC16 symbol:.L0013C9FC addend:0x4
 // rom:0x3CF00 reloc:MIPS_PC16 symbol:.L0013C9FC addend:0x4
