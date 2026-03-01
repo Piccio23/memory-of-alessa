@@ -212,6 +212,25 @@ AddFreeList = 0x012ee90;
 DataId = 0x1403d0;
 ClearWeights = 0x140430;
 printf = 0x00100590;
+shCharacterGetSkeletons = 0x00140d80;
+close_to_angle_target = 0x00150c80;
+// event_heather_? = 0x00190410;
+Effect_Object_Initialize = 0x1c1de0;
+InstanceTable_All_Initialize = 0x141db0;
+
+ImpactManager = 0x001410c0;
+Object_Group_InstanceTableInfomeation_Set = 0x00142030;
+Exception_Handling_Instance_Create = 0x00141b40;
+Instance_Search_from_InstanceHandle = 0x00141670;
+ObjectInstance_DataBlock_Get = 0x00142190;
+
+// item_menu_select.c
+// this TU isn't in SH2, but there's a string that refers to it.
+ItemMenuSelect = 0x002b1420;
+
+// dbfntprint.c
+_dbfntvsnprintf = 0x001dbd90;
+
 
 D_8 = 0x8; // ignore:true
 D_10 = 0x10; // ignore:true
