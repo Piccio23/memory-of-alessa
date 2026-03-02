@@ -366,6 +366,23 @@ HH_Class_pPrefix_0x3d = 0x003373e0;
 HH_Class_pMain_0x3d = 0x00337460;
 HH_Class_pMain_0x3e = 0x002fdfd0;
 
+// pss_vibuf.c
+getFIFOindex = 0x002b7a30;
+setD3_CHCR = 0x002b7a70;
+setD4_CHCR = 0x002b7ae0;
+scTag2 = 0x002b7b50;
+viBufCreate = 0x002b7b80;
+viBufReset = 0x002b7bf0;
+viBufBeginPut = 0x002b7d50;
+vifBufEndPut = 0x002b7e50;
+viBufAddDMA = 0x002b7eb0;
+viBufStopDMA = 0x002b80e0;
+viBufRestartDMA = 0x002b81c0;
+viBufDelete = 0x002b84e0;
+viBufFlush = 0x002b8530;
+viBufPutTs = 0x002b86d0;
+viBufGetTs = 0x002b8800;
+
 // dbfntprint.c
 _dbfntvsnprintf = 0x001dbd90;
 
@@ -867,7 +884,6 @@ vcRenewalBaseCamAngAndAdjustOfsCamAng                                           
 vcRetNearRatioSwitchAreaInXZPos                                                  = 0x1b6c20;
 vcSetNearRoadAryByCharaPos                                                       = 0x1b8a30;
 vcSetTHROUGH_DOOR_CAM_PARAM_in_VC_WORK                                           = 0x1b8300;
-viBufGetTs                                                                       = 0x2b8800;
 viBufModifyPts                                                                   = 0x2b8580;
 vwMatrixToAngleYXZ                                                               = 0x1c1690;
 vwRetNewVelocityToTargetVal                                                      = 0x1c12e0;
