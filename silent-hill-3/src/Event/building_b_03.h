@@ -9,12 +9,14 @@
 
 int   RoomName();
 void  SeCall(float, float, long);
+float shGetDT();
 void  func_0016C1A0();
 void  func_0016C1B0();
 int   func_0016C1C0(int);
 void  func_00190A20(int);
 void  func_001C2290(int, float);
-float shGetDT();
+void  func_001DE5B0(void*, int, int);
+extern void func_01F6DC90_building_b_03(int);
 
 extern int   D_01F6FC00_building_b_03;
 extern float D_01F6FC08_building_b_03;
