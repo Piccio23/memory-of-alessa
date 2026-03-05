@@ -81,7 +81,7 @@ segments:
       - [0x03e700, asm, Effect/ef_packet]
       - [0x03e840, asm, Effect/ef_stage]
       - [0x040110, asm, Enemy/en_bos]
-      - [0x041ab0, asm, Enemy/en_common]
+      - [0x041ab0, c,   Enemy/en_common]
       - [0x047f50, asm, Enemy/en_draw]
       - [0x049bc0, asm, Enemy/en_edb]
       - [0x04e720, asm, Enemy/en_effect]

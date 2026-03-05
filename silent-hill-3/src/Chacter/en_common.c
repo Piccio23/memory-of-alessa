@@ -235,7 +235,7 @@ void func_0022FE80(EnemyWork* work) {
             break;
         case SLURPER_X_CHARA_ID:
             func_0030DF30(work);
-            /* fallthrough */
+            // @bug maybe accidental fallthrough?
         case PENDULUM_CHARA_ID:
             func_002936A0(work);
             break;
