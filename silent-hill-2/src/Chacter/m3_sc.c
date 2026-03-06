@@ -1,4 +1,4 @@
-#include "character.h"
+#include "Chacter/character.h"
 #include "m3_sc.h"
 
 static void shCharacterCutList(SubCharacter* scp) {
