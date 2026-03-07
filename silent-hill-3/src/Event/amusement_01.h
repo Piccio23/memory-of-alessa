@@ -73,6 +73,11 @@ extern int func_001DD9F0(SubCharacter*);
 extern void func_001433A0(SubCharacter*, int, int);
 extern void func_0016D8F0(int);
 
+extern int func_0016BED0(int, int);
+extern int func_00199820();
+extern int func_001C2580(int);
+
+extern int D_01F74D00_amusement_01;
 extern sceVu0FVECTOR D_01F74670_amusement_01;
 extern sceVu0FVECTOR D_01F74690_amusement_01[];
 extern float D_01F74610_amusement_01[][2];
