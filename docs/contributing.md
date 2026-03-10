@@ -61,10 +61,10 @@ helpful to understand as you work in the repo.
 
 We need to extract assembly from the file we want to decompile. For this we use
 a _disassembler_, this project uses
-[spimdisasm](github.com/Decompollaborate/spimdisasm) via
+[spimdisasm](https://github.com/Decompollaborate/spimdisasm) via
 [splat](https://github.com/ethteck/splat).
 
-Splat allow us to describe the structure of our file using a markdown format.
+Splat allows us to describe the structure of our file using a markdown format.
 For example, see the Silent Hill 3 project YAML at
 [SLUS_206.22.yaml](../silent-hill-3/config/SLUS_206.22/SLUS_206.22.yaml), and
 also see the Silent Hill 2 YAML,
