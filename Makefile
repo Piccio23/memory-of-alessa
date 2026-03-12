@@ -80,6 +80,7 @@ D_FILES := \
 	$(patsubst $(CONFIG)/%.yaml, $(LINKERS)/%.d, $(YAMLS))
 SPLAT_FILES := $(SPLAT_CONFIG) $(wildcard $(CONFIG)/*.txt)
 OVERLAY_SPLAT_FILES = $(CONFIG)/overlay/%_symbol_addrs.txt
+LINKER_TEMPLATE := $(INCLUDE)/$(SERIAL).inc.lcf
 ###############################################################
 
 BINUTILS_FLAVOR := mips-ps2-decompals
@@ -133,7 +134,7 @@ OBJDIFF_FRAGMENTS = $(patsubst $(CONFIG)/%.yaml, $(BUILD)/objdiff/%.json, $(YAML
 
 ALESSATOOL := $(PYTHON) $(TOOLS)/alessatool/alessatool.py --verbose
 GENERATE := $(ALESSATOOL) generate \
-	--template-path $(INCLUDE)/$(SERIAL).inc.lcf \
+	--template-path $(LINKER_TEMPLATE) \
 	--lcf-output-path $(LINKERS)/$(SERIAL).lcf \
 	--build-path $(BUILD) \
 	--config-path $(CONFIG)
@@ -250,7 +251,7 @@ $(BUILD)/$(SERIAL): $(SETUP) $(OVERLAY_TARGETS) $(LINKER_SCRIPT)
 	$(LD)
 	$(CHECK_MATCH_PERCENT)
 
-$(BUILD)/%.c.o: $(PROJECT)/%.c $(wildcard $(PROJECT)/%.h)
+$(BUILD)/%.c.o: $(PROJECT)/%.c $(PROJECT)/%.h
 	@mkdir -p "$(@D)"
 	$(CC)
 
@@ -258,7 +259,7 @@ $(BUILD)/%.s.o: $(CONFIG)/%.s
 	@mkdir -p "$(@D)"
 	$(AS) $(AS_FLAGS) -o "$@" "$<"
 
-$(LINKER_SCRIPT): $(SPLAT_CONFIG) $(CONFIG)/$(SERIAL).yaml
+$(LINKER_SCRIPT): $(SPLAT_CONFIG) $(CONFIG)/$(SERIAL).yaml $(LINKER_TEMPLATE)
 	$(GENERATE) $(GENERATE_FLAGS) $(SPLAT_CONFIG) $(CONFIG)/$(SERIAL).yaml
 
 $(OBJDIFF_CONFIG): $(OBJDIFF_FRAGMENTS)
