@@ -863,26 +863,6 @@ func_00190240 = 0x190240;
 func_0016D5B0 = 0x16D5B0;
 func_002FE570 = 0x2FE570;
 
-// ???
-D_1F713C0 = 0x1F713C0; // ignore:true
-D_1F70F90 = 0x1F70F90; // ignore:true
-D_1F715F0 = 0x1F715F0; // ignore:true
-D_1F6F090 = 0x1F6F090; // ignore:true
-D_1F6F0A0 = 0x1F6F0A0; // ignore:true
-D_1F6F0C8 = 0x1F6F0C8; // ignore:true
-D_1F70020 = 0x1F70020; // ignore:true
-D_1F70000 = 0x1F70000; // ignore:true
-D_1F70010 = 0x1F70010; // ignore:true
-D_1F766D0 = 0x1F766D0; // ignore:true
-D_1F76720 = 0x1F76720; // ignore:true
-D_1F7AB30 = 0x1F7AB30; // ignore:true
-D_1F7AB38 = 0x1F7AB38; // ignore:true
-D_1F767B0 = 0x1F767B0; // ignore:true
-D_1F76740 = 0x1F76740; // ignore:true
-D_1F76750 = 0x1F76750; // ignore:true
-D_1F76760 = 0x1F76760; // ignore:true
-D_1F76730 = 0x1F76730; // ignore:true
-
 L_00237920 = 0x237920; // type:jtbl_label
 D_1D31670 = 0x1D31670; // size:0x10
 
