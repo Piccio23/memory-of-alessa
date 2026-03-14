@@ -1254,40 +1254,40 @@ rom:0x9A530 reloc:MIPS_PC16 symbol:.L0019A164 addend:0x4
 rom:0x9A55C reloc:MIPS_PC16 symbol:.L0019A164 addend:0x4
 rom:0x9F638 reloc:MIPS_PC16 symbol:func_0019F134 addend:0x4
 rom:0x9F698 reloc:MIPS_PC16 symbol:func_0019F134 addend:0x4
-rom:0xA30A4 reloc:MIPS_PC16 symbol:.L001A318C addend:0x4
-rom:0xA30F0 reloc:MIPS_PC16 symbol:.L001A318C addend:0x4
-rom:0xA311C reloc:MIPS_PC16 symbol:.L001A318C addend:0x4
-rom:0xA312C reloc:MIPS_PC16 symbol:.L001A318C addend:0x4
-rom:0xA3148 reloc:MIPS_PC16 symbol:.L001A318C addend:0x4
-rom:0xA31A0 reloc:MIPS_PC16 symbol:.L001A318C addend:0x4
-rom:0xA31CC reloc:MIPS_PC16 symbol:.L001A318C addend:0x4
-rom:0xA3214 reloc:MIPS_PC16 symbol:.L001A318C addend:0x4
-rom:0xA3240 reloc:MIPS_PC16 symbol:.L001A318C addend:0x4
-rom:0xA324C reloc:MIPS_PC16 symbol:.L001A318C addend:0x4
-rom:0xA3268 reloc:MIPS_PC16 symbol:.L001A318C addend:0x4
-rom:0xA32A0 reloc:MIPS_PC16 symbol:.L001A318C addend:0x4
-rom:0xA32CC reloc:MIPS_PC16 symbol:.L001A318C addend:0x4
-rom:0xA32F0 reloc:MIPS_PC16 symbol:.L001A318C addend:0x4
-rom:0xA331C reloc:MIPS_PC16 symbol:.L001A318C addend:0x4
-rom:0xA3364 reloc:MIPS_PC16 symbol:.L001A318C addend:0x4
-rom:0xA3378 reloc:MIPS_PC16 symbol:.L001A318C addend:0x4
-rom:0xA3384 reloc:MIPS_PC16 symbol:.L001A318C addend:0x4
-rom:0xA33A0 reloc:MIPS_PC16 symbol:.L001A318C addend:0x4
-rom:0xA33C4 reloc:MIPS_PC16 symbol:.L001A318C addend:0x4
-rom:0xA33F4 reloc:MIPS_PC16 symbol:.L001A318C addend:0x4
-rom:0xA3418 reloc:MIPS_PC16 symbol:.L001A318C addend:0x4
-rom:0xA3464 reloc:MIPS_PC16 symbol:.L001A318C addend:0x4
-rom:0xA3470 reloc:MIPS_PC16 symbol:.L001A318C addend:0x4
-rom:0xA3494 reloc:MIPS_PC16 symbol:.L001A318C addend:0x4
-rom:0xA353C reloc:MIPS_PC16 symbol:.L001A318C addend:0x4
-rom:0xA358C reloc:MIPS_PC16 symbol:.L001A318C addend:0x4
-rom:0xA35C4 reloc:MIPS_PC16 symbol:.L001A318C addend:0x4
-rom:0xA35E8 reloc:MIPS_PC16 symbol:.L001A318C addend:0x4
-rom:0xA3620 reloc:MIPS_PC16 symbol:.L001A318C addend:0x4
-rom:0xA3644 reloc:MIPS_PC16 symbol:.L001A318C addend:0x4
-rom:0xA367C reloc:MIPS_PC16 symbol:.L001A318C addend:0x4
-rom:0xA36AC reloc:MIPS_PC16 symbol:.L001A318C addend:0x4
-rom:0xA36E8 reloc:MIPS_PC16 symbol:.L001A318C addend:0x4
+// rom:0xA30A4 reloc:MIPS_PC16 symbol:.L001A318C addend:0x4
+// rom:0xA30F0 reloc:MIPS_PC16 symbol:.L001A318C addend:0x4
+// rom:0xA311C reloc:MIPS_PC16 symbol:.L001A318C addend:0x4
+// rom:0xA312C reloc:MIPS_PC16 symbol:.L001A318C addend:0x4
+// rom:0xA3148 reloc:MIPS_PC16 symbol:.L001A318C addend:0x4
+// rom:0xA31A0 reloc:MIPS_PC16 symbol:.L001A318C addend:0x4
+// rom:0xA31CC reloc:MIPS_PC16 symbol:.L001A318C addend:0x4
+// rom:0xA3214 reloc:MIPS_PC16 symbol:.L001A318C addend:0x4
+// rom:0xA3240 reloc:MIPS_PC16 symbol:.L001A318C addend:0x4
+// rom:0xA324C reloc:MIPS_PC16 symbol:.L001A318C addend:0x4
+// rom:0xA3268 reloc:MIPS_PC16 symbol:.L001A318C addend:0x4
+// rom:0xA32A0 reloc:MIPS_PC16 symbol:.L001A318C addend:0x4
+// rom:0xA32CC reloc:MIPS_PC16 symbol:.L001A318C addend:0x4
+// rom:0xA32F0 reloc:MIPS_PC16 symbol:.L001A318C addend:0x4
+// rom:0xA331C reloc:MIPS_PC16 symbol:.L001A318C addend:0x4
+// rom:0xA3364 reloc:MIPS_PC16 symbol:.L001A318C addend:0x4
+// rom:0xA3378 reloc:MIPS_PC16 symbol:.L001A318C addend:0x4
+// rom:0xA3384 reloc:MIPS_PC16 symbol:.L001A318C addend:0x4
+// rom:0xA33A0 reloc:MIPS_PC16 symbol:.L001A318C addend:0x4
+// rom:0xA33C4 reloc:MIPS_PC16 symbol:.L001A318C addend:0x4
+// rom:0xA33F4 reloc:MIPS_PC16 symbol:.L001A318C addend:0x4
+// rom:0xA3418 reloc:MIPS_PC16 symbol:.L001A318C addend:0x4
+// rom:0xA3464 reloc:MIPS_PC16 symbol:.L001A318C addend:0x4
+// rom:0xA3470 reloc:MIPS_PC16 symbol:.L001A318C addend:0x4
+// rom:0xA3494 reloc:MIPS_PC16 symbol:.L001A318C addend:0x4
+// rom:0xA353C reloc:MIPS_PC16 symbol:.L001A318C addend:0x4
+// rom:0xA358C reloc:MIPS_PC16 symbol:.L001A318C addend:0x4
+// rom:0xA35C4 reloc:MIPS_PC16 symbol:.L001A318C addend:0x4
+// rom:0xA35E8 reloc:MIPS_PC16 symbol:.L001A318C addend:0x4
+// rom:0xA3620 reloc:MIPS_PC16 symbol:.L001A318C addend:0x4
+// rom:0xA3644 reloc:MIPS_PC16 symbol:.L001A318C addend:0x4
+// rom:0xA367C reloc:MIPS_PC16 symbol:.L001A318C addend:0x4
+// rom:0xA36AC reloc:MIPS_PC16 symbol:.L001A318C addend:0x4
+// rom:0xA36E8 reloc:MIPS_PC16 symbol:.L001A318C addend:0x4
 rom:0xA8A4C reloc:MIPS_PC16 symbol:.L001A8608 addend:0x4
 rom:0xA8B2C reloc:MIPS_PC16 symbol:.L001A8608 addend:0x4
 rom:0xA8B68 reloc:MIPS_PC16 symbol:.L001A8608 addend:0x4

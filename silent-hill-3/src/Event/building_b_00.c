@@ -134,10 +134,10 @@ void func_01F6E2D0_building_b_00() {
             }
 
             if (!get_bit(0x15)) {
-                func_001A0740(&D_01F6EC70_building_b_00);
-                func_001A0740(&D_01F6F260_building_b_00);
-                func_001A0740(&D_01F6F530_building_b_00);
-                func_001A06F0(&D_01F6F760_building_b_00);
+                clAddDynamicFloor(&D_01F6EC70_building_b_00);
+                clAddDynamicFloor(&D_01F6F260_building_b_00);
+                clAddDynamicFloor(&D_01F6F530_building_b_00);
+                clAddDynamicWall(&D_01F6F760_building_b_00);
                 D_1D31714 |= 0x1;
             } else {
                 func_00189F00(0xEF);

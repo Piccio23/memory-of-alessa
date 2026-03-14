@@ -133,7 +133,7 @@ void func_01F6E090_building_b_02(void) {
         
         case BUILDING_OTHERWORLD_4F_HALL:
             if (func_00190950() != 0) {
-                func_001A06F0(&D_01F6EB80_building_b_02); 
+                clAddDynamicWall(&D_01F6EB80_building_b_02); 
                 break;
             }
             break;

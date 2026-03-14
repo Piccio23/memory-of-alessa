@@ -266,9 +266,9 @@ void func_01F70000_hospital_f_01(void) {
                 break;
             }
             func_0016CA40(1);
-            func_001A06F0(&D_01F71000_hospital_f_01);
-            func_001A06F0(&D_01F71140_hospital_f_01);
-            func_001A06F0(&D_01F711E0_hospital_f_01);
+            clAddDynamicWall(&D_01F71000_hospital_f_01);
+            clAddDynamicWall(&D_01F71140_hospital_f_01);
+            clAddDynamicWall(&D_01F711E0_hospital_f_01);
             break;
         
         case HOSPITAL_2F_M4_ROOM:

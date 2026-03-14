@@ -173,7 +173,7 @@ void fontSetLine(int x, int w, int y)
 
 INCLUDE_ASM("asm/nonmatchings/Font/font", fontPrintStr);
 
-INCLUDE_ASM("asm/nonmatchings/Font/font", func_00158D20);
+INCLUDE_ASM("asm/nonmatchings/Font/font", fontPrintStrNum);
 
 INCLUDE_ASM("asm/nonmatchings/Font/font", fontPrintStrMain);
 

@@ -9,6 +9,7 @@ font = 0x1D0EFB0; // size:136626
 font_dma_data = 0x3585C0; // size:272
 fontPrintStrMain = 0x158d60;
 fontPrintStr = 0x158cd0;
+fontPrintStrNum = 0x00158d20;
 fontSetColor = 0x15a930;
 fontSetStreamMax = 0x1580c0;
 fontClear = 0x158010;
@@ -236,7 +237,6 @@ printline = 0x01DBB80;
 
 // ...
 sh3_CharacterDrawOne = 0x001d13d0;
-// fontPrintStrNum = 0x00158d20;
 sceMcGetInfo = 0x0010c5d8;
 sceMcRead = 0x0010c1a0;
 LightGetNthViewNHM = 0x001c4d90;
@@ -283,6 +283,14 @@ shCharacterEnemyFLYAnimeSetP = 0x0029aa10;
 shCharacterEnemyCKNAnimeSetP = 0x0024c180;
 EnemyCKNFunction = 0x00244110;
 
+clAllInitCollisionData = 0x0019f750;
+clSetCharaHitColumn = 0x0019fd40;
+clCollectCharaPosition = 0x0019f910;
+clCollectCharaALL = 0x001a09b0;
+clAddDynamicWall = 0x001a06f0;
+clAddDynamicFloor = 0x001a0740;
+clPermitColumnExpansion = 0x001a7870;
+
 Object_Initialize = 0x002105c0; // allow_duplicated:True visibility:local
 Object_Draw = 0x002109d0; // allow_duplicated:True visibility:local
 ParabolaMotion_Calculator = 0x00210660; // allow_duplicated:True visibility:local
@@ -312,6 +320,13 @@ ObjectInstance_DataBlock_Get = 0x00142190;
 // item_menu_select.c
 // this TU isn't in SH2, but there's a string that refers to it.
 ItemMenuSelect = 0x002b1420;
+
+// sh3 stuff
+blood_color = 0x1d880c2; // type:u8
+blood_volume = 0x1d880c4; // type:u8
+GetBloodVolume = 0x0019a430;
+GetBloodColor = 0x0019a3f0;
+GetMessageStation = 0x0016f2c0;
 
 // hh_classes
 HH_Class_pMain_0x2 = 0x00212b10;
@@ -733,7 +748,6 @@ func_001C0EE0 = 0x1C0EE0;
 func_002A47C0 = 0x2A47C0;
 func_001E24F0 = 0x1E24F0;
 func_00332F20 = 0x332F20;
-func_00158D20 = 0x158D20;
 func_0018FE80 = 0x18FE80;
 D_01D31938 = 0x1D31938;
 func_001DA020 = 0x1DA020;
@@ -751,7 +765,6 @@ func_0012EA40 = 0x12EA40;
 func_0016D6B0 = 0x16D6B0;
 func_0016BEB0 = 0x16BEB0;
 func_0016BBF0 = 0x16BBF0;
-func_0016F2C0 = 0x16F2C0;
 func_001AF0B0 = 0x1AF0B0;
 func_001EC590 = 0x1EC590;
 func_0016C3C0 = 0x16C3C0;
@@ -782,7 +795,6 @@ func_00164210 = 0x164210;
 func_0019B580 = 0x19B580;
 func_0016D8F0 = 0x16D8F0;
 func_003272E0 = 0x3272E0;
-func_001A0740 = 0x1A0740;
 func_0015E880 = 0x15E880;
 func_002804E0 = 0x2804E0;
 func_0012CFC0 = 0x12CFC0;
@@ -805,7 +817,6 @@ func_00164620 = 0x164620;
 func_0015E7F0 = 0x15E7F0;
 func_00190050 = 0x190050;
 func_00163A20 = 0x163A20;
-func_001A06F0 = 0x1A06F0;
 func_00190AD0 = 0x190AD0;
 func_0016BC00 = 0x16BC00;
 func_0016DC80 = 0x16DC80;
