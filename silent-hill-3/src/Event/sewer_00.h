@@ -1,8 +1,8 @@
 #ifndef SEWER_00_H
 #define SEWER_00_H
 
-#include "common.h"
 #include "Chacter/m3_sc.h"
+#include "common.h"
 
 void func_0013D250(int, int *, float);
 void func_0013D280(int);
@@ -72,5 +72,7 @@ extern u_int D_1D316AC;
 extern u_int D_1D31644;
 extern u_int D_1D31660;
 extern u_int D_1D31664;
+
+#define GET_BIT(x, i) (((x) >> (i)) & 1)
 
 #endif
