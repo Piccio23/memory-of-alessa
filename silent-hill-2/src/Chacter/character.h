@@ -854,6 +854,6 @@ typedef struct _Character_Info
 } Character_Info;
 
 // E:\work\sh2(CVS全取得)\src\Chacter\m3_djames.c
-struct shPlayerWork sh2jms; // size: 0x540, address: 0x3C7EE0
+extern struct shPlayerWork sh2jms; // size: 0x540, address: 0x3C7EE0
 
 #endif CHARACTER_H

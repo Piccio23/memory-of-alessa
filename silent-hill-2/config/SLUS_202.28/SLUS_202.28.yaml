@@ -11,7 +11,6 @@ options:
   ld_script_path: linkers/SLUS_202.28.ld
   undefined_funcs_auto_path: linkers/sh2_undefined_funcs_auto.main.txt
   undefined_syms_auto_path: linkers/sh2_undefined_syms_auto.main.txt
-  asm_nonmatching_label_macro: ""
   symbol_addrs_path: symbol_addrs.txt
   migrate_rodata_to_functions: True
   pair_rodata_to_text: True
@@ -362,7 +361,7 @@ segments:
       - [0x28cf60, rodata,  rodata_0]
       - [0x28e0b0, .rodata, Chacter_Draw/model3_vu1_n]
       - [0x28e2c0, rodata,  rodata_1]
-      - [0x28e4b0, .rodata, Collision/cl_main]
+      - [0x28e380, .rodata, Collision/cl_main]
       - [0x28e510, rodata,  rodata_2]
       - [0x291810, .rodata, Event/item]
       - [0x2918e0, rodata,  rodata_3]

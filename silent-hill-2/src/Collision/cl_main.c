@@ -125,13 +125,77 @@ void clAddWallCollectVector(float* v0, float* v1, int* flg) {
 
 INCLUDE_ASM("asm/nonmatchings/Collision/cl_main", clCheckColumn2WallHit);
 
-INCLUDE_ASM("asm/nonmatchings/Collision/cl_main", clCheckColumn2ColumnHit);
 
-INCLUDE_ASM("asm/nonmatchings/Collision/cl_main", clCollectCharaHeightNormal);
+static void clCheckColumn2ColumnHit(CL_HITPOLY_COLUMN* col, s32* whnum, CL_HITPOLY_COLUMN* cl, s32* ptr) {
+    CL_HITRESULT cres; // r29+0x50
+    int* cur;
+    
+    for (cur = ptr; *cur != -1; cur++) {
+        signed int hitchk; // r2
+        hitchk = clCheckSubColumnToColumn(&cres, &cl[*cur].p, &col->p);
+        
+        if (hitchk == 1) {
+            ASSERT(*whnum < 32);
+            
+            clWallHitData[*whnum].kind = 3;
+            cres.cv[1] = 0.0f;
+            vec_copy(clWallHitData[*whnum].cv, cres.cv);
+            *whnum += 1;
+        }
+    }
+}
 
-INCLUDE_ASM("asm/nonmatchings/Collision/cl_main", clBattleAddQue);
+static void clCollectCharaHeightNormal(SubCharacter* sc) {
+    float st[4]; // r29+0x30
+    Vector4 * pos = &sc->pos; // r2
+    float ed[4]; // r29+0x40
+    CL_VHIT_RESULT res; // r29+0x50
 
+    st[0] = pos->x;
+    st[1] = -500.0f + pos->y;
+    st[2] = pos->z;
+    st[3] = 1.0f;
+    ed[0] = pos->x;
+    ed[1] = 1500.0f + pos->y;
+    ed[2] = pos->z;
+    ed[3] = 1.0f;
+    
+    clCheckHitEyesOnlyFloor(&res, 0, &st, &ed);
+    if (res.kind == 1) {
+        // @todo Vector4* matt?
+        pos->y = res.hobj.wall.cp.y;
+        pos->y = res.hobj.wall.cp.y;
+
+        vec_copy(&sc->grnd_normal, &res.hobj.wall.nl);
+        sc->grnd_height = res.hobj.wall.cp.y;
+    }
+}
+
+void clBattleAddQue(CL_BATTLE_QUE* que) {
+    ASSERT(clUseBattleQue < 64);
+    memcpy(&clBattleQue[clUseBattleQue], que, sizeof (struct _CL_BATTLE_QUE));
+    clUseBattleQue += 1;
+}
+
+#ifdef NON_MATCHING
+CL_BATTLE_RESULT* clBattleGetResult(u_int id, CL_BATTLE_RESULT* before) {
+    CL_BATTLE_RESULT* temp_v0;
+    int i;
+
+    for (i = before == 0 ? 0 : 1 - before->enable; i < clUseBattleResult; i++) {
+        if (id == clBattleResult[i].id) {
+            if (clBattleResult[i].enable > 0) {
+                clBattleResult[i].enable = -i;
+                return &clBattleResult[i];
+            }
+        }
+    }
+
+    return &clBattleResult[0x40];
+}
+#else
 INCLUDE_ASM("asm/nonmatchings/Collision/cl_main", clBattleGetResult);
+#endif
 
 INCLUDE_ASM("asm/nonmatchings/Collision/cl_main", clBattleCheckExec);
 
