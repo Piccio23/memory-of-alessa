@@ -91,15 +91,15 @@ inline void vec_add(void* x, void* y, void* out) {
 }
 
 inline void mat_copy(void *dst, void *src) {
-    asm volatile (
-        "lq $t6, 0(%1)\n\t"
-        "lq $t7, 0x10(%1)\n\t"
-        "sq $t6, 0(%0)\n\t"
-        "sq $t7, 0x10(%0)\n\t"
-        "lq $t6, 0x20(%1)\n\t"
-        "lq $t7, 0x30(%1)\n\t"
-        "sq $t6, 0x20(%0)\n\t"
-        "sq $t7, 0x30(%0)\n\t"
+    asm volatile ("\
+        lq $t6, 0(%1)\n\
+        lq $t7, 0x10(%1)\n\
+        sq $t6, 0(%0)\n\
+        sq $t7, 0x10(%0)\n\
+        lq $t6, 0x20(%1)\n\
+        lq $t7, 0x30(%1)\n\
+        sq $t6, 0x20(%0)\n\
+        sq $t7, 0x30(%0)"
         : : "r"(dst), "r"(src) : "t6", "t7", "memory"
     );
 }
