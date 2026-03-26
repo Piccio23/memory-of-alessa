@@ -22,4 +22,5 @@ tools/m2ctx.py
 __pycache__
 *decorated.s
 tmp*.c
+ctx.c
 *.log
