@@ -4,6 +4,7 @@
 #pragma divbyzerocheck on
 #pragma mpwc_relax     on
 
+#include "eetypes.h"
 #include "libvu0.h"
 
 typedef unsigned char u8;
@@ -17,11 +18,6 @@ typedef long s64;
 typedef float f32;
 
 typedef signed char s_char;
-typedef unsigned char u_char;
-typedef unsigned short u_short;
-typedef unsigned int u_int;
-typedef unsigned long u_long;
-typedef unsigned int u_long128;
 
 #define NULL 0
 #define PI 3.1415927f
@@ -60,7 +56,7 @@ typedef unsigned int u_long128;
 
 typedef union Q
 {
-    __int128 u128;         // offset 0x0, size 0x10
+    u_long128 u128;        // offset 0x0, size 0x10
     unsigned long u64[2];  // offset 0x0, size 0x8
     unsigned int u32[4];   // offset 0x0, size 0x10
     unsigned short u16[8]; // offset 0x0, size 0x10

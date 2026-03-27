@@ -12,7 +12,7 @@ union Q_WORDDATA {
     signed short ss16[8]; // offset 0x0, size 0x10
     char sc8[16]; // offset 0x0, size 0x10
     unsigned long ul64[2]; // offset 0x0, size 0x8
-    __int128 ul128; // offset 0x0, size 0x10
+    u_long128 ul128; // offset 0x0, size 0x10
 };
 
 // total size: 0xB0

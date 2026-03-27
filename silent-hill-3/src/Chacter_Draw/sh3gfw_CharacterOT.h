@@ -4,7 +4,7 @@
 #include "common.h"
 
 // src\Chacter_Draw\sh2gfw_CharacterOT.c
-__int128 *CharacterOt_RequestPacket(int qwc /* r2 */);
-void CharacterOt_Append(u_int depth /* r3 */, __int128 *packet /* r2 */);
+u_long128 *CharacterOt_RequestPacket(int qwc /* r2 */);
+void CharacterOt_Append(u_int depth /* r3 */, u_long128 *packet /* r2 */);
 
 #endif

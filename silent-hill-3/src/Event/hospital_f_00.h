@@ -114,7 +114,7 @@ void func_0016BBF0(void);
 void func_0016BC00(int);
 void func_0016F550(int, int);
 
-void func_0018FE60(__int128 *);
+void func_0018FE60(u_long128 *);
 void func_00190A20(int);
 void func_001C2290(int, float);
 void func_001C7BC0(Q *, Q *, Q *, int);

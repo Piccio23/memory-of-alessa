@@ -32,9 +32,9 @@ typedef struct Model3Junk
     float xyz_max_wide[4];      // offset 0x30, size 0x10
     float rgba_max[4];          // offset 0x40, size 0x10
     float global_ambient[4];    // offset 0x50, size 0x10
-    __int128 giftag_0;          // offset 0x60, size 0x10
-    __int128 giftag_1;          // offset 0x70, size 0x10
-    __int128 giftag_2;          // offset 0x80, size 0x10
+    u_long128 giftag_0;         // offset 0x60, size 0x10
+    u_long128 giftag_1;         // offset 0x70, size 0x10
+    u_long128 giftag_2;         // offset 0x80, size 0x10
     float camera[4];            // offset 0x90, size 0x10
     float wvm[4][4];            // offset 0xA0, size 0x40
     float vsm[4][4];            // offset 0xE0, size 0x40

@@ -48,7 +48,7 @@ void scTag2(QWORD *q, void *addr, u_int id, u_int qwc)
     q->l[0] = (u_long)(u_int)addr << 32 | (u_long)id << 28 | (u_long)qwc << 0;
 }
 
-int viBufCreate(ViBuf *f, __int128 *data, __int128 *tag, int size, TimeStamp *ts, int n_ts)
+int viBufCreate(ViBuf *f, u_long128 *data, u_long128 *tag, int size, TimeStamp *ts, int n_ts)
 {
     SemaParam param;
 

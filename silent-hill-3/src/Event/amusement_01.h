@@ -32,20 +32,20 @@ typedef union DWORD
 
 int func_01F6D680_amusement_01(void);
 
-void func_001C0EB0(void (*)(__int128 *, int *, __int128 *, int *, int *), int, int);
+void func_001C0EB0(void (*)(u_long128 *, int *, u_long128 *, int *, int *), int, int);
 
-static void func_01F6DCF0_amusement_01(__int128 *arg0, int *arg1, __int128 *arg2, int *arg3, int *arg4);
+static void func_01F6DCF0_amusement_01(u_long128 *arg0, int *arg1, u_long128 *arg2, int *arg3, int *arg4);
 
-static void func_01F6F430_amusement_01(__int128 *arg0, int *arg1, __int128 *arg2, int *arg3, int *arg4);
+static void func_01F6F430_amusement_01(u_long128 *arg0, int *arg1, u_long128 *arg2, int *arg3, int *arg4);
 
-static void func_01F6DC70_amusement_01(__int128 *arg0, int *arg1, __int128 *arg2, int *arg3, int *arg4);
+static void func_01F6DC70_amusement_01(u_long128 *arg0, int *arg1, u_long128 *arg2, int *arg3, int *arg4);
 
 void func_01F703B0_amusement_01(float, float);
 
 extern float func_001643C0(void);
 extern int func_0016C540(float *, float *);
 extern void func_001C2290(int, float);
-extern void func_0018FE60(__int128 *);
+extern void func_0018FE60(u_long128 *);
 extern void func_0016CF70(void);
 extern int func_0016CF80(int, int, int *);
 extern SubCharacter *shCharacterGetSubCharacter(int, short);
@@ -110,7 +110,7 @@ extern sceVu0FVECTOR D_01F74690_amusement_01[];
 extern float D_01F74610_amusement_01[][2];
 extern int D_01F74D98_amusement_01;
 extern int D_01F74CB0_amusement_01;
-extern __int128 D_01F74680_amusement_01;
+extern u_long128 D_01F74680_amusement_01;
 extern int D_01F74CB0_amusement_01;
 extern int D_01F714A0_amusement_01;
 extern int D_01F714D0_amusement_01;
@@ -151,7 +151,7 @@ extern int D_01F74C88_amusement_01;
 extern float D_01F74C98_amusement_01;
 extern float D_01F74CA0_amusement_01;
 
-extern __int128 D_01F748B0_amusement_01;
+extern u_long128 D_01F748B0_amusement_01;
 extern float D_01F748B8_amusement_01;
 extern float D_01F748C8_amusement_01;
 extern int D_01F74D18_amusement_01;
@@ -160,7 +160,7 @@ extern int D_01F74D88_amusement_01;
 extern float D_01F74DB8_amusement_01;
 extern float D_01F74DC0_amusement_01;
 
-extern __int128 D_01F748C0_amusement_01;
+extern u_long128 D_01F748C0_amusement_01;
 extern sceVu0FVECTOR D_01F748D0_amusement_01;
 extern sceVu0FVECTOR D_01F748E0_amusement_01;
 

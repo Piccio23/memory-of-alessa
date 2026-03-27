@@ -219,8 +219,8 @@ int func_01F6DD90_construct_00(void) {
             if (func_001C2580(2) == 0) {
                 return 0;
             }
-            func_0018FE60((__int128*)&sp20);
-            func_0018FE80((__int128*)&sp10);
+            func_0018FE60((u_long128*)&sp20);
+            func_0018FE80((u_long128*)&sp10);
 
             if (sp20[0] < 19960.0f) {
                 if (sp20[2] > 21140.0f && sp20[2] < 22400.0f) {

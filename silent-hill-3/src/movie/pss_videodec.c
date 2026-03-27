@@ -1,6 +1,6 @@
 #include "pss_videodec.h"
 
-int videoDecCreate(VideoDec *vd, u_char *mpegWork, int mpegWorkSize, __int128 *data, __int128 *tag, int tagSize, TimeStamp *pts, int n_pts)
+int videoDecCreate(VideoDec *vd, u_char *mpegWork, int mpegWorkSize, u_long128 *data, u_long128 *tag, int tagSize, TimeStamp *pts, int n_pts)
 {
     sceMpegCreate(&sys_mpeg, mpegWork, mpegWorkSize);
     sceMpegAddCallback(&sys_mpeg, sceMpegCbError, (sceMpegCallback)mpegError, NULL);

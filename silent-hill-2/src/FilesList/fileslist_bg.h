@@ -63,7 +63,7 @@ union fsFile {
         signed int pad1; // offset 0x8, size 0x4
         signed int pad2; // offset 0xC, size 0x4
     } check; // offset 0x0, size 0x10
-    __int128 pack; // offset 0x0, size 0x10
+    u_long128 pack; // offset 0x0, size 0x10
     struct fsCdFile cd; // offset 0x0, size 0x10
     struct fsHdFile hd; // offset 0x0, size 0x10
     struct fsMgcFile mgc; // offset 0x0, size 0x10

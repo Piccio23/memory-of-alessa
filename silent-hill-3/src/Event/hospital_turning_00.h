@@ -47,7 +47,7 @@ extern int D_01F70F80_hospital_turning_00;
 
 extern u_int D_01F715C0_hospital_turning_00;
 
-extern __int128 D_01F715F0_hospital_turning_00;
+extern u_long128 D_01F715F0_hospital_turning_00;
 
 extern u_int D_1D31648;
 extern u_int D_1D3168C;

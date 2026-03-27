@@ -98,7 +98,7 @@ int func_01F6D920_hospital_f_00(void) {
             
         D_01F6FA80_hospital_f_00 += 1;
         func_0016C3C0();
-        func_0018FE60((__int128*)&sp10);
+        func_0018FE60((u_long128*)&sp10);
         func_0015DCD0(1.0f, 10000.0f, 0x2B21, (float*)&sp10, 0, 0);
         
         default:

@@ -65,8 +65,8 @@ void SortEnvPrim(void) {
     *ep = envpacketdata;
     ep->head_ep.fogcol_d = model3_junk.fogcol;
 
-    CharacterOt_Append(0, (__int128*) &ep->head_ep);
-    CharacterOt_Append(0xFFF, (__int128*) &ep->head_ep.unk0x70); // @todo maybe head and tail combined into the same struct?
+    CharacterOt_Append(0, (u_long128*) &ep->head_ep);
+    CharacterOt_Append(0xFFF, (u_long128*) &ep->head_ep.unk0x70); // @todo maybe head and tail combined into the same struct?
 }
 
 void Model3Draw_n(void* scp_d_, void* model_, void* work_, float (*mwm)[4]) {

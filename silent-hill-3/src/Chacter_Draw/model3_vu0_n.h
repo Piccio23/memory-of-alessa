@@ -274,7 +274,7 @@ static void DrawParts0(ktVif1Ot2 * ot /* r17 */, ModelWork * work /* r2 */, void
 extern u_int model3_mpg0_skel_load[];
 extern signed int initialized; // @ 0x00419FA0
 
-extern __int128* D_01EE30C0; // packet buffer
+extern u_long128* D_01EE30C0; // packet buffer
 extern u_long128 D_003B63C0;
 extern u_long128 D_003BA2C0;
 
@@ -339,7 +339,7 @@ extern int calc_base;
 extern void (* sort_functions[8])(struct ktVif1Ot2 *, struct Part *); // size: 0x20, address: 0x2A9730
 
 extern void func_0011FD28(sceVif0Packet *pPacket, u_long128 *pBase);
-extern void func_0011FE80(sceVif0Packet*, __int128*, int);
+extern void func_0011FE80(sceVif0Packet*, u_long128*, int);
 extern int func_001CC680(void);
 
 #endif

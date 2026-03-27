@@ -59,7 +59,7 @@ void func_01F6DC40_amusement_01(void) {
     D_01F74CB0_amusement_01 = 0;
 }
 
-static void func_01F6DC70_amusement_01(__int128* arg0, int* arg1, __int128* arg2, int* arg3, int* arg4) {
+static void func_01F6DC70_amusement_01(u_long128* arg0, int* arg1, u_long128* arg2, int* arg3, int* arg4) {
     vec_copy(arg0, &D_01F74680_amusement_01);
     *arg1 = 1;
     vec_copy(arg2, &D_01F74670_amusement_01);
@@ -72,10 +72,10 @@ void func_01F6DCB0_amusement_01(void) {
     D_01F74CB0_amusement_01 = 0;
 }
 
-static void func_01F6DCF0_amusement_01(__int128* arg0, int* arg1, __int128* arg2, int* arg3, int* arg4) {
+static void func_01F6DCF0_amusement_01(u_long128* arg0, int* arg1, u_long128* arg2, int* arg3, int* arg4) {
     sceVu0FVECTOR sp60;
 
-    func_0018FE60((__int128*) &sp60);
+    func_0018FE60((u_long128*) &sp60);
     sp60[1] += -700.0f;
     vec_copy(arg0, &D_01F74690_amusement_01[D_01F74CB0_amusement_01]);
     *arg1 = 1;
@@ -435,7 +435,7 @@ void func_01F6F3C0_amusement_01(void) {
     D_01F74D18_amusement_01 = 2;
 }
 
-void func_01F6F430_amusement_01(__int128* arg0, int* arg1, __int128* arg2, int* arg3, int* arg4) {
+void func_01F6F430_amusement_01(u_long128* arg0, int* arg1, u_long128* arg2, int* arg3, int* arg4) {
     sceVu0FVECTOR sp0;
     sceVu0FVECTOR sp10;
     

@@ -27,7 +27,7 @@ extern sceMpeg sys_mpeg;
 extern VideoDec videoDec;
 extern VoBuf voBuf;
 
-int videoDecCreate(VideoDec *vd, u_char *mpegWork, int mpegWorkSize, __int128 *data, __int128 *tag, int tagSize, TimeStamp *pts, int n_pts);
+int videoDecCreate(VideoDec *vd, u_char *mpegWork, int mpegWorkSize, u_long128 *data, u_long128 *tag, int tagSize, TimeStamp *pts, int n_pts);
 void videoDecSetDecodeMode(VideoDec *vd, int ni, int np, int nb);
 int videoDecSetStream(VideoDec *vd, int strType, int ch, sceMpegCallback cb, void *data);
 void videoDecBeginPut(VideoDec *vd, u_char **ptr0, int *len0, u_char **ptr1, int *len1);

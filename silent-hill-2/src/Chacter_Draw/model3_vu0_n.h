@@ -259,7 +259,7 @@ extern u_int _vu_0_0x0037FDC0;
 
 extern u_int model3_mpg0_skel_load[];
 extern signed int initialized; // @ 0x00419FA0
-extern __int128 * packet_buffer; // r2
+extern u_long128 * packet_buffer; // r2
 
 extern struct AllData_Vu0 alldata_Vu0_Dblbuffer[2]; // size: 0xC00, address: 0x41A040
 extern int alldata_Vu0_page;

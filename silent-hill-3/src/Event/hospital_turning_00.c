@@ -178,7 +178,7 @@ void func_01F6E770_hospital_turning_00(void) {
 
 INCLUDE_ASM("asm/nonmatchings/Event/hospital_turning_00", func_01F6EAF0_hospital_turning_00);
 
-void func_01F6EB70_hospital_turning_00(__int128* arg0) {
+void func_01F6EB70_hospital_turning_00(u_long128* arg0) {
     vec_copy(arg0, &D_01F715F0_hospital_turning_00);
 }
 

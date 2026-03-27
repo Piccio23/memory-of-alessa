@@ -35,8 +35,8 @@ typedef struct
 
 typedef struct
 { // 0x60
-    /* 0x00 */ __int128 *data;
-    /* 0x04 */ __int128 *tag;
+    /* 0x00 */ u_long128 *data;
+    /* 0x04 */ u_long128 *tag;
     /* 0x08 */ int n;
     /* 0x0c */ int dmaStart;
     /* 0x10 */ int dmaN;

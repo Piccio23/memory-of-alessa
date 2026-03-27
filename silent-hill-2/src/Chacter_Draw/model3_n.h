@@ -109,8 +109,8 @@ struct Model3Junk model3_junk; // size: 0x1C0, address: 0x419DC0
 // E:\work\sh2(CVS全取得)\src\Chacter_Draw\model3_n.c
 struct EnvPacket envpacketdata; // @ 0x002A9580
 // E:\work\sh2(CVS全取得)\src\Chacter_Draw\sh2gfw_CharacterOT.c
-__int128 *CharacterOt_RequestPacket(int qwc /* r2 */);
-void CharacterOt_Append(u_int depth /* r3 */, __int128 *packet /* r2 */);
+u_long128 *CharacterOt_RequestPacket(int qwc /* r2 */);
+void CharacterOt_Append(u_int depth /* r3 */, u_long128 *packet /* r2 */);
 
 s_char *Model3SkeletonStructure(sh_Model *model);
 #endif

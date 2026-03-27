@@ -27,10 +27,9 @@ typedef unsigned short u_short;
 typedef unsigned int u_int;
 typedef unsigned long u_long;
 #endif
-#ifdef __GNUC__
+
 typedef int long128 __attribute__((mode(TI)));
 typedef unsigned int u_long128 __attribute__((mode(TI)));
-#endif
 
 #ifndef FALSE
 #define FALSE 0

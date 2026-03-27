@@ -3,15 +3,15 @@
 
 utilHeapCtrl* utilHeapInit(void* buf, u_int bytesize) {
     u_int size; // $v1
-    __int128 * bufhead; // $v0
-    __int128 * buftail; // $v0
+    u_long128 * bufhead; // $v0
+    u_long128 * buftail; // $v0
     utilHeapMBlock * mblock; // $v1
     utilHeapCtrl * heapctrl; // $v0
     u_int free; // $a0
     
     if (buf < (void *) 0x100000) return NULL;
 
-    bufhead = (__int128 *) CEIL16((u_int) buf);
+    bufhead = (u_long128 *) CEIL16((u_int) buf);
     size = FLOOR16((u_int) buf + bytesize);
 
     size -= (u_int) bufhead;
@@ -24,7 +24,7 @@ utilHeapCtrl* utilHeapInit(void* buf, u_int bytesize) {
 
     free = size - 0x20, heapctrl->free = free;
 
-    buftail = (__int128*) (heapctrl + 1);
+    buftail = (u_long128*) (heapctrl + 1);
     mblock = (utilHeapMBlock*) buftail;
 
     mblock->size = free;

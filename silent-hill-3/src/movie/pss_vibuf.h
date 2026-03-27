@@ -16,7 +16,7 @@ int getFIFOindex(ViBuf *f, void *addr);
 void setD3_CHCR(u_int val);
 void setD4_CHCR(u_int val);
 void scTag2(QWORD *q, void *addr, u_int id, u_int qwc);
-int viBufCreate(ViBuf *f, __int128 *data, __int128 *tag, int size, TimeStamp *ts, int n_ts);
+int viBufCreate(ViBuf *f, u_long128 *data, u_long128 *tag, int size, TimeStamp *ts, int n_ts);
 int viBufReset(ViBuf *f);
 void viBufBeginPut(ViBuf *f, u_char **ptr0, int *len0, u_char **ptr1, int *len1);
 void viBufEndPut(ViBuf *f, int size);
