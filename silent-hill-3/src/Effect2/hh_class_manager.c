@@ -2,7 +2,53 @@
 
 INCLUDE_ASM("asm/nonmatchings/Effect2/hh_class_manager", ImpactManager);
 
-INCLUDE_ASM("asm/nonmatchings/Effect2/hh_class_manager", func_00141240);
+static u_int InstanceManager(Object_Group_Infomeation* pInfo) {
+    u_int i; 
+    Object_InstanceTable_Infomeation* pInstance_Info; 
+    Object_Class* pClass; 
+    Object_Instance* pInstance;
+    Object_DataPool_Infomeation* pPool_Info;
+    void* pBlock_Table;
+    Object_Instance* pInstance_Current;
+    u_int Block_Index_Max; 
+    Object_Class_Association_Infomeation* pClass_Info; 
+    u_int result = 0; 
+    
+
+    pInstance_Info = &pInfo->InstanceTable_Info;
+
+    for(i = 0; i < pInfo->Association_Info.Class_Max; i++){
+        pClass_Info = &pInfo->Association_Info;
+        pClass = &pClass_Info->pClass_List[pClass_Info->pClass_Priority_List[i]];
+        pInstance = pInstance_Info->pHierarchyTable[pClass_Info->pClass_Priority_List[i]];
+        pPool_Info = &pClass_Info->pDataPool_Info[pClass_Info->pClass_Priority_List[i]];
+        pBlock_Table = pPool_Info->pBlock_Table;
+        Block_Index_Max = pPool_Info->Block_Index_Max;
+
+        if(pBlock_Table != NULL && pInstance != NULL && !(pClass->Status & 0xC)){
+            if(pClass->pPrefix != NULL){
+                pClass->pPrefix(pBlock_Table, Block_Index_Max);
+            }
+            while(pInstance != NULL){
+                pInstance_Current = pInstance;
+                pInstance = pInstance->pNext;
+                pClass->pMain(pInstance_Current->pBlock, pInstance_Current->Element);
+                pInstance_Current->Timer += 0.1/3.0;
+
+                if(*((u_int*)pInstance_Current->pBlock) == 0){
+                    InstanceHierarchyTable_DesignateInstance_Initialize(pInstance_Info, &pInfo->Queue_Info, pPool_Info, pInstance_Current);
+                }
+            }
+            if(pClass->pSuffix != NULL){
+                pClass->pSuffix(pBlock_Table, Block_Index_Max);
+            }
+
+            result = 1;
+        }
+    }
+    
+    return result;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Effect2/hh_class_manager", func_001413D0);
 
@@ -50,7 +96,7 @@ INCLUDE_ASM("asm/nonmatchings/Effect2/hh_class_manager", func_00141980);
 
 INCLUDE_ASM("asm/nonmatchings/Effect2/hh_class_manager", func_001419D0);
 
-INCLUDE_ASM("asm/nonmatchings/Effect2/hh_class_manager", func_00141A20);
+INCLUDE_ASM("asm/nonmatchings/Effect2/hh_class_manager", InstanceHierarchyTable_DesignateInstance_Initialize);
 
 INCLUDE_ASM("asm/nonmatchings/Effect2/hh_class_manager", func_00141A90);
 
@@ -91,7 +137,33 @@ INCLUDE_ASM("asm/nonmatchings/Effect2/hh_class_manager", func_00141C80);
 
 INCLUDE_ASM("asm/nonmatchings/Effect2/hh_class_manager", func_00141D50);
 
-INCLUDE_ASM("asm/nonmatchings/Effect2/hh_class_manager", InstanceTable_All_Initialize);
+static unsigned int InstanceTable_All_Initialize(struct Object_Group_Infomeation * pInfo /* r16 */) {
+    unsigned int result = 0; // r2
+    unsigned int i; // r3
+    struct Object_Instance * pCurrent; // r4
+    struct Object_Instance * pPrev; // r5
+
+    if(pInfo != NULL){
+        memset(pInfo->InstanceTable_Info.pInstanceTable, 0, pInfo->InstanceTable_Info.Instance_Max * sizeof(struct Object_Instance));
+        pInfo->InstanceTable_Info.pFreeTable = pInfo->InstanceTable_Info.pInstanceTable;
+        memset(pInfo->InstanceTable_Info.pHierarchyTable, 0, pInfo->Association_Info.Class_Max * 4);
+
+        pCurrent = pInfo->InstanceTable_Info.pInstanceTable;
+        pPrev = NULL;
+
+        for(i = 0; i < pInfo->InstanceTable_Info.Instance_Max; i++, pCurrent++){
+            pCurrent->pPrev = pPrev;
+            pCurrent->pNext = pCurrent+1;
+            pPrev = pCurrent;
+        }
+
+        (pCurrent-1)->pNext = NULL;
+        
+        result = 1;
+    }
+    
+    return result;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Effect2/hh_class_manager", ImpactDescriptor_Post);
 
@@ -116,7 +188,19 @@ u_int Object_Group_ClassAssociationInfomeation_Set(Object_Group_Infomeation* pIn
     return result;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Effect2/hh_class_manager", Object_Group_InstanceTableInfomeation_Set);
+u_int Object_Group_InstanceTableInfomeation_Set(Object_Group_Infomeation* pInfo, Object_Instance* pInstance_Base, Object_Instance** pInstance_HierarchyTable, u_int Instance_Max) {
+    u_int result = 0; 
+
+    if(pInfo != NULL && pInstance_Base != NULL && pInstance_HierarchyTable != NULL && Instance_Max != 0){
+        pInfo->InstanceTable_Info.Instance_Max = Instance_Max;
+        pInfo->InstanceTable_Info.pInstanceTable = pInstance_Base;
+        pInfo->InstanceTable_Info.pHierarchyTable = pInstance_HierarchyTable;
+        pInfo->InstanceTable_Info.pFreeTable = pInstance_Base;
+        result = 1;
+    }
+
+    return result;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Effect2/hh_class_manager", func_00142070);
 

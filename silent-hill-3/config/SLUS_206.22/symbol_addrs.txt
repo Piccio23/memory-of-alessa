@@ -336,6 +336,7 @@ HH_Class_Blood_Pool_Phenomenon_00 = 0x002116e0;
 HH_Class_Unknown_00 = 0x00213620;
 
 ImpactManager = 0x001410c0;
+InstanceManager = 0x00141240;
 Object_Group_InstanceTableInfomeation_Set = 0x00142030;
 Exception_Handling_Instance_Create = 0x00141b40;
 Instance_Search_from_InstanceHandle = 0x00141670;
@@ -348,6 +349,7 @@ ObjectInstance_DesignateClassDescriptorAttach_Count = 0x00142130;
 ObjectInstanceHandle_Get_from_ClassDescriptor_and_AttachCount = 0x00142140;
 Instance_DesignateClassDescriptorAttach_Count = 0x001416B0;
 InstanceHandle_Get_from_ClassDescriptor_and_AttachCount = 0x001416F0;
+InstanceHierarchyTable_DesignateInstance_Initialize = 0x00141A20;
 
 // item_menu_select.c
 // this TU isn't in SH2, but there's a string that refers to it.
