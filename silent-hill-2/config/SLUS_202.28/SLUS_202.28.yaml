@@ -356,7 +356,7 @@ segments:
       - [0x1988b0, asm, Effect2/hh_class_boatmask]
       - [0x199090, asm, pause]
       - [0x1996a0, c, now_loading]
-      - [0x1999a8, data, data]
+      - [0x199a00, textbin, vutext]
       - [0x28cf40, .rodata, Chacter/m3_sc]
       - [0x28cf60, rodata,  rodata_0]
       - [0x28e0b0, .rodata, Chacter_Draw/model3_vu1_n]
@@ -373,5 +373,6 @@ segments:
       - [0x298ac8, rodata,  rodata_6]
       - [0x29a870, .rodata, Effect2/hh_class_manager]
       - [0x29a8a0, rodata,  rodata_7]
+      - [0x29cd00, data,    data]
       - { vram: 0x3c7d80, type: bss, name: bss }
   - [0x2c8480]
