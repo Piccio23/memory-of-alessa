@@ -344,7 +344,7 @@ segments:
       - [0x191c00, asm, Chacter/m3_ty23]
       - [0x191d20, asm, Effect2/hh_class_blood_04]
       - [0x1924f0, asm, Effect2/hh_class_blood_pool_phenomenon_01]
-      - [0x192aa0, asm, Effect2/hh_memory_manage]
+      - [0x192aa0, c,   Effect2/hh_memory_manage]
       - [0x192f50, asm, SH2_common/mem_share]
       - [0x1937c0, asm, Effect2/hh_class_flame_03]
       - [0x194300, asm, SH2_common/result]
@@ -373,6 +373,8 @@ segments:
       - [0x298ac8, rodata,  rodata_6]
       - [0x29a870, .rodata, Effect2/hh_class_manager]
       - [0x29a8a0, rodata,  rodata_7]
+      - [0x29cb00, .rodata, Effect2/hh_memory_manage]
+      - [0x29cb80, rodata,  rodata_8]
       - [0x29cd00, data,    data]
       - { vram: 0x3c7d80, type: bss, name: bss }
   - [0x2c8480]
