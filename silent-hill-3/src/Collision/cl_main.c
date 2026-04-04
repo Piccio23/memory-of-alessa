@@ -100,7 +100,7 @@ INCLUDE_ASM("asm/nonmatchings/Collision/cl_main", func_001A55A0);
 
 INCLUDE_ASM("asm/nonmatchings/Collision/cl_main", Line2PlaneBoundaryCheckXZ);
 
-INCLUDE_ASM("asm/nonmatchings/Collision/cl_main", func_001A5690);
+INCLUDE_ASM("asm/nonmatchings/Collision/cl_main", clCheckCrossLine2BoxXZ);
 
 int clCheckCrossLine2LineXZ(float * va0, float * va1, float * vb0, float * vb1) {
     float bp[4]; // r29

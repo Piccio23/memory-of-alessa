@@ -85,6 +85,9 @@ sh3gfw_Lock_AllTexSlot_For_Shadow = 0x001b5ce0;
 sh3gfw_UnLock_AllTexSlot_For_Shadow = 0x001b5d40;
 sh3gfw_SetSlot2Tex = 0x001b5db0;
 
+// cl_main
+rodata_jyun = 0x00361bc0; // type:int[5] size:0x14
+
 // vb_main
 vbCalcViewScreenMatrix = 0x001b64a0;
 vbInitCoordinate = 0x001b65c0;
@@ -1002,6 +1005,7 @@ _waitBdecOut                                                                    
 clAddWallCollectVector                                                           = 0x1a1f60;
 clCheckBg2Chara                                                                  = 0x1a11a0;
 clCheckColumn2WallHit                                                            = 0x1a20f0;
+clCheckCrossLine2BoxXZ                                                           = 0x1a5690;
 clCheckCrossLine2LineXZ                                                          = 0x1a5890;
 clCheckHitEyeVectorBGColumn                                                      = 0x1a69f0;
 clCheckHitEyeVectorCharacter                                                     = 0x1a6b10;
