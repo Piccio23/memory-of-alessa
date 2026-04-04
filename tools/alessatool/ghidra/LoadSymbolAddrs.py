@@ -5,7 +5,7 @@ import os
 import re
 from ghidra.program.model.symbol import SourceType
 
-def loadSymbolFile(symbol_addrs_path):
+def load_symbol_file(symbol_addrs_path):
     if not os.path.exists(symbol_addrs_path):
         printerr("File not found: {}".format(symbol_addrs_path))
         return
@@ -53,6 +53,6 @@ def loadSymbolFile(symbol_addrs_path):
 
 def main():
     symbol_addrs_file = askFile("Select symbol_addrs.txt", "Load")
-    loadSymbolFile(symbol_addrs_file.absolutePath)
+    load_symbol_file(symbol_addrs_file.absolutePath)
 
 main()
