@@ -52,7 +52,7 @@ INCLUDE_ASM("asm/nonmatchings/Collision/cl_main", clAddCollectVector);
 
 INCLUDE_ASM("asm/nonmatchings/Collision/cl_main", clCheckBg2Chara);
 
-static void clCheckHitWallCollision(CL_HITPOLY_COLUMN* col, s32* whnum, CL_HITPOLY_PLANE* pl, s32* ptr) {
+static void clCheckHitWallCollision(CL_HITPOLY_COLUMN* col, int* whnum, CL_HITPOLY_PLANE* pl, int* ptr) {
     CL_HITRESULT cres;
 
     while (*ptr != -1) {
@@ -77,7 +77,7 @@ static void clCheckHitWallCollision(CL_HITPOLY_COLUMN* col, s32* whnum, CL_HITPO
     }
 }
 
-static void clCheckHitDynamicWallCollision(CL_HITPOLY_COLUMN* col, s32* whnum) {
+static void clCheckHitDynamicWallCollision(CL_HITPOLY_COLUMN* col, int* whnum) {
     int ac; // r2
     struct _CL_HITRESULT cres; // r29+0x60
     int i; // r16
@@ -139,7 +139,7 @@ void clAddWallCollectVector(float* v0, float* v1, int* flg) {
 INCLUDE_ASM("asm/nonmatchings/Collision/cl_main", clCheckColumn2WallHit);
 
 
-static void clCheckColumn2ColumnHit(CL_HITPOLY_COLUMN* col, s32* whnum, CL_HITPOLY_COLUMN* cl, s32* ptr) {
+static void clCheckColumn2ColumnHit(CL_HITPOLY_COLUMN* col, int* whnum, CL_HITPOLY_COLUMN* cl, int* ptr) {
     CL_HITRESULT cres; // r29+0x50
     int* cur;
     

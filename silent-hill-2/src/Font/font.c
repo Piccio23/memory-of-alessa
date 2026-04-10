@@ -35,7 +35,7 @@ void fontEachTurn() {
         if (font.flag & 2) {
             font.flag &= 0xfffffffd;
         } else if (!(font.flag & 0x20)) {
-            if ((s16) font.sel_max == -1) {
+            if ((short) font.sel_max == -1) {
                 if (shPadTrigger(0, 0x200) != 0) {
                     fontSelectUp();
                 }
@@ -59,7 +59,7 @@ void fontEachTurn() {
         }
         if (((font.wait_type & 7u) != 0) && (font.wait_type != 4)) {
             if (font.wait_count > 0 && !(font.flag & 0x10)) {
-                font.wait_count = font.wait_count - (s16) shGetDF();
+                font.wait_count = font.wait_count - (short) shGetDF();
             }
             if (font.wait_count == 0) {
                 if (font.wait_type & 8u) {
