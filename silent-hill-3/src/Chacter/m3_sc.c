@@ -289,7 +289,7 @@ int shCharacter_Manage_SetDataAdresss(SubCharacter* scp) {
     }
 
     if (scp_d->model_adr == NULL) {
-        func_00140D60(func_001DCAD0((s16) scp->kind));
+        func_00140D60(func_001DCAD0((short) scp->kind));
         SCSetModel(scp_d, (u_long) pMD->sh_Model, (u_long) pMD->pAnime);
         scp_d->model_adr = (u_long) pMD->sh_Model;
         scp_d->anime_adr = (u_long) pMD->pAnime;

@@ -18,7 +18,7 @@ int func_00190C00(void);
 int func_0019B580(int);
 void func_001C2290(int, float);
 int func_001C2580(int);
-void func_001C7BC0(Q*, Q*, Q*, s32);
+void func_001C7BC0(Q*, Q*, Q*, int);
 void func_0029F330(float*, float*);
 int func_002A47C0(float, float);
 void func_01F6D680_hospital_f_02(void);

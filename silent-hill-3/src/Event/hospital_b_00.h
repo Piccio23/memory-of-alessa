@@ -17,8 +17,8 @@ typedef struct {
 typedef struct {
     s16 unk0;
     s16 unk2;
-    s32 unk4;
-    s32 unk8;
+    int unk4;
+    int unk8;
     s16 unkC;
     s16 unkE;
     s16 unk10;
@@ -28,27 +28,27 @@ typedef struct {
 } Unk01F6F8C0;
 
 typedef struct {
-    s32 unk0;
-    s32 unk4;
+    int unk0;
+    int unk4;
 } Unk01F70510;
 
 typedef struct {
-    s32 pad0;
+    int pad0;
     s16 unk4;
     s16 unk6;
     s16 pad8;
     s16 padA;
-    s32 padC;
+    int padC;
     f32 unk10;
     f32 unk14;
     f32 unk18;
-    s32 pad1C;
-    s32 pad20;
+    int pad1C;
+    int pad20;
     f32 unk24;
-    s32 pad28;
-    s32 pad2C;
-    s32 unk30;
-    s32 unk34;
+    int pad28;
+    int pad2C;
+    int unk30;
+    int unk34;
 } Unk01F6E360;
 
 /**

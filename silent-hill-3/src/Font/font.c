@@ -35,7 +35,7 @@ void fontSetStreamMax(u_short s_max, u_short ws_max, u_short ms_max)
     font.m_stream = (MFONT_STREAM_DATA *)(font.w_stream + ws_max);
 
     fjAssert(
-        ((u32)(font.m_stream + ms_max) - (u32)font_stream_buf) <= FONT_STREAM_BUFFER_SIZE,
+        ((u_int)(font.m_stream + ms_max) - (u_int)font_stream_buf) <= FONT_STREAM_BUFFER_SIZE,
         "font.c",
         0x129);
 }

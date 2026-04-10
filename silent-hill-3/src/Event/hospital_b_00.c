@@ -330,7 +330,7 @@ void func_01F6E360_hospital_b_00(void) {
     }
     var_s0 = D_01F70510_hospital_b_00;
     while (var_s0->unk0 != 0){
-        if (shCharacterGetSubCharacter((s16)var_s0->unk0, var_s0->unk4) == 0) {
+        if (shCharacterGetSubCharacter((short)var_s0->unk0, var_s0->unk4) == 0) {
             var_s1 = D_01F6F8C0_hospital_b_00;
             while (var_s1 != NULL && var_s1->unk0 != 0) {
                 if ((var_s1->unk0 != var_s0->unk0) || (var_s1->unk2 != var_s0->unk4)) {

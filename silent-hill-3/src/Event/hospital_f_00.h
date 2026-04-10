@@ -125,7 +125,7 @@ void PictureLoadImage(void *);
 void shQzero(void *, int);
 int SeCall(float, float, int);
 
-void func_001DE5B0(void (*)(), PictureGroup *, s32); // maybe this is the problem
+void func_001DE5B0(void (*)(), PictureGroup *, int); // maybe this is the problem
 
 void *func_00156410(int); // not sure
 SubCharacter *shCharacterGetSubCharacter(short kind, short id);
