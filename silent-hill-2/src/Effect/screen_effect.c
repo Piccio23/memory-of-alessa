@@ -33,7 +33,7 @@ void ScreenEffectFadeStart(int type /* r2 */, float time /* r29+0x10 */) {
         case 6:
         case 7:
         case 11:
-            if ((u_int)1 >= (scr_efct.fade_status - 1)) {
+            if (1u >= scr_efct.fade_status - 1) {
                 return;
             }
             scr_efct.fade_status = 1;
