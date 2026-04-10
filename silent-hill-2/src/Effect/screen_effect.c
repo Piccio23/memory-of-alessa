@@ -10,18 +10,13 @@ void ScreenEffectInit(void) {
 }
 
 void ScreenEffectManager(void) {
-    float temp_f0;
-
-    temp_f0 = scr_efct.fade_timer_now + shGetDT();
-    scr_efct.fade_timer_now = temp_f0;
-    if (!(temp_f0 < scr_efct.fade_timer_max)) {
+    scr_efct.fade_timer_now += shGetDT();
+    if (scr_efct.fade_timer_now >= scr_efct.fade_timer_max) {
         scr_efct.fade_timer_now = scr_efct.fade_timer_max;
-        if (scr_efct.fade_status == 1) {
+        if (scr_efct.fade_status == 1)
             scr_efct.fade_status = 2;
-        }
-        if (scr_efct.fade_status == 3) {
+        if (scr_efct.fade_status == 3)
             scr_efct.fade_status = 0;
-        }
     }
 }
 
