@@ -96,4 +96,3 @@ jobs:
         with:
           name: ${{ matrix.TARGET.SERIAL }}_report
           path: build/${{ matrix.TARGET.SERIAL }}/report.json
-        if: ${{ env.REPORT_STATUS == 'changed' }}
