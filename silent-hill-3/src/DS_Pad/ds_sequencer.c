@@ -2,7 +2,7 @@
 #include "common.h"
 #include "DS_Pad/ds_sequencer.h"
 
-INCLUDE_ASM("asm/nonmatchings/DS_Pad/ds_sequencer", func_0013B520);
+INCLUDE_ASM("asm/nonmatchings/DS_Pad/ds_sequencer", SequencerManager);
 
 void Sequencer_Type_Hispeed(MysterySequenceData *unk, EntryRecord *pER)
 {

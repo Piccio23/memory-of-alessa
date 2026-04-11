@@ -132,6 +132,8 @@ SeCall = 0x15dc20;
 RObjectInit = 0x142EE0;
 RObjectFunction = 0x142F20;
 
+// ds_sequencer
+SequencerManager = 0x0013b520;
 Sequencer_Type_Hispeed = 0x13B700;
 Node_Current_Search = 0x13C890;
 Node_Next_Search = 0x13C840;
