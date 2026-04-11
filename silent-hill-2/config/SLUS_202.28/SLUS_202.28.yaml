@@ -281,7 +281,7 @@ segments:
       - [0x167360, asm, Effect2/hh_class_water_30]
       - [0x168720, asm, Effect2/hh_class_water_common]
       - [0x1691d0, asm, Effect2/hh_class_water_splash_phenomenon_00]
-      - [0x169790, asm, Effect2/hh_class_wrapper]
+      - [0x169790, c,   Effect2/hh_class_wrapper]
       - [0x16a310, asm, Effect2/hh_dbg_wrapper]
       - [0x16a4b0, asm, Effect2/hh_effect_object_def]
       - [0x16ab10, asm, Effect2/hh_effect_object_texture]
