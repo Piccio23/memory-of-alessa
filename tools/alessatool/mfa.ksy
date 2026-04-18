@@ -1,18 +1,31 @@
 meta:
   id: mfa
   file-extension: mfa
-  encoding: ascii
+  encoding: shift-jis
   endian: le
 
+params:
+  - id: skip_command_prelude
+    type: bool
+    doc: |
+      If set to true, will skip parsing the command line string at the start of
+      the file.
+
 seq:
-  - id: commmand
-    type: strz
-    size: 0xE0
+  - id: command_prelude
+    type: command_prelude
+    if: not skip_command_prelude
+  
+  - id: num_files
+    type: u4
+  
+  - id: archive_size
+    type: u4
   
   - id: file_info
     type: info
-    repeat: until
-    repeat-until: _.file_ofs == 0x20202020
+    repeat: expr
+    repeat-expr: num_files
   
   - id: filenames
     type: strz
@@ -29,9 +42,12 @@ seq:
     repeat-expr: num_files
 
 instances:
-  num_files:
-    value: _root.file_info.size - 1 
- 
+  command_size:
+    value: 0xD8
+  
+  header_size:
+    value: 0x800
+
 types:
   file:
     params:
@@ -58,3 +74,18 @@ types:
       - type: u4
       - id: file_size
         type: u4
+
+  command_prelude:
+    seq:
+      - id: commmand
+        type: str
+        terminator: 0xC # form feed
+    
+      - id: line_feed
+        type: u1
+        valid: 0xA # line feed
+    
+      - id: spaces
+        type: u1
+        repeat: until
+        repeat-until: _io.pos % 0x10 == 8

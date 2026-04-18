@@ -58,6 +58,12 @@ def main():
         type=bool,
         default=True
     )
+    extract_parser.add_argument(
+        "--overlay",
+        type=bool,
+        default=False,
+        help="print overlay header information in verbose mode"
+    )
     extract_parser.set_defaults(func=extract)
 
     generate_parser = subparsers.add_parser(

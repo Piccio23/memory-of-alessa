@@ -1,5 +1,6 @@
 from pathlib import Path
 from constants import ASM, SRC
+from os import stat
 
 def normalize_object_path(path: Path, prefix_path: Path):
     '''
@@ -35,3 +36,6 @@ def ensure_path_and_write(output_path: Path, contents: str):
     output_path.parent.mkdir(exist_ok=True, parents=True)
     with open(output_path, "w") as f:
         f.write(contents)
+
+def get_file_size(file_path: Path):
+    return stat(file_path).st_size

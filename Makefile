@@ -296,7 +296,10 @@ $(MWCCGAP_ENTRYPOINT):
 	$(GIT) submodule update --init --recursive
 
 $(OVERLAY_SOURCES): $(SOURCE_OVERLAY_ARCHIVE)
-	$(ALESSATOOL) extract --archive-path $(SOURCE_OVERLAY_ARCHIVE) --output-dir $(ROM)
+	$(ALESSATOOL) extract \
+		--archive-path $(SOURCE_OVERLAY_ARCHIVE) \
+		--output-dir $(ROM)
+		--overlay
 
 $(ROM_SYMLINK):
 	ln -sf $(realpath $(ROM)) $@
