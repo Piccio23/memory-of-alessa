@@ -60,7 +60,7 @@
 #define SJIS_87_TRAIL_MIN            0x9D
 
 #define IS_VALID_SJIS_81(c) ( \
-    ((SJIS_81_SPECIAL > (c)) || \
+    !((SJIS_81_SPECIAL > (c)) || \
     ((c) == SJIS_81_DEL) || \
     (((c) >= SJIS_81_ROW1_MIN) && (SJIS_81_ROW1_MAX >= (c))) || \
     (((c) >= SJIS_81_ROW2_MIN) && (SJIS_81_ROW2_MAX >= (c))) || \
