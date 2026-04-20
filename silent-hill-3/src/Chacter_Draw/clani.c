@@ -12,6 +12,11 @@ float func_001404C0(void);
 
 ClusterAnimeWork sh3cluster;
 
+const static float (* calc_func_list[2])(void *, int, int, short) __attribute__((section(".rodata"))) = {
+    func_001404C0,
+    Calc1
+}; 
+
 typedef struct Header {
     // total size: 0x10
     u_int id; // offset 0x0, size 0x4
@@ -86,7 +91,38 @@ void ClusterAnimeDelete(shClusterAnime* cap, int index) {
     memset(sh3cluster.cluster_weight_data[index], NULL, sizeof sh3cluster.cluster_weight_data[index]);
 }
 
-INCLUDE_ASM("asm/nonmatchings/Chacter_Draw/clani", ClusterAnimeSet);
+void ClusterAnimeSet(shClusterAnime* cap, void* data) {
+    int n_clusters;
+
+    int data_id;
+
+    
+    if (!cap) {
+        return;
+    }
+        
+    if (!data) {
+        cap->data = NULL;
+        ClearWeights(cap);
+        return;
+    }
+    
+    data_id = DataId(data);
+    if (data_id != 0x29843918 && data_id != 0x29853918) {
+        printf("ClusterAnimeSet: illegal data\n\0");
+        return;
+    }
+    
+    n_clusters = NClusters(data);
+    if (n_clusters != cap->n_clusters) {
+        printf("ClusterAnimeSet: n_clusters mismatch\n");
+        return;
+    }
+    
+    cap->data = data;
+    cap->frame_no = 0;
+    cap->frame_updated = 1;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Chacter_Draw/clani", ClusterAnimeExec);
 
