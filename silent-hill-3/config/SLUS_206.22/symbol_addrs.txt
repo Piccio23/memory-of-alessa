@@ -1031,6 +1031,7 @@ dicCode83                                                                       
 dicCode84                                                                        = 0x157be0;
 dicCode87                                                                        = 0x157c90;
 dicCodeAsc                                                                       = 0x157810;
+dicTransCode                                                                     = 0x157570;
 drop_shadow_micro_init                                                           = 0x177a60;
 efCartridgeDischargeDisp                                                         = 0x1eef90;
 exponent                                                                         = 0x115438;
