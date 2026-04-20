@@ -5,7 +5,7 @@ static u_int NClusters(void* data);
 static u_int NFrames(void* data);
 static void* NthCluster(void * data, int n);
 static float CalcDummy(void);
-static float Calc1(void* cluster, int frame, int n_frames, s16 f_counter);
+static float Calc1(void* cluster, int frame, int n_frames, short f_counter);
 static void ClearWeights(shClusterAnime* cap);
 
 typedef struct Header {
@@ -93,7 +93,7 @@ void ClusterAnimeDelete(shClusterAnime* cap, int index) {
 }
 
 #line 401
-void ClearWeights(shClusterAnime* cap) {
+static void ClearWeights(shClusterAnime* cap) {
     int n_clusters;
     float* weights;
     int i;
