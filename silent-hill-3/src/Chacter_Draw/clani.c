@@ -1,5 +1,5 @@
 #include "common.h"
-#include "clani.h"
+#include "Chacter_Draw/clani.h"
 
 static u_int DataId(void* data);
 static u_int NClusters(void* data);
@@ -124,7 +124,86 @@ void ClusterAnimeSet(shClusterAnime* cap, void* data) {
     cap->frame_updated = 1;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Chacter_Draw/clani", ClusterAnimeExec);
+void ClusterAnimeExec(shClusterAnime* cap, shAnime3dNew* ap) {
+    int sp9C;
+    float sp98;
+    Header * header; // r2
+    int n_frames; // r16
+    int n_clusters; // r17
+    int frame; // r18
+    int revision; // r2
+    int total_counter; // r3
+    float var_f20;
+    
+    float (* calc_func)(void *, int, int, float) = NULL; // r20
+    int i; // r21
+    void * cluster; // r2
+
+    if (!cap) {
+        return;
+    }
+    if (!cap->used) {
+        return;
+    }
+
+    func_0020F070(ap->unkC, ap->unkE, &sp9C, &sp98);
+    header = cap->data;
+    if (!cap->data) {
+        return;
+    }
+    if (!sp9C) {
+        return;
+    }
+
+    n_frames = NFrames(header);
+    
+    if (cap->frame_updated) {
+        var_f20 = 0.0f;
+        cap->frame_updated = 0;
+    } else {
+        cap->frame_no = sp98;
+        var_f20 = sp98 - cap->frame_no;
+
+        if (var_f20 > 0.01f && func_002A4280()) {
+            var_f20 = 0.0f;
+            cap->frame_no++;
+        }
+    }
+
+    if (cap->frame_no >= n_frames - 1) {
+        var_f20 = 0.0f;
+        cap->frame_no = n_frames - 1;
+    }
+    
+    if (cap->frame_no < 0) {
+        var_f20 = 0.0f;
+        cap->frame_no = 0;
+    }
+    
+    frame = cap->frame_no;
+    
+    revision = header->revision;
+    
+    if (revision < 2u) {
+        calc_func = calc_func_list[revision];
+    }
+    
+    if (!calc_func) {
+        calc_func = CalcDummy;
+    }
+    
+    n_clusters = NClusters(header);
+    
+    for (i = 0; i < n_clusters; i++) {
+        cluster = NthCluster(cap->data, i);
+        cap->weights[i] = calc_func(
+            cluster,
+            frame,
+            n_frames,  
+            var_f20
+        );   
+    }
+}
 
 float* ClusterAnimeGetWeights(shClusterAnime* cap, float* weights) {
     int n_clusters;
