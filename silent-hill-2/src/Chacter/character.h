@@ -2,6 +2,7 @@
 #define CHARACTER_H
 
 #include "sh2_common.h"
+#include "Chacter_Draw/clani.h"
 
 typedef struct shBattleArea
 {
@@ -20,14 +21,6 @@ typedef struct _CL_HITPOLY_HEAD
     u_int material; // offset 0x8, size 0x4
     int flg;        // offset 0xC, size 0x4
 } CL_HITPOLY_HEAD;
-
-typedef struct
-{
-    float x;
-    float y;
-    float z;
-    float w;
-} __attribute__((aligned(16))) Vector4;
 
 typedef struct _CL_VHIT_WALL
 {
@@ -115,17 +108,6 @@ typedef struct SubCharacter
     void *enemy_p;
 } SubCharacter;
 
-typedef struct shClusterAnime
-{
-    // total size: 0x10
-    void *data;           // offset 0x0, size 0x4
-    u_char used;          // offset 0x4, size 0x1
-    u_char n_clusters;    // offset 0x5, size 0x1
-    u_char is_repeat;     // offset 0x6, size 0x1
-    u_char frame_updated; // offset 0x7, size 0x1
-    int frame_no;         // offset 0x8, size 0x4
-    float *weights;       // offset 0xC, size 0x4
-} shClusterAnime;
 typedef struct sh2gfw_ModelDraw_MAN
 {
     u_int chara_id;
@@ -152,90 +134,6 @@ typedef struct sh2gfw_ModelDraw_MAN
     int d2c1d;
     void *pTexMAN[6];
 } sh2gfw_ModelDraw_MAN;
-
-typedef struct _USXY
-{
-    // total size: 0x4
-    u_short x; // offset 0x0, size 0x2
-    u_short y; // offset 0x2, size 0x2
-} USXY;
-
-typedef struct _SXY
-{
-    // total size: 0x4
-    short x; // offset 0x0, size 0x2
-    short y; // offset 0x2, size 0x2
-} SXY;
-
-typedef struct _IXY
-{
-    // total size: 0x8
-    int x; // offset 0x0, size 0x4
-    int y; // offset 0x4, size 0x4
-} IXY;
-
-typedef struct shSkelton
-{
-    // total size: 0xF0
-    struct shSkelton *next;   // offset 0x0, size 0x4
-    struct shSkelton *parent; // offset 0x4, size 0x4
-    sceVu0FMATRIX src_m;      // offset 0x10, size 0x40
-    Vector4 src_t;            // offset 0x50, size 0x10
-    sceVu0FMATRIX des_m;      // offset 0x60, size 0x40
-    Vector4 des_t;            // offset 0xA0, size 0x10
-    Vector4 axis;             // offset 0xB0, size 0x10
-    float theta;              // offset 0xC0, size 0x4
-    float xx;                 // offset 0xC4, size 0x4
-    float yy;                 // offset 0xC8, size 0x4
-    float zz;                 // offset 0xCC, size 0x4
-    float xy;                 // offset 0xD0, size 0x4
-    float yz;                 // offset 0xD4, size 0x4
-    float zx;                 // offset 0xD8, size 0x4
-    u_short c_count;          // offset 0xDC, size 0x2
-    u_short c_speed;          // offset 0xDE, size 0x2
-    s_char change;            // offset 0xE0, size 0x1
-    char reserved;            // offset 0xE1, size 0x1
-    char is_key;              // offset 0xE2, size 0x1
-    char pad;                 // offset 0xE3, size 0x1
-    void *untouchable;        // offset 0xE4, size 0x4
-} shSkelton;
-
-typedef struct _AnimeInfo
-{
-    // total size: 0xC
-    u_short name;  // offset 0x0, size 0x2
-    u_short frame; // offset 0x2, size 0x2
-    short speed;   // offset 0x4, size 0x2
-    u_short start; // offset 0x6, size 0x2
-    u_short end;   // offset 0x8, size 0x2
-    u_char loop;   // offset 0xA, size 0x1
-    char pad;      // offset 0xB, size 0x1
-} AnimeInfo;
-
-typedef struct shAnime3d
-{
-    // total size: 0x90
-    struct shSkelton *top;     // offset 0x0, size 0x4
-    void *anime;               // offset 0x4, size 0x4
-    void *frame_top;           // offset 0x8, size 0x4
-    void *p_anime;             // offset 0xC, size 0x4
-    void *p_frame_top;         // offset 0x10, size 0x4
-    u_int frame_size;          // offset 0x14, size 0x4
-    int total_count;           // offset 0x18, size 0x4
-    struct _IXY c_count;       // offset 0x1C, size 0x8
-    struct _SXY c_speed;       // offset 0x24, size 0x4
-    struct _SXY total_speed;   // offset 0x28, size 0x4
-    struct _USXY cur_frame;    // offset 0x2C, size 0x4
-    char first_bone_type;      // offset 0x30, size 0x1
-    char comp_type;            // offset 0x31, size 0x1
-    struct _AnimeInfo *anim_a; // offset 0x34, size 0x4
-    struct _AnimeInfo *anim_b; // offset 0x38, size 0x4
-    Vector4 rot_neck;          // offset 0x40, size 0x10
-    Vector4 ot_arms;           // offset 0x50, size 0x10
-    Vector4 rot_body_neck;     // offset 0x60, size 0x10
-    Vector4 rot_body;          // offset 0x70, size 0x10
-    float scale;               // offset 0x80, size 0x4
-};
 
 typedef struct SubCharacterDisp
 {

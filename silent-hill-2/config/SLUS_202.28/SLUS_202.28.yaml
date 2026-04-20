@@ -53,7 +53,7 @@ segments:
       - [0x025b00, asm, Chacter_Draw/vifot/sh_kt_vif1]
       - [0x025b50, asm, Chacter_Draw/vifot/sh_kt_vif1ot2]
       - [0x025f10, asm, Chacter_Draw/vifot/sh_kt_vif1pkbuf]
-      - [0x025fc0, asm, Chacter_Draw/clani]
+      - [0x025fc0, c,   Chacter_Draw/clani]
       - [0x026760, asm, Chacter_Draw/light_n]
       - [0x027f80, asm, Chacter_Draw/model3_cluster_n]
       - [0x028730, asm, Chacter_Draw/model3_equip_n]
@@ -354,13 +354,17 @@ segments:
       - [0x199090, asm, pause]
       - [0x1996a0, c, now_loading]
       - [0x199a00, textbin, vutext]
-      - [0x1a7b00, data,    data_0]
+      - [0x1a7b00, data,    data_0x1a7b00]
+      - [0x1a9c30, .data,   Chacter_Draw/clani]
+      - [0x1a9c38, data,    data_0x1a9c38]
       - [0x27c230, .data,   Effect2/hh_memory_manage]
-      - [0x27c240, data,    data_1]
+      - [0x27c240, data,    data_0x27c240]
       - [0x27e280, databin, vudata]
       - [0x289700, rodata,  rodata_0x289700]
       - [0x28cf40, .rodata, Chacter/m3_sc]
       - [0x28cf60, rodata,  rodata_0x28cf60]
+      - [0x28de10, .rodata, Chacter_Draw/clani]
+      - [0x28dee0, rodata,  rodata_0x28dee0]
       - [0x28e0b0, .rodata, Chacter_Draw/model3_vu1_n]
       - [0x28e2c0, rodata,  rodata_0x28e2c0]
       - [0x28e380, .rodata, Collision/cl_main]
@@ -384,6 +388,8 @@ segments:
       - [0x29cb00, .rodata, Effect2/hh_memory_manage]
       - [0x29cb80, rodata,  rodata_0x29cb80]
       - { vram: 0x03c7d80, type: bss,  name: bss_0x03c7d80 }
+      - { vram: 0x0418780, type: .bss, name: Chacter_Draw/clani }
+      - { vram: 0x0419380, type: bss,  name: bss_0x0419380 }
       - { vram: 0x041bf10, type: .bss, name: Chacter_Draw/model_common }
       - { vram: 0x0438588, type: bss,  name: bss_0x0438588 }
       - { vram: 0x122b3c0, type: .bss, name: Effect2/hh_memory_manage }
