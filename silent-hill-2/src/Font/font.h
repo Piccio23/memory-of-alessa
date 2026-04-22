@@ -3,7 +3,7 @@
 
 #include "sh2_common.h"
 
-extern u_short *msg_station;
+extern u_short* msg_station;
 #define FONT_STREAM_BUFFER_SIZE 0x4000
 
 typedef struct sh_Model
@@ -198,7 +198,15 @@ typedef struct FONT_STREAM_DATA
 struct FONT_DATA font;
 void fontSetColor(int num);
 void fontSetStreamMax(u_short s_max, u_short ws_max, u_short ms_max);
-int fjAssert_(const char *file, int line, const char *str) __attribute__((noreturn));
+int fjAssert_(const char* file, int line, const char* str) __attribute__((noreturn));
 char font_stream_buf[FONT_STREAM_BUFFER_SIZE];
 
-#endif
+u_short* fontGetMesAdr(u_short* str /* r2 */, u_short num /* r2 */);
+void fontMessage(u_short* str /* r2 */);
+void fontNextMessage(void);
+u_short fontPrintStrMain(u_short** pstr /* r29+0x15C */, int flag /* r2 */);
+
+void fontClear(void);
+void fontMessageNum(u_short* str /* r2 */, u_short num /* r2 */);
+
+#endif // FONT_H
