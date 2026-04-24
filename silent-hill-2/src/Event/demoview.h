@@ -27,7 +27,7 @@ typedef struct Playing_Info {
     u_short clearcount; // offset 0xC, size 0x2
     u_short item_get; // offset 0xE, size 0x2
     u_short kill_by_shot; // offset 0x10, size 0x2
-    u_shortkill_by_fight; // offset 0x12, size 0x2
+    u_short kill_by_fight; // offset 0x12, size 0x2
     float time; // offset 0x14, size 0x4
     float walk_distance; // offset 0x18, size 0x4
     float run_distance; // offset 0x1C, size 0x4

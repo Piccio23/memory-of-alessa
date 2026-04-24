@@ -1,6 +1,7 @@
 #include "Event/demoview.h"
 #include "SH2_common/sh2dt.h"
 #include "sound/sh_sd_call.h"
+#include "Font/font.h"
 
 extern /* static */ float sbt_timer; 
 
@@ -42,13 +43,13 @@ void SubtitlesExec(DramaDemo_MessageTime* msg_time /* r2 */, int msg_no /* r2 */
 }
 
 void SubtitlesManager(void) {
-    if (sbt_msg_no != 0) {
-        if ((sbt_str_no == 0) && !(shSdStat() & 0xF0)) {
+    if (sbt_msg_no) {
+        if (!sbt_str_no && !(shSdStat() & 0xF0)) {
             sbt_msg_no = 0;
             return;
         }
-        if ((sbt_str_no == 0) || !(shSdStat() & 0xF0)) {
-            if (sbt_str_no != 0) {
+        if (!sbt_str_no || !(shSdStat() & 0xF0)) {
+            if (sbt_str_no) {
                 shSdCall(sbt_str_no, 0, 0, 0);
                 sbt_str_no = 0;
             }
@@ -60,7 +61,7 @@ void SubtitlesManager(void) {
                 UNSET_BIT(demo_status, 8);
             }
             sbt_timer += 30.0f * shGetDT();
-            if (playing.subtitles != 0) {
+            if (playing.subtitles) {
                 if ((int) sbt_timer > sbt_msg_time->end) {
                     fontClear();
                     sbt_msg_time++;
