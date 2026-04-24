@@ -5,7 +5,7 @@ INCLUDE_ASM("asm/nonmatchings/Event/mall_b_01", func_01F6D680_mall_b_01);
 void func_01F6D740_mall_b_01(void) {
     if (GET_BIT(D_1D31658, 0x19)) {
         func_0016D0E0(0x300F, D_01F72910_mall_b_01);
-        REMOVE_FLAG(&D_1D31658, 25);
+        UNSET_FLAG(&D_1D31658, 25);
     }
 }
 

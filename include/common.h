@@ -30,12 +30,16 @@ typedef signed char s_char;
 #define READ_UNCACHED(addr)      ((((u_int)(addr)) & 0x0fffffff) | 0x20000000)
 #define GIF_REG(reg, n) ((u_long)(reg) << ((n) * 4))
 
+/* bit helpers */
 #define GET_BIT(x, i) (((x) >> (i)) & 1)
 #define SET_BIT(x, i) ((x) |= (i))
 #define UNSET_BIT(x, i) ((x) &= ~(i))
-#define GET_FLAG(x, i) (((x[i >> 5]) >> (i & 0x1F)) & 1)
-#define SET_FLAG(x, i) ((x[i >> 5]) |= (1 << (i & 0x1F)))
-#define REMOVE_FLAG(x, i) ((x)[(i) >> 5] &= ~(1 << ((i) & 0x1F)))
+
+/* `game_flag` helpers */
+#define GET_FLAG(x, i) ((((x)[(i) >> 5]) >> ((i) & 0x1F)) & 1)
+#define SET_FLAG(x, i) (((x)[(i) >> 5]) |= (1 << ((i) & 0x1F)))
+#define UNSET_FLAG(x, i) ((x)[(i) >> 5] &= ~(1 << ((i) & 0x1F)))
+
 
 #define ABORT() asm("breakc 0")
 
@@ -127,6 +131,6 @@ inline void mat_copy(void *dst, void *src) {
     );
 }
 
-extern void * memcpy(void *__dest, void *__src, u_int __n);
+extern void* memcpy(void *__dest, void *__src, u_int __n);
 
 #endif
