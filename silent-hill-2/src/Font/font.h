@@ -86,7 +86,7 @@ void fontPrintStr(u_short *str, int x, int y);
 
 */
 
-struct FONT_DATA
+typedef struct FONT_DATA
 {
     // total size: 0x215B0
     /* 0x00000 */ u_int tex_head[12];                 // size 0x30
@@ -160,7 +160,7 @@ struct FONT_DATA
     /* 0x215A4 */ int base_x;                         // size 0x4
     /* 0x215A8 */ int base_y;                         // size 0x4
     /* 0x215AC */ int base_z;                         // size 0x4
-};
+} FONT_DATA;
 
 typedef struct WFONT_STREAM_DATA
 {
@@ -198,11 +198,12 @@ typedef struct FONT_STREAM_DATA
     u_int rgb_d;
 } FONT_STREAM_DATA;
 
-struct FONT_DATA font;
+extern FONT_DATA font;
+extern char font_stream_buf[FONT_STREAM_BUFFER_SIZE];
+
 void fontSetColor(int num);
 void fontSetStreamMax(u_short s_max, u_short ws_max, u_short ms_max);
 int fjAssert_(const char* file, int line, const char* str) __attribute__((noreturn));
-char font_stream_buf[FONT_STREAM_BUFFER_SIZE];
 
 u_short* fontGetMesAdr(u_short* str /* r2 */, u_short num /* r2 */);
 void fontMessage(u_short* str /* r2 */);

@@ -1,6 +1,9 @@
 #include "sh2_common.h"
 #include "Font/font.h"
 
+FONT_DATA font;
+char font_stream_buf[FONT_STREAM_BUFFER_SIZE];
+
 // @todo: does this have an SH3 equivalent?
 void fontSetYesNo(int y) {
     int w;
