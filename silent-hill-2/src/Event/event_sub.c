@@ -122,7 +122,7 @@ int EvSubItemGet(int kind /* r16 */, int message /* r2 */)  {
 }
 
 int EvSubItemGetAndAnim(int kind /* r16 */, int message /* r2 */)  {
-    struct SubCharacter * scp; 
+    struct SubCharacter* scp; 
     
     switch (ev_s_step) {
         case 0:
