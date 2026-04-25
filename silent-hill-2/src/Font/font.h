@@ -216,4 +216,7 @@ void fontMessageNum(u_short* str /* r2 */, u_short num /* r2 */);
 int fontGetStatus(void);
 void fontPrintStr(u_short* str /* r29+0x1C */, int x /* r2 */, int y /* r2 */);
 
+int fontLoad(u_short code /* r2 */);
+void fontSet(u_short code /* r2 */, u_short x /* r17 */, u_short y /* r16 */);
+
 #endif

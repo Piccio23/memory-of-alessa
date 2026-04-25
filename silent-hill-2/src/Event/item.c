@@ -1,4 +1,4 @@
-#include "item.h"
+#include "Event/item.h"
 
 void ItemDataInit(void) {
     shQzero(&item, 0x34);
@@ -46,7 +46,6 @@ void ItemGet(int kind /* r16 */) {
 }
 
 int ItemUse(int kind /* r2 */) {
-
     if (kind < 11) {
         if (item.number[kind] > 0) {
             item.number[kind]--;
@@ -103,7 +102,7 @@ int ItemUse(int kind /* r2 */) {
     return 0;
 }
 
-int ItemWeaponShoot(signed int kind /* r16 */, signed int use /* r2 */) {
+int ItemWeaponShoot(int kind /* r16 */, int use /* r2 */) {
     if (kind == 0) {
         kind = item.equip;
     }
@@ -119,9 +118,8 @@ int ItemWeaponShoot(signed int kind /* r16 */, signed int use /* r2 */) {
     return item.number[kind];
 }
 
-#line 198
 
-int ItemWeaponReload(int kind, int use) {
+int ItemWeaponReload(int kind /* r2 */, int use /* r2 */) {
     int work;
     int weapon;
     int bullet;
@@ -173,8 +171,7 @@ int ItemWeaponReload(int kind, int use) {
     return item.number[weapon];
 }
 
-int ItemMedicineUse(signed int kind) {
-
+int ItemMedicineUse(int kind /* r16 */) {
     if ((kind != HEALTH_DRINK) && (kind != FIRST_AID_KIT) && (kind != AMPOULE)) {
         return 0;
     }
@@ -208,7 +205,7 @@ float ItemAmpolueEfficacy(void) {
     return work / 300.0f;
 }
 
-int ItemEventCheck(signed int kind_0 /* r2 */, signed int kind_1 /* r2 */, signed int kind_2 /* r2 */) {
+int ItemEventCheck(int kind_0 /* r2 */, int kind_1 /* r2 */, int kind_2 /* r2 */) {
     int use_item;
 
     use_item = ItemCombinationUseCheck(kind_0, kind_1, kind_2);
@@ -218,8 +215,7 @@ int ItemEventCheck(signed int kind_0 /* r2 */, signed int kind_1 /* r2 */, signe
     return EventCheck(0, use_item, 1);
 }
 
-#line 357
-int ItemCombinationUseCheck(int kind_0, int kind_1, int kind_2) {
+int ItemCombinationUseCheck(int kind_0 /* r2 */, int kind_1 /* r2 */, int kind_2 /* r2 */) {
     int i;
     int kind_x;
 
@@ -245,5 +241,5 @@ int ItemCombinationUseCheck(int kind_0, int kind_1, int kind_2) {
 }
 
 void ItemPutForShelf(void) {
-    stage->ev_prog[1]();;
+    stage->ev_prog[1]();
 }

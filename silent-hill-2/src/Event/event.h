@@ -80,4 +80,6 @@ extern u_short msg_buffer[];
 extern struct shPlayerWork sh2jms;
 extern Stage_Data* stage;
 
+void EventCancel(void);
+
 #endif // EVENT_H

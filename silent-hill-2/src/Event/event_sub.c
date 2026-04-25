@@ -1,4 +1,8 @@
-#include "event_sub.h"
+#include "Event/event_sub.h"
+#include "Event/item.h"
+#include "Font/font.h"
+
+static int ItemUseSeTiming(int kind /* r2 */, int boa /* r2 */);
 
 int EvSubMessage(int msg /* r2 */) {
     switch (ev_s_step) { 
@@ -21,7 +25,7 @@ int EvSubMessage(int msg /* r2 */) {
     return 0;
 }
 
-int EvSubQuestion(int msg)  {
+int EvSubQuestion(int msg /* r2 */)  {
     switch (ev_s_step) {
         case 0:
             fontMessageNum(msg_buffer, msg);
@@ -39,8 +43,7 @@ int EvSubQuestion(int msg)  {
     return 0;
 }
 
-signed int EvSubItemUse0(int kind /* r19 */, int message /* r20 */, int se /* r18 */, int stereo /* r17 */, float * pos /* r16 */, int xxx /* r2 */) {
-
+int EvSubItemUse0(int kind /* r19 */, int message /* r20 */, int se /* r18 */, int stereo /* r17 */, float* pos /* r16 */, int xxx /* r2 */) {
     switch (ev_s_step) {
         case 0:
             if (xxx != 0) {
@@ -80,7 +83,7 @@ signed int EvSubItemUse0(int kind /* r19 */, int message /* r20 */, int se /* r1
     return 0;
 }
 
-signed int ItemUseSeTiming(int kind, int boa) {
+static int ItemUseSeTiming(int kind /* r2 */, int boa /* r2 */) {
     switch (kind) {
         case 0x38:
         case 0x39:
@@ -118,14 +121,69 @@ int EvSubItemGet(int kind /* r16 */, int message /* r2 */)  {
     return 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Event/event_sub", EvSubItemGetAndAnim);
+int EvSubItemGetAndAnim(int kind /* r16 */, int message /* r2 */)  {
+    struct SubCharacter* scp; 
+    
+    switch (ev_s_step) {
+        case 0:
+            SCNowPlayableEventSwitch(sh2jms.player, 1);
+            scp = shCharacterGetSubCharacter(item_to_chara[kind], 0);
+            if (scp && sh2jms.player->pos.y - scp->pos.y < 100.0f) {
+                PlayerEventAnimeSet(0x4E21);
+                SET_EV_S_STEP(9);
+            } else {
+                PlayerEventAnimeSet(0x65);
+                SET_EV_S_STEP(10);
+            }
+            break;
+    
+        case 9:
+            if (ev_cancel) {
+                ev_prog_flag_set = 0;
+                SET_EV_S_STEP(11);
+            } else if (PlayerEventAnimeSuccessFrame()) {
+                shCharacterAnimePause(sh2jms.player);
+                SET_EV_S_STEP(10);
+            }
+            break;
+        case 10:
+            fontMessageNum(msg_buffer, message);
+            SeCall(0x2B21, 1.0f, 0);
+            SET_EV_S_STEP(3);
+            break;
+        case 3:
+            if (fontGetStatus() == -2 || ev_cancel) {
+                ItemGet(kind);
+                fontClear();
+                scp = shCharacterGetSubCharacter(item_to_chara[kind], 0);
+                if (scp && sh2jms.player->pos.y - scp->pos.y < 100.0f) {
+                    shCharacterAnimeRestart(sh2jms.player);
+                    SET_EV_S_STEP(8);
+                } else {
+                    SET_EV_S_STEP(11);
+                }
+                if (scp) {
+                    shCharacter_Manage_Delete(scp, 0, 0);
+                }
+            }
+            break;
+        case 8:
+            if (shCharacterAnimeIsEnd(sh2jms.player) || ev_cancel) {
+                SET_EV_S_STEP(11);
+            }
+            break;
+        case 11:
+            SCNowPlayableEventSwitch(sh2jms.player, 0);
+            return 1;
+        }
+    return 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Event/event_sub", EvSubFileLoadAndFadeOut);
 
 INCLUDE_ASM("asm/nonmatchings/Event/event_sub", EvSubPictureDisplayAndFadeIn);
 
-int EvSubPictureDisplayOnly() {
-
+int EvSubPictureDisplayOnly(void) {
     struct PicDraw_Data pic;
     
     PictureLoadImage((struct sh2gfw_AREA_HEAD *) get_gp_data_buf_addr(), 0, -1, -1);
@@ -141,7 +199,7 @@ int EvSubPictureDisplayOnly() {
 
 INCLUDE_ASM("asm/nonmatchings/Event/event_sub", EvSubPictureDisplayAndFadeOut);
 
-signed int EvSubPictureDisplay(union fsFileIndex * file /* r16 */, int msg /* r17 */) {
+int EvSubPictureDisplay(union fsFileIndex* file /* r16 */, int msg /* r17 */) {
     switch (ev_s_step) {
         case 0:
             FcRead(file, get_gp_data_buf_addr());
@@ -205,7 +263,6 @@ signed int EvSubPictureDisplay(union fsFileIndex * file /* r16 */, int msg /* r1
 INCLUDE_ASM("asm/nonmatchings/Event/event_sub", EvSubMapGet);
 
 void EvSubPictureLayer(int x0 /* r20 */, int y0 /* r19 */, int x1 /* r18 */, int y1 /* r17 */, int alpha /* r16 */) {
-
     struct PicDraw_Data pic;
     
     PictureLoadImage((struct sh2gfw_AREA_HEAD *)layer_adr, 2, -1, -1);
@@ -250,8 +307,7 @@ INCLUDE_ASM("asm/nonmatchings/Event/event_sub", EvSubPictureCursor);
 
 INCLUDE_ASM("asm/nonmatchings/Event/event_sub", EvDispControlModelEntry);
 
-void EvDispControlModelExec(int * list /* r16 */) {
-
+void EvDispControlModelExec(int* list /* r16 */) {
     switch (BgIsOut(0)) {
         default:
             sh2gfw_Init_DispOnOffObj();
@@ -270,7 +326,6 @@ void EvDispControlModelExec(int * list /* r16 */) {
 INCLUDE_ASM("asm/nonmatchings/Event/event_sub", EvSubMovieReady);
 
 int EvSubMovieStart(int demo /* r16 */) {
-
     int movie = MovieWaitReady();
     
     if ((movie != 0) && (demo != 0) && ((shGs_AllEnv.loop3 % 3U) == 1)) {
