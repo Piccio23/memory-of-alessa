@@ -4,6 +4,16 @@
 #include "common.h"
 #include "Chacter/character.h"
 
+#define SET_EV_STEP(p_step, s_step) \
+do {                                \
+    ev_p_step = p_step;             \
+    ev_s_step = s_step;             \
+} while (0);
+
+#define GET_GAME_FLAG(index, bit) ((game_flag.flag[index] >> (bit)) & 1)
+#define SET_GAME_FLAG(index, bit) ((game_flag.flag[index] |= (1 << (bit))))
+#define UNSET_GAME_FLAG(index, bit) ((game_flag.flag[index] &= ~(1 << (bit))))
+
 // total size: 0x10
 typedef struct Event_List {
     // Members

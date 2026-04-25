@@ -41,7 +41,6 @@ typedef signed char s_char;
 #define SET_FLAG(x, i) (((x)[(i) >> 5]) |= (1 << ((i) & 0x1F)))
 #define UNSET_FLAG(x, i) ((x)[(i) >> 5] &= ~(1 << ((i) & 0x1F)))
 
-
 #define ABORT() asm("breakc 0")
 
 #ifdef DEBUG

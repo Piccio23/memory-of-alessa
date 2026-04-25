@@ -3,6 +3,7 @@
 #define JUMP_MENU_H
 
 #include "common.h"
+#include "Event/event.h"
 
 extern int jump_after_data_set;
 
@@ -109,22 +110,5 @@ static struct                /* @anon7 */
     signed int trg;     // offset 0xC, size 0x4
     signed int glb_crd; // offset 0x10, size 0x4
 } user_data;
-struct /* @anon1 */
-{
-    // total size: 0x4A0
-    unsigned int flag[255]; // offset 0x0, size 0x3FC
-    float time_deai;        // offset 0x3FC, size 0x4
-    unsigned int enemy[32]; // offset 0x400, size 0x80
-    unsigned char safe[4];  // offset 0x480, size 0x4
-    char rotate[4];         // offset 0x484, size 0x4
-    char guruguru[4];       // offset 0x488, size 0x4
-    char cylinder[4];       // offset 0x48C, size 0x4
-    unsigned short clock;   // offset 0x490, size 0x2
-    unsigned short carbon;  // offset 0x492, size 0x2
-    char runaway[4];        // offset 0x494, size 0x4
-    unsigned short hanging; // offset 0x498, size 0x2
-    signed short pad;       // offset 0x49A, size 0x2
-    char trunk[4];          // offset 0x49C, size 0x4
-} game_flag;                // size: 0x4A0, address: 0x1126430
 
 #endif
