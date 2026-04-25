@@ -1,8 +1,7 @@
 #include "sh2_common.h"
 #include "Font/font.h"
 
-FONT_DATA font;
-char font_stream_buf[FONT_STREAM_BUFFER_SIZE];
+extern /* static */ short FontSize[2][2];
 
 // @todo: does this have an SH3 equivalent?
 void fontSetYesNo(int y) {
@@ -132,4 +131,46 @@ void fontNextMessage(void) {
         }
     }
     SET_BIT(font.flag, 0x2);
+}
+
+void fontSet(u_short code /* r2 */, u_short x /* r17 */, u_short y /* r16 */) {        
+    int num; // r2   
+    struct WFONT_STREAM_DATA* fstream_w;// r3 I changed name here
+    struct FONT_STREAM_DATA* fstream; // r3
+
+    if (font.flag & 0x400) {
+        if (font.w_st_num >= font.w_stream_max) {
+            printf("wfont over.\n");
+            return;
+        }
+        num = fontLoad(code);
+        fstream_w = &font.w_stream[font.w_st_num];
+        fstream_w->x = x << 4;
+        fstream_w->y = y << 4;
+        fstream_w->u = (num % 25) * 20;
+        fstream_w->v = (num / 25) * 30;
+        fstream_w->rgb_u = font.rgb_u | (font.alpha << 24);
+        fstream_w->rgb_d = font.rgb_d | (font.shadow_now << 24);
+        fstream_w->w = FontSize[font.fonttype][0] << 4;
+        fstream_w->h = FontSize[font.fonttype][1] << 4;
+        fstream_w->vw = font.wide_w << 4;
+        fstream_w->vh = font.wide_h << 4;
+        font.w_st_num++;
+        return;
+    }
+    if (font.st_num >= font.stream_max) {
+        printf("font over.\n");
+        return;
+    }
+    num = fontLoad(code);
+    fstream = &font.stream[font.st_num];
+    fstream->x = x << 4;
+    fstream->y = y << 4;
+    fstream->u = (num % 25) * 20;
+    fstream->v = (num / 25) * 30;
+    fstream->rgb_u = font.rgb_u | (font.alpha << 24);
+    fstream->rgb_d = font.rgb_d | (font.shadow_now << 24);
+    fstream->w = FontSize[font.fonttype][0] << 4;
+    fstream->h = FontSize[font.fonttype][1] << 4;
+    font.st_num++;
 }
