@@ -198,18 +198,10 @@ void fontSetAlpha(u_char alp /* r2 */) {
     font.alpha = alp;
 }
 
-void* fontTexLoad(int texadr /* r2 */, int clutadr /* r2 */) {
-    font_dma_data[0x04] =
-        ((long)(int)texadr << 32) | (0x14080000ULL << 32);
-
-    font_dma_data[0x14] =
-        ((long)(int)clutadr << 32) | (0x00010000ULL << 32);
-
-    font.tex0 =
-        (long)(int)texadr |
-        (0x00066542ULL << 16) |
-        ((long)(int)clutadr << 37) |
-        (0x20000000ULL << 32);
+void* fontTexLoad(int texadr, int clutadr) {
+    font_dma_data[0x04] = SCE_GS_SET_BITBLTBUF(0, 0, SCE_GS_PSMCT32, texadr, 512 / 64, SCE_GS_PSMT4);
+    font_dma_data[0x14] = SCE_GS_SET_BITBLTBUF(0, 0, SCE_GS_PSMCT32, clutadr, 64 / 64, SCE_GS_PSMCT32);
+    font.tex0 = SCE_GS_SET_TEX0(texadr, 8, 20, 9, 9, 1, 0, clutadr, 0, 0, 0, 1);
 
     return font_dma_data;
 }
