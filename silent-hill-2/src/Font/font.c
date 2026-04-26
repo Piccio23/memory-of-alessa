@@ -2,6 +2,8 @@
 #include "Font/font.h"
 
 extern /* static */ short FontSize[2][2];
+extern /* static */ u_long font_dma_data[34];
+extern /* static */ u_long font_after_env[8];
 
 // @todo: does this have an SH3 equivalent?
 void fontSetYesNo(int y) {
@@ -171,4 +173,82 @@ void fontSet(u_short code /* r2 */, u_short x /* r17 */, u_short y /* r16 */) {
         fstream->h = FontSize[font.fonttype][1] << 4;
         font.st_num++;
     }
+}
+
+void fontClear(void) {
+    font.w_st_num = 0;
+    font.st_num = 0;
+    fontSetColor(0);
+    font.rgb_s[0] = 0;
+    font.shadow_max = 1;
+    font.shadow_now = 0;
+    font.alpha_base = 0x80;
+    font.alpha = 0x80;
+    font.fonttype = 0;
+    font.flag = font.flag & 0x38F8 | 1;
+    fontSetStreamMax(0x200, 0x40, 0x200);
+}
+
+void fontSetColorDirect(u_char r /* r2 */, u_char g /* r2 */, u_char b /* r2 */, u_char alp /* r2 */) {
+    font.rgb_u = font.rgb_d = (b << 0x10) | (r | g << 8);
+    font.alpha = alp;
+}
+
+void fontSetAlpha(u_char alp /* r2 */) {
+    font.alpha = alp;
+}
+
+void* fontTexLoad(int texadr /* r2 */, int clutadr /* r2 */) {
+    font_dma_data[0x04] =
+        ((long)(int)texadr << 32) | (0x14080000ULL << 32);
+
+    font_dma_data[0x14] =
+        ((long)(int)clutadr << 32) | (0x00010000ULL << 32);
+
+    font.tex0 =
+        (long)(int)texadr |
+        (0x00066542ULL << 16) |
+        ((long)(int)clutadr << 37) |
+        (0x20000000ULL << 32);
+
+    return font_dma_data;
+}
+
+int fontGetStatus(void) {
+    if (font.wait_type == 5) {
+        return font.sel_now;
+    }
+    return font.st_num == 0 ? -2 : -1; // I think we could eventually add these values as #define
+}
+
+void fontWide(u_short w /* r2 */, u_short h /* r2 */) {
+    SET_BIT(font.flag, 0x400);
+    font.wide_w = w;
+    font.wide_h = h;
+}
+
+void fontAllCenterOn(void) {
+    SET_BIT(font.flag, 0x100);
+}
+
+void fontAllCenterOff(void) {
+    UNSET_BIT(font.flag, 0x100);
+}
+
+void fontCrushOn(void) {
+    font.fonttype = 1;
+}
+
+void fontCrushOff(void) {
+    font.fonttype = 0;
+}
+
+void fontShadowOff(void) {
+    if (font.shadow_now < 4) {
+        font.shadow_now += 4;
+    }
+}
+
+void* fontAfterEnv(void) {
+    return &font_after_env;
 }
