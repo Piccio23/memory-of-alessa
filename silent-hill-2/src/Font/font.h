@@ -218,5 +218,17 @@ void fontPrintStr(u_short* str /* r29+0x1C */, int x /* r2 */, int y /* r2 */);
 
 int fontLoad(u_short code /* r2 */);
 void fontSet(u_short code /* r2 */, u_short x /* r17 */, u_short y /* r16 */);
+void fontSetColorDirect(u_char r /* r2 */, u_char g /* r2 */, u_char b /* r2 */, u_char alp /* r2 */);
+void fontSetAlpha(u_char alp /* r2 */);
+void* fontTexLoad(int texadr /* r2 */, int clutadr /* r2 */);
+void fontWide(u_short w /* r2 */, u_short h /* r2 */);
+
+void fontAllCenterOn(void);
+void fontAllCenterOff(void);
+void fontCrushOn(void);
+void fontCrushOff(void);
+void fontShadowOff(void);
+
+void* fontAfterEnv(void);
 
 #endif
