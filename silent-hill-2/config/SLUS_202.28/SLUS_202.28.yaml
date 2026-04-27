@@ -265,7 +265,7 @@ segments:
       - [0x158790, asm, Effect2/hh_class_glass_break_phenomenon_00]
       - [0x159110, asm, Effect2/hh_class_glass_piece_00]
       - [0x159ce0, c,   Effect2/hh_class_manager]
-      - [0x15ad80, asm, Effect2/hh_class_object_execute]
+      - [0x15ad80, c,   Effect2/hh_class_object_execute]
       - [0x15b560, asm, Effect2/hh_class_plural_phenomenon_00]
       - [0x15b930, asm, Effect2/hh_class_raise_dust_phenomenon_00]
       - [0x15bee0, asm, Effect2/hh_class_water_00]
