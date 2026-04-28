@@ -23,9 +23,9 @@ static void MakeNormalPacket(Part* part, sceVif1Packet* pk) {
     unsigned short * text_pos_indices = (u_short*)((u_int)part + part->text_pos_indices_offset); // r29+0xB0
     TextPosParam * text_pos_params = model_common_work->text_pos_params; // r30
     TextureParam * texture_params = (TextureParam*) ((u_int)part + part->texture_params_offset); // r23
-    signed int mpg = (u_char)((part->backclip == 0) ? 0x16: 0x18); // r16
+    int mpg = (u_char)((part->backclip == 0) ? 0x16: 0x18); // r16
     sceDmaChan* fromSPR = sceDmaGetChan(8); // r17
-    signed int i = 0; // r18
+    int i = 0; // r18
     for (i = 0; i < n_textures; i++) {
         int text_pos_index = text_pos_indices[i];
         TextPosParam *text_pos = (TextPosParam *)(text_pos_params + text_pos_index);

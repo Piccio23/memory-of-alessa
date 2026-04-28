@@ -77,10 +77,10 @@ void AlwaysFront_WorldView_Matrix_Create(void) {
     sceVu0CopyMatrix(_pWork->AlwaysFront_WorldView_Matrix, inv_wvm);
 }
 
-unsigned int HH_ClassWrapper_RotTrans_PerspectiveProjection_Clip(int * Dst_iVector /* r2 */, float * pReverse_W /* r2 */, sceVu0FMATRIX LocalScreen_Matrix /* r2 */, sceVu0FMATRIX LocalScreen_ClipMatrix, sceVu0FVECTOR Src_fVector /* r2 */) {
-    unsigned int result; // r2
+u_int HH_ClassWrapper_RotTrans_PerspectiveProjection_Clip(int * Dst_iVector /* r2 */, float * pReverse_W /* r2 */, sceVu0FMATRIX LocalScreen_Matrix /* r2 */, sceVu0FMATRIX LocalScreen_ClipMatrix, sceVu0FVECTOR Src_fVector /* r2 */) {
+    u_int result; // r2
     float reverse_w; // r29
-    unsigned int clip; // r2
+    u_int clip; // r2
 
     asm ("lqc2 vf24, 0(%3)\n\
           lqc2 vf25, 0x10(%3)\n\

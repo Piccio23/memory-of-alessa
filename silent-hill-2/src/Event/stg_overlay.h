@@ -6,15 +6,15 @@
 // total size: 0x8C
 struct Playing_Info {
     // Members
-    unsigned char stage; // offset 0x0, size 0x1
-    unsigned char enemy_off; // offset 0x1, size 0x1
-    unsigned char voice_off; // offset 0x2, size 0x1
-    unsigned char memo_select; // offset 0x3, size 0x1
-    unsigned char clear_end_kind; // offset 0x4, size 0x1
-    unsigned char clear_end_number; // offset 0x5, size 0x1
-    unsigned char rank; // offset 0x6, size 0x1
-    unsigned char game_stage; // offset 0x7, size 0x1
-    unsigned char hidden_item_get; // offset 0x8, size 0x1
+    u_char stage; // offset 0x0, size 0x1
+    u_char enemy_off; // offset 0x1, size 0x1
+    u_char voice_off; // offset 0x2, size 0x1
+    u_char memo_select; // offset 0x3, size 0x1
+    u_char clear_end_kind; // offset 0x4, size 0x1
+    u_char clear_end_number; // offset 0x5, size 0x1
+    u_char rank; // offset 0x6, size 0x1
+    u_char game_stage; // offset 0x7, size 0x1
+    u_char hidden_item_get; // offset 0x8, size 0x1
     char spray_pow; // offset 0x9, size 0x1
     unsigned short savecount; // offset 0xA, size 0x2
     unsigned short clearcount; // offset 0xC, size 0x2
@@ -30,38 +30,38 @@ struct Playing_Info {
     float mar_damage_by_enemy; // offset 0x2C, size 0x4
     float mar_damage_by_jms; // offset 0x30, size 0x4
     float stage_check_point[7]; // offset 0x34, size 0x1C
-    unsigned int stage_score[7]; // offset 0x50, size 0x1C
-    unsigned int total_score; // offset 0x6C, size 0x4
+    u_int stage_score[7]; // offset 0x50, size 0x1C
+    u_int total_score; // offset 0x6C, size 0x4
     float total_time; // offset 0x70, size 0x4
-    unsigned char battle_level; // offset 0x74, size 0x1
-    unsigned char riddle_level; // offset 0x75, size 0x1
-    unsigned char brightness_level; // offset 0x76, size 0x1
+    u_char battle_level; // offset 0x74, size 0x1
+    u_char riddle_level; // offset 0x75, size 0x1
+    u_char brightness_level; // offset 0x76, size 0x1
     char screen_position_x; // offset 0x77, size 0x1
     char screen_position_y; // offset 0x78, size 0x1
-    unsigned char vibration; // offset 0x79, size 0x1
-    unsigned char auto_load; // offset 0x7A, size 0x1
-    unsigned char sound; // offset 0x7B, size 0x1
-    unsigned char bgm_volume; // offset 0x7C, size 0x1
-    unsigned char se_volume; // offset 0x7D, size 0x1
-    unsigned char weapon_control; // offset 0x7E, size 0x1
-    unsigned char blood_color; // offset 0x7F, size 0x1
-    unsigned char view_control; // offset 0x80, size 0x1
-    unsigned char retreat_turn; // offset 0x81, size 0x1
-    unsigned char walk_run_control; // offset 0x82, size 0x1
-    unsigned char auto_aiming; // offset 0x83, size 0x1
-    unsigned char view_mode; // offset 0x84, size 0x1
-    unsigned char bullet_adjust; // offset 0x85, size 0x1
-    unsigned char language; // offset 0x86, size 0x1
-    unsigned char subtitles; // offset 0x87, size 0x1
-    unsigned char control_type; // offset 0x88, size 0x1
-    unsigned char radar; // offset 0x89, size 0x1
+    u_char vibration; // offset 0x79, size 0x1
+    u_char auto_load; // offset 0x7A, size 0x1
+    u_char sound; // offset 0x7B, size 0x1
+    u_char bgm_volume; // offset 0x7C, size 0x1
+    u_char se_volume; // offset 0x7D, size 0x1
+    u_char weapon_control; // offset 0x7E, size 0x1
+    u_char blood_color; // offset 0x7F, size 0x1
+    u_char view_control; // offset 0x80, size 0x1
+    u_char retreat_turn; // offset 0x81, size 0x1
+    u_char walk_run_control; // offset 0x82, size 0x1
+    u_char auto_aiming; // offset 0x83, size 0x1
+    u_char view_mode; // offset 0x84, size 0x1
+    u_char bullet_adjust; // offset 0x85, size 0x1
+    u_char language; // offset 0x86, size 0x1
+    u_char subtitles; // offset 0x87, size 0x1
+    u_char control_type; // offset 0x88, size 0x1
+    u_char radar; // offset 0x89, size 0x1
 };
 
 // total size: 0x10
 struct fsMgcFile {
     // Members
-    signed int type : 8; // offset 0x0, size 0x4
-    signed int padding : 24; // offset 0x0, size 0x4
+    int type : 8; // offset 0x0, size 0x4
+    int padding : 24; // offset 0x0, size 0x4
     union fsFile * parent; // offset 0x4, size 0x4
     char * start; // offset 0x8, size 0x4
     char * end; // offset 0xC, size 0x4
@@ -70,28 +70,28 @@ struct fsMgcFile {
 // total size: 0x10
 struct fsCdFile {
     // Members
-    signed int type : 8; // offset 0x0, size 0x4
-    signed int number : 24; // offset 0x0, size 0x4
+    int type : 8; // offset 0x0, size 0x4
+    int number : 24; // offset 0x0, size 0x4
     char * name; // offset 0x4, size 0x4
-    signed int lsn; // offset 0x8, size 0x4
-    signed int size; // offset 0xC, size 0x4
+    int lsn; // offset 0x8, size 0x4
+    int size; // offset 0xC, size 0x4
 };
 
 // total size: 0x10
 struct fsHdFile {
     // Members
-    signed int type : 8; // offset 0x0, size 0x4
-    signed int padding : 24; // offset 0x0, size 0x4
+    int type : 8; // offset 0x0, size 0x4
+    int padding : 24; // offset 0x0, size 0x4
     char * name; // offset 0x4, size 0x4
-    signed int offset; // offset 0x8, size 0x4
-    signed int size; // offset 0xC, size 0x4
+    int offset; // offset 0x8, size 0x4
+    int size; // offset 0xC, size 0x4
 };
 
 // total size: 0x10
 struct fsMgpFile {
     // Members
-    signed int type : 8; // offset 0x0, size 0x4
-    signed int padding : 24; // offset 0x0, size 0x4
+    int type : 8; // offset 0x0, size 0x4
+    int padding : 24; // offset 0x0, size 0x4
     union fsFile * file; // offset 0x4, size 0x4
     struct fsMgcFile * start; // offset 0x8, size 0x4
     struct fsMgcFile * end; // offset 0xC, size 0x4
@@ -100,22 +100,22 @@ struct fsMgpFile {
 // total size: 0x10
 struct fsMgfFile {
     // Members
-    signed int type : 8; // offset 0x0, size 0x4
-    signed int padding : 24; // offset 0x0, size 0x4
+    int type : 8; // offset 0x0, size 0x4
+    int padding : 24; // offset 0x0, size 0x4
     union fsFile * parent; // offset 0x4, size 0x4
-    signed int offset; // offset 0x8, size 0x4
-    signed int size; // offset 0xC, size 0x4
+    int offset; // offset 0x8, size 0x4
+    int size; // offset 0xC, size 0x4
 };
 
 union fsFile {
     // total size: 0x10
     struct /* @anon5 */ {
         // Members
-        signed int type : 8; // offset 0x0, size 0x4
-        signed int number : 24; // offset 0x0, size 0x4
-        signed int pad0; // offset 0x4, size 0x4
-        signed int pad1; // offset 0x8, size 0x4
-        signed int pad2; // offset 0xC, size 0x4
+        int type : 8; // offset 0x0, size 0x4
+        int number : 24; // offset 0x0, size 0x4
+        int pad0; // offset 0x4, size 0x4
+        int pad1; // offset 0x8, size 0x4
+        int pad2; // offset 0xC, size 0x4
     } check; // offset 0x0, size 0x10
     __int128 pack; // offset 0x0, size 0x10
     struct fsCdFile cd; // offset 0x0, size 0x10
@@ -137,16 +137,16 @@ typedef union fsFileIndex {
 
 typedef struct mwOverlayHeader {
     // total size: 0x40
-    unsigned char identifier[3]; // offset 0x0, size 0x3
-    unsigned char version; // offset 0x3, size 0x1
-    unsigned int id; // offset 0x4, size 0x4
-    unsigned int address; // offset 0x8, size 0x4
-    unsigned int sz_text; // offset 0xC, size 0x4
-    unsigned int sz_data; // offset 0x10, size 0x4
-    unsigned int sz_bss; // offset 0x14, size 0x4
-    unsigned int _static_init; // offset 0x18, size 0x4
-    unsigned int _static_init_end; // offset 0x1C, size 0x4
-    unsigned char name[32]; // offset 0x20, size 0x20
+    u_char identifier[3]; // offset 0x0, size 0x3
+    u_char version; // offset 0x3, size 0x1
+    u_int id; // offset 0x4, size 0x4
+    u_int address; // offset 0x8, size 0x4
+    u_int sz_text; // offset 0xC, size 0x4
+    u_int sz_data; // offset 0x10, size 0x4
+    u_int sz_bss; // offset 0x14, size 0x4
+    u_int _static_init; // offset 0x18, size 0x4
+    u_int _static_init_end; // offset 0x1C, size 0x4
+    u_char name[32]; // offset 0x20, size 0x20
 } mwOverlayHeader;
 
 typedef enum {

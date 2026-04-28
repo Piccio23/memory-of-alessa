@@ -6,12 +6,12 @@
 // total size: 0xB0
 struct shGsLoopEnv {
     // Members
-    unsigned int GsDrawFBPs[3]; // offset 0x0, size 0xC
-    unsigned int GsNowDispFBPs[3]; // offset 0xC, size 0xC
-    unsigned int GsNextDispFBPs[3]; // offset 0x18, size 0xC
-    unsigned int GsTexTBPs[24]; // offset 0x24, size 0x60
-    unsigned int GsShadowFBP[3]; // offset 0x84, size 0xC
-    unsigned int GsShadowWorkFBP[3]; // offset 0x90, size 0xC
+    u_int GsDrawFBPs[3]; // offset 0x0, size 0xC
+    u_int GsNowDispFBPs[3]; // offset 0xC, size 0xC
+    u_int GsNextDispFBPs[3]; // offset 0x18, size 0xC
+    u_int GsTexTBPs[24]; // offset 0x24, size 0x60
+    u_int GsShadowFBP[3]; // offset 0x84, size 0xC
+    u_int GsShadowWorkFBP[3]; // offset 0x90, size 0xC
     unsigned short clutsize; // offset 0x9C, size 0x2
     unsigned short clutamount; // offset 0x9E, size 0x2
     unsigned short GsClutPage[8]; // offset 0xA0, size 0x10
@@ -187,10 +187,10 @@ struct shGsStencilDrawEnv {
         // total size: 0x8
         struct /* @anon14 */ {
             // Members
-            unsigned int R : 8; // offset 0x0, size 0x4
-            unsigned int G : 8; // offset 0x0, size 0x4
-            unsigned int B : 8; // offset 0x0, size 0x4
-            unsigned int A : 8; // offset 0x0, size 0x4
+            u_int R : 8; // offset 0x0, size 0x4
+            u_int G : 8; // offset 0x0, size 0x4
+            u_int B : 8; // offset 0x0, size 0x4
+            u_int A : 8; // offset 0x0, size 0x4
             float Q; // offset 0x4, size 0x4
         } rgbaq; // offset 0x20, size 0x8
         signed long rgbaqaddr; // offset 0x28, size 0x4
@@ -351,8 +351,8 @@ struct shGsStencilDrawEnv {
 // total size: 0x10
 struct ScreenEffect_Parameter {
     // Members
-    signed int fade_status; // offset 0x0, size 0x4
-    signed int fade_type; // offset 0x4, size 0x4
+    int fade_status; // offset 0x0, size 0x4
+    int fade_type; // offset 0x4, size 0x4
     float fade_timer_now; // offset 0x8, size 0x4
     float fade_timer_max; // offset 0xC, size 0x4
 };
@@ -508,10 +508,10 @@ struct shGsDrawEnv {
         // total size: 0x8
         struct /* @anon14 */ {
             // Members
-            unsigned int R : 8; // offset 0x0, size 0x4
-            unsigned int G : 8; // offset 0x0, size 0x4
-            unsigned int B : 8; // offset 0x0, size 0x4
-            unsigned int A : 8; // offset 0x0, size 0x4
+            u_int R : 8; // offset 0x0, size 0x4
+            u_int G : 8; // offset 0x0, size 0x4
+            u_int B : 8; // offset 0x0, size 0x4
+            u_int A : 8; // offset 0x0, size 0x4
             float Q; // offset 0x4, size 0x4
         } rgbaq; // offset 0x20, size 0x8
         signed long rgbaqaddr; // offset 0x28, size 0x4
@@ -673,8 +673,8 @@ struct shGsDrawEnv {
 struct shGsAllEnv {
     // Members
     unsigned long loop_counter; // offset 0x0, size 0x4
-    unsigned int loop; // offset 0x8, size 0x4
-    unsigned int loop3; // offset 0xC, size 0x4
+    u_int loop; // offset 0x8, size 0x4
+    u_int loop3; // offset 0xC, size 0x4
     struct shGsLoopEnv LoopEnv; // offset 0x10, size 0xB0
     // total size: 0x28
     struct /* @anon14 */ {
@@ -682,56 +682,56 @@ struct shGsAllEnv {
         // total size: 0x8
         struct /* @anon16 */ {
             // Members
-            unsigned int EN1 : 1; // offset 0x0, size 0x4
-            unsigned int EN2 : 1; // offset 0x0, size 0x4
-            unsigned int CRTMD : 3; // offset 0x0, size 0x4
-            unsigned int MMOD : 1; // offset 0x0, size 0x4
-            unsigned int AMOD : 1; // offset 0x0, size 0x4
-            unsigned int SLBG : 1; // offset 0x0, size 0x4
-            unsigned int ALP : 8; // offset 0x0, size 0x4
-            unsigned int p0 : 16; // offset 0x0, size 0x4
-            unsigned int p1; // offset 0x4, size 0x4
+            u_int EN1 : 1; // offset 0x0, size 0x4
+            u_int EN2 : 1; // offset 0x0, size 0x4
+            u_int CRTMD : 3; // offset 0x0, size 0x4
+            u_int MMOD : 1; // offset 0x0, size 0x4
+            u_int AMOD : 1; // offset 0x0, size 0x4
+            u_int SLBG : 1; // offset 0x0, size 0x4
+            u_int ALP : 8; // offset 0x0, size 0x4
+            u_int p0 : 16; // offset 0x0, size 0x4
+            u_int p1; // offset 0x4, size 0x4
         } pmode; // offset 0x0, size 0x8
         // total size: 0x8
         struct /* @anon3 */ {
             // Members
-            unsigned int INT : 1; // offset 0x0, size 0x4
-            unsigned int FFMD : 1; // offset 0x0, size 0x4
-            unsigned int DPMS : 2; // offset 0x0, size 0x4
-            unsigned int p0 : 28; // offset 0x0, size 0x4
-            unsigned int p1; // offset 0x4, size 0x4
+            u_int INT : 1; // offset 0x0, size 0x4
+            u_int FFMD : 1; // offset 0x0, size 0x4
+            u_int DPMS : 2; // offset 0x0, size 0x4
+            u_int p0 : 28; // offset 0x0, size 0x4
+            u_int p1; // offset 0x4, size 0x4
         } smode2; // offset 0x8, size 0x8
         // total size: 0x8
         struct /* @anon18 */ {
             // Members
-            unsigned int FBP : 9; // offset 0x0, size 0x4
-            unsigned int FBW : 6; // offset 0x0, size 0x4
-            unsigned int PSM : 5; // offset 0x0, size 0x4
-            unsigned int p0 : 12; // offset 0x0, size 0x4
-            unsigned int DBX : 11; // offset 0x4, size 0x4
-            unsigned int DBY : 11; // offset 0x4, size 0x4
-            unsigned int p1 : 10; // offset 0x4, size 0x4
+            u_int FBP : 9; // offset 0x0, size 0x4
+            u_int FBW : 6; // offset 0x0, size 0x4
+            u_int PSM : 5; // offset 0x0, size 0x4
+            u_int p0 : 12; // offset 0x0, size 0x4
+            u_int DBX : 11; // offset 0x4, size 0x4
+            u_int DBY : 11; // offset 0x4, size 0x4
+            u_int p1 : 10; // offset 0x4, size 0x4
         } dispfb; // offset 0x10, size 0x8
         // total size: 0x8
         struct /* @anon5 */ {
             // Members
-            unsigned int DX : 12; // offset 0x0, size 0x4
-            unsigned int DY : 11; // offset 0x0, size 0x4
-            unsigned int MAGH : 4; // offset 0x0, size 0x4
-            unsigned int MAGV : 2; // offset 0x0, size 0x4
-            unsigned int p0 : 3; // offset 0x0, size 0x4
-            unsigned int DW : 12; // offset 0x4, size 0x4
-            unsigned int DH : 11; // offset 0x4, size 0x4
-            unsigned int p1 : 9; // offset 0x4, size 0x4
+            u_int DX : 12; // offset 0x0, size 0x4
+            u_int DY : 11; // offset 0x0, size 0x4
+            u_int MAGH : 4; // offset 0x0, size 0x4
+            u_int MAGV : 2; // offset 0x0, size 0x4
+            u_int p0 : 3; // offset 0x0, size 0x4
+            u_int DW : 12; // offset 0x4, size 0x4
+            u_int DH : 11; // offset 0x4, size 0x4
+            u_int p1 : 9; // offset 0x4, size 0x4
         } display; // offset 0x18, size 0x8
         // total size: 0x8
         struct /* @anon7 */ {
             // Members
-            unsigned int R : 8; // offset 0x0, size 0x4
-            unsigned int G : 8; // offset 0x0, size 0x4
-            unsigned int B : 8; // offset 0x0, size 0x4
-            unsigned int p0 : 8; // offset 0x0, size 0x4
-            unsigned int p1; // offset 0x4, size 0x4
+            u_int R : 8; // offset 0x0, size 0x4
+            u_int G : 8; // offset 0x0, size 0x4
+            u_int B : 8; // offset 0x0, size 0x4
+            u_int p0 : 8; // offset 0x0, size 0x4
+            u_int p1; // offset 0x4, size 0x4
         } bgcolor; // offset 0x20, size 0x8
     } DispEnv[3]; // offset 0xC0, size 0x78
     struct shGsDrawEnv DrawEnv[3]; // offset 0x140, size 0x7E0
@@ -770,16 +770,16 @@ struct shGsAllEnv {
 };
 
 int ScreenEffectFadeCheck(void);
-void ScreenEffectFadeStart(signed int type /* r2 */, float time /* r29+0x10 */);
+void ScreenEffectFadeStart(int type /* r2 */, float time /* r29+0x10 */);
 void ScreenEffectInit(void);
 
 unsigned short * dicSetStr(void * str /* r2 */);
 void fjFontDrawExecVif1(void);
 void fontClear(void);
-void fontPrintStr(unsigned short * str /* r29+0x1C */, signed int x /* r2 */, signed int y /* r2 */);
-void fontSetColorDirect(unsigned char r /* r2 */, unsigned char g /* r2 */, unsigned char b /* r2 */, unsigned char alp /* r2 */);
-unsigned int sh2gfw_DeclimentLoopCounter(struct shGsAllEnv * stdb /* r2 */);
-unsigned int sh2gfw_InclimentLoopCounter(struct shGsAllEnv * stdb /* r2 */);
+void fontPrintStr(unsigned short * str /* r29+0x1C */, int x /* r2 */, int y /* r2 */);
+void fontSetColorDirect(u_char r /* r2 */, u_char g /* r2 */, u_char b /* r2 */, u_char alp /* r2 */);
+u_int sh2gfw_DeclimentLoopCounter(struct shGsAllEnv * stdb /* r2 */);
+u_int sh2gfw_InclimentLoopCounter(struct shGsAllEnv * stdb /* r2 */);
 
 extern int D_01F01DD0; // now_loading_enable
 extern int D_01F01DD8; // now_loading_draw

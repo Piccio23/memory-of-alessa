@@ -10,15 +10,15 @@ extern int jump_after_data_set;
 typedef struct Playing_Info
 {
     // total size: 0x8C
-    unsigned char stage;            // offset 0x0, size 0x1
-    unsigned char enemy_off;        // offset 0x1, size 0x1
-    unsigned char voice_off;        // offset 0x2, size 0x1
-    unsigned char memo_select;      // offset 0x3, size 0x1
-    unsigned char clear_end_kind;   // offset 0x4, size 0x1
-    unsigned char clear_end_number; // offset 0x5, size 0x1
-    unsigned char rank;             // offset 0x6, size 0x1
-    unsigned char game_stage;       // offset 0x7, size 0x1
-    unsigned char hidden_item_get;  // offset 0x8, size 0x1
+    u_char stage;                   // offset 0x0, size 0x1
+    u_char enemy_off;               // offset 0x1, size 0x1
+    u_char voice_off;               // offset 0x2, size 0x1
+    u_char memo_select;             // offset 0x3, size 0x1
+    u_char clear_end_kind;          // offset 0x4, size 0x1
+    u_char clear_end_number;        // offset 0x5, size 0x1
+    u_char rank;                    // offset 0x6, size 0x1
+    u_char game_stage;              // offset 0x7, size 0x1
+    u_char hidden_item_get;         // offset 0x8, size 0x1
     char spray_pow;                 // offset 0x9, size 0x1
     unsigned short savecount;       // offset 0xA, size 0x2
     unsigned short clearcount;      // offset 0xC, size 0x2
@@ -34,62 +34,62 @@ typedef struct Playing_Info
     float mar_damage_by_enemy;      // offset 0x2C, size 0x4
     float mar_damage_by_jms;        // offset 0x30, size 0x4
     float stage_check_point[7];     // offset 0x34, size 0x1C
-    unsigned int stage_score[7];    // offset 0x50, size 0x1C
-    unsigned int total_score;       // offset 0x6C, size 0x4
+    u_int stage_score[7];           // offset 0x50, size 0x1C
+    u_int total_score;              // offset 0x6C, size 0x4
     float total_time;               // offset 0x70, size 0x4
-    unsigned char battle_level;     // offset 0x74, size 0x1
-    unsigned char riddle_level;     // offset 0x75, size 0x1
-    unsigned char brightness_level; // offset 0x76, size 0x1
+    u_char battle_level;            // offset 0x74, size 0x1
+    u_char riddle_level;            // offset 0x75, size 0x1
+    u_char brightness_level;        // offset 0x76, size 0x1
     char screen_position_x;         // offset 0x77, size 0x1
     char screen_position_y;         // offset 0x78, size 0x1
-    unsigned char vibration;        // offset 0x79, size 0x1
-    unsigned char auto_load;        // offset 0x7A, size 0x1
-    unsigned char sound;            // offset 0x7B, size 0x1
-    unsigned char bgm_volume;       // offset 0x7C, size 0x1
-    unsigned char se_volume;        // offset 0x7D, size 0x1
-    unsigned char weapon_control;   // offset 0x7E, size 0x1
-    unsigned char blood_color;      // offset 0x7F, size 0x1
-    unsigned char view_control;     // offset 0x80, size 0x1
-    unsigned char retreat_turn;     // offset 0x81, size 0x1
-    unsigned char walk_run_control; // offset 0x82, size 0x1
-    unsigned char auto_aiming;      // offset 0x83, size 0x1
-    unsigned char view_mode;        // offset 0x84, size 0x1
-    unsigned char bullet_adjust;    // offset 0x85, size 0x1
-    unsigned char language;         // offset 0x86, size 0x1
-    unsigned char subtitles;        // offset 0x87, size 0x1
-    unsigned char control_type;     // offset 0x88, size 0x1
-    unsigned char radar;            // offset 0x89, size 0x1
+    u_char vibration;               // offset 0x79, size 0x1
+    u_char auto_load;               // offset 0x7A, size 0x1
+    u_char sound;                   // offset 0x7B, size 0x1
+    u_char bgm_volume;              // offset 0x7C, size 0x1
+    u_char se_volume;               // offset 0x7D, size 0x1
+    u_char weapon_control;          // offset 0x7E, size 0x1
+    u_char blood_color;             // offset 0x7F, size 0x1
+    u_char view_control;            // offset 0x80, size 0x1
+    u_char retreat_turn;            // offset 0x81, size 0x1
+    u_char walk_run_control;        // offset 0x82, size 0x1
+    u_char auto_aiming;             // offset 0x83, size 0x1
+    u_char view_mode;               // offset 0x84, size 0x1
+    u_char bullet_adjust;           // offset 0x85, size 0x1
+    u_char language;                // offset 0x86, size 0x1
+    u_char subtitles;               // offset 0x87, size 0x1
+    u_char control_type;            // offset 0x88, size 0x1
+    u_char radar;                   // offset 0x89, size 0x1
 } Playing_Info;
 
 typedef struct Item
 {
     // total size: 0x34
-    unsigned int flag[2];        // offset 0x0, size 0x8
+    u_int flag[2];               // offset 0x0, size 0x8
     unsigned short number[11];   // offset 0x8, size 0x16
-    unsigned char light_switch;  // offset 0x1E, size 0x1
-    unsigned char radio_switch;  // offset 0x1F, size 0x1
-    unsigned char radio_volume;  // offset 0x20, size 0x1
-    unsigned char equip;         // offset 0x21, size 0x1
+    u_char light_switch;         // offset 0x1E, size 0x1
+    u_char radio_switch;         // offset 0x1F, size 0x1
+    u_char radio_volume;         // offset 0x20, size 0x1
+    u_char equip;                // offset 0x21, size 0x1
     float ampoule_efficacy;      // offset 0x24, size 0x4
     unsigned short event_use[3]; // offset 0x28, size 0x6
     unsigned short short_pad;    // offset 0x2E, size 0x2
-    unsigned char last_cursor;   // offset 0x30, size 0x1
+    u_char last_cursor;          // offset 0x30, size 0x1
 } Item;
 
 struct Item item;                    // size: 0x34, address: 0x11268E0
 struct Playing_Info playing;         // size: 0x8C, address: 0x122B310
-unsigned char hidden_item_get;       // offset 0x8, size 0x1
+u_char hidden_item_get;       // offset 0x8, size 0x1
 unsigned short item_get;             // offset 0xE, size 0x2
 struct SubCharacter *nearest_item_p; // offset 0xAB8C, size 0x4
 float nearest_item_xz_dist;          // offset 0xAB90, size 0x4
-signed int use_item;                 // r2
-signed int EventCheck(signed int act_on /* r21 */, signed int use_item /* r20 */, signed int check_only /* r19 */);
+int use_item;                 // r2
+int EventCheck(int act_on /* r21 */, int use_item /* r20 */, int check_only /* r19 */);
 static signed short item_to_chara[75]; // size: 0x96, address: 0x2B9950
-signed int EvSubItemGet(signed int kind /* r16 */, signed int message /* r2 */);
-signed int EvSubItemGetAndAnim(signed int kind /* r16 */, signed int message /* r2 */);
-void ItemGet(signed int kind /* r16 */);
+int EvSubItemGet(int kind /* r16 */, int message /* r2 */);
+int EvSubItemGetAndAnim(int kind /* r16 */, int message /* r2 */);
+void ItemGet(int kind /* r16 */);
 struct BootOptItem *keyitem[62]; // r29+0x160
-signed int jump_menu_select;     // size: 0x4, address: 0x11B6990
+int jump_menu_select;     // size: 0x4, address: 0x11B6990
 static float item_size[80];      // size: 0x140, address: 0x0
 signed short item_no;            // offset 0x220, size 0x2
 signed short item_kind;          // offset 0x222, size 0x2
@@ -97,18 +97,18 @@ signed short item_count;         // offset 0x224, size 0x2
 signed short use_item_kind;      // offset 0x282, size 0x2
 float item_scale;                // offset 0x10, size 0x4
 void GameItemGetCountUp(void);
-unsigned int GameCalcRankItemGet(void);
-unsigned int GameCalcRankHiddenItemGet(void);
-unsigned char quiz_get_item; // size: 0x1, address: 0x1F04498
-signed int use_item;         // r16
+u_int GameCalcRankItemGet(void);
+u_int GameCalcRankHiddenItemGet(void);
+u_char quiz_get_item; // size: 0x1, address: 0x1F04498
+int use_item;         // r16
 static struct                /* @anon7 */
 {
     // total size: 0x14
-    signed int x;       // offset 0x0, size 0x4
-    signed int z;       // offset 0x4, size 0x4
-    signed int flg;     // offset 0x8, size 0x4
-    signed int trg;     // offset 0xC, size 0x4
-    signed int glb_crd; // offset 0x10, size 0x4
+    int x;       // offset 0x0, size 0x4
+    int z;       // offset 0x4, size 0x4
+    int flg;     // offset 0x8, size 0x4
+    int trg;     // offset 0xC, size 0x4
+    int glb_crd; // offset 0x10, size 0x4
 } user_data;
 
 #endif

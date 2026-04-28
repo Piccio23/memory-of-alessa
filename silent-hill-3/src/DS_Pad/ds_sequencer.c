@@ -218,8 +218,8 @@ static int Node_Next_Search(Record_Info* pInfo, float Time) {
 }
 
 static int Node_Current_Search(Record_Info * pInfo /* r2 */, float Time /* r29+0x10 */) {
-    signed int result = -1; // r7
-    signed int num = Node_Next_Search(pInfo, Time); // r2
+    int result = -1; // r7
+    int num = Node_Next_Search(pInfo, Time); // r2
 
     if (num > 0) {
         result = num - 1;

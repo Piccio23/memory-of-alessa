@@ -7,7 +7,7 @@
 
 typedef struct
 {
-    unsigned int *micro[3][2];
+    u_int *micro[3][2];
 } CscVu1;
 
 typedef struct

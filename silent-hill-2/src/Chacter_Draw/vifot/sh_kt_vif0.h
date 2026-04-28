@@ -2,7 +2,7 @@
 #define SH_KT_VIF0
 
 void ktVif0Wait2(void);
-void ktVif0Send(void *p /* r16 */, signed int tte /* r17 */);
+void ktVif0Send(void *p /* r16 */, int tte /* r17 */);
 void *ktVif0PkBufCurrent(void);
 
 #endif

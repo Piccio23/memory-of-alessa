@@ -102,8 +102,8 @@ typedef struct Data
 typedef struct SkeletonPair
 {
     // total size: 0x2
-    unsigned char parent_no; // offset 0x0, size 0x1
-    unsigned char child_no;  // offset 0x1, size 0x1
+    u_char parent_no; // offset 0x0, size 0x1
+    u_char child_no;  // offset 0x1, size 0x1
 } SkeletonPair;
 
 #endif

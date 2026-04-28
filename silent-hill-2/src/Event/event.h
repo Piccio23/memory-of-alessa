@@ -45,7 +45,7 @@ typedef struct Stage_Data {
     // Members
     struct Event_List* ev_list; // offset 0x0, size 0x4
     u_char* ev_pos; // offset 0x4, size 0x4
-    signed int (** ev_prog)(void); // offset 0x8, size 0x4
+    int (** ev_prog)(void); // offset 0x8, size 0x4
     struct Item_List* gi_list; // offset 0xC, size 0x4
     struct Model_List* mdl_list; // offset 0x10, size 0x4
     struct Enemy_List* en_list; // offset 0x14, size 0x4

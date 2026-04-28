@@ -272,7 +272,7 @@ void FlipXMTOP(void);
 static void DrawParts0(ktVif1Ot2 * ot /* r17 */, ModelWork * work /* r2 */, void (*make)(Part*), void (*draw)(ktVif1Ot2*, Part*, ModelWork*));
 
 extern u_int model3_mpg0_skel_load[];
-extern signed int initialized; // @ 0x00419FA0
+extern int initialized; // @ 0x00419FA0
 
 extern u_long128* D_01EE30C0; // packet buffer
 extern u_long128 D_003B63C0;

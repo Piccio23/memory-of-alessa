@@ -181,12 +181,12 @@ typedef struct ktVif1Ot2 {
     // total size: 0x20
     struct _sceDmaTag * top_1; // offset 0x0, size 0x4
     struct _sceDmaTag * top_2; // offset 0x4, size 0x4
-    unsigned int n_bits_1; // offset 0x8, size 0x4
-    unsigned int n_bits_2; // offset 0xC, size 0x4
-    unsigned int length_1; // offset 0x10, size 0x4
-    unsigned int length_2; // offset 0x14, size 0x4
-    unsigned int mask_1; // offset 0x18, size 0x4
-    unsigned int mask_2; // offset 0x1C, size 0x4
+    u_int n_bits_1; // offset 0x8, size 0x4
+    u_int n_bits_2; // offset 0xC, size 0x4
+    u_int length_1; // offset 0x10, size 0x4
+    u_int length_2; // offset 0x14, size 0x4
+    u_int mask_1; // offset 0x18, size 0x4
+    u_int mask_2; // offset 0x1C, size 0x4
 };
 typedef struct PersData {
     // total size: 0x70
@@ -258,7 +258,7 @@ extern u_int _vu_0_0x0037FB80;
 extern u_int _vu_0_0x0037FDC0;
 
 extern u_int model3_mpg0_skel_load[];
-extern signed int initialized; // @ 0x00419FA0
+extern int initialized; // @ 0x00419FA0
 extern u_long128 * packet_buffer; // r2
 
 extern struct AllData_Vu0 alldata_Vu0_Dblbuffer[2]; // size: 0xC00, address: 0x41A040

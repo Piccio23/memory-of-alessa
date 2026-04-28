@@ -32,10 +32,10 @@ typedef struct shAttackInfo
         struct shBattleFight fight; // offset 0x0, size 0xC
         struct shBattleShot shot;   // offset 0x0, size 0xC
     } hit_check;                    // offset 0x14, size 0xC
-    unsigned char atk_start;        // offset 0x20, size 0x1
-    unsigned char atk_end;          // offset 0x21, size 0x1
-    unsigned char sd;               // offset 0x22, size 0x1
-    unsigned char eff;              // offset 0x23, size 0x1
+    u_char atk_start;               // offset 0x20, size 0x1
+    u_char atk_end;                 // offset 0x21, size 0x1
+    u_char sd;                      // offset 0x22, size 0x1
+    u_char eff;                     // offset 0x23, size 0x1
 } shAttackInfo;
 
 extern shAttackInfo sh2_attack_list[66];

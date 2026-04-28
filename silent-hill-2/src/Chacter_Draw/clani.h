@@ -34,7 +34,7 @@ typedef struct _AnimeInfo {
     signed short speed; // offset 0x4, size 0x2
     unsigned short start; // offset 0x6, size 0x2
     unsigned short end; // offset 0x8, size 0x2
-    unsigned char loop; // offset 0xA, size 0x1
+    u_char loop; // offset 0xA, size 0x1
     char pad; // offset 0xB, size 0x1
 } AnimeInfo;
 

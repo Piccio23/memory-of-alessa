@@ -3,16 +3,16 @@
 
 typedef struct
 {
-    unsigned int data;
-    unsigned int addr;
-    unsigned int size;
-    unsigned int mode;
+    u_int data;
+    u_int addr;
+    u_int size;
+    u_int mode;
 } sceSifDmaData;
 
-extern unsigned int sceSifSetDma(sceSifDmaData *sdd, int len);
-extern unsigned int isceSifSetDma(sceSifDmaData *sdd, int len);
-extern int sceSifDmaStat(unsigned int id);
-extern int isceSifDmaStat(unsigned int id);
+extern u_int sceSifSetDma(sceSifDmaData *sdd, int len);
+extern u_int isceSifSetDma(sceSifDmaData *sdd, int len);
+extern int sceSifDmaStat(u_int id);
+extern int isceSifDmaStat(u_int id);
 
 #define ExitHandler() __asm__ volatile("sync.l; ei")
 

@@ -6,11 +6,11 @@
 // total size: 0x14
 typedef struct CmdServStat {
     // Members
-    signed int qsize; // offset 0x0, size 0x4
-    signed int qlen; // offset 0x4, size 0x4
-    signed int id; // offset 0x8, size 0x4
-    signed int last_id; // offset 0xC, size 0x4
-    signed int clen; // offset 0x10, size 0x4
+    int qsize; // offset 0x0, size 0x4
+    int qlen; // offset 0x4, size 0x4
+    int id; // offset 0x8, size 0x4
+    int last_id; // offset 0xC, size 0x4
+    int clen; // offset 0x10, size 0x4
 } CmdServStat;
 
 int CmdServInit(u_long128* work /* r22 */, int workSize /* r2 */, void* stack /* r21 */, int stackSize /* r20 */, int prio /* r19 */);

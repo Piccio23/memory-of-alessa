@@ -163,9 +163,9 @@ INCLUDE_ASM("asm/nonmatchings/Effect2/hh_class_manager", func_00141C80);
 
 INCLUDE_ASM("asm/nonmatchings/Effect2/hh_class_manager", func_00141D50);
 
-static unsigned int InstanceTable_All_Initialize(struct Object_Group_Infomeation * pInfo /* r16 */) {
-    unsigned int result = 0; // r2
-    unsigned int i; // r3
+static u_int InstanceTable_All_Initialize(struct Object_Group_Infomeation * pInfo /* r16 */) {
+    u_int result = 0; // r2
+    u_int i; // r3
     struct Object_Instance * pCurrent; // r4
     struct Object_Instance * pPrev; // r5
 

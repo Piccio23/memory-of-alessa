@@ -7,9 +7,9 @@
 #include "Event/picture.h"
 #include "Event/event_sub.h"
 
-static signed int EvProgBoxWithKeyCursor(void);
-static signed int EvProgBoxWithKeyLayer(void);
-static signed int EvProgBoxWithKeyOpen(signed int alp /* r16 */);
+static int EvProgBoxWithKeyCursor(void);
+static int EvProgBoxWithKeyLayer(void);
+static int EvProgBoxWithKeyOpen(int alp /* r16 */);
 
 extern /* static */ float cyl_alp; // size: 0x4, address: 0x11EA360
 extern /* static */ short tex[9][4][4]; // @ 0x00355FD0
@@ -26,8 +26,8 @@ INCLUDE_ASM("asm/nonmatchings/Event/stage/stg_tgs_trial", EvProgGetNeedle);
 #line 329
 static int EvProgGuruguruNumber(void) {
     PicDraw_Data pic; // r29+0x30
-    signed int no; // r2
-    signed int i; // r16
+    int no; // r2
+    int i; // r16
 
 
 

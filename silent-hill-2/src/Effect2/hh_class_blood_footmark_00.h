@@ -16,8 +16,8 @@ typedef struct Vertex_Infomeation_List {
     float (* pVertex_List)[4]; // offset 0x0, size 0x4
     float (* pRgba_List)[4]; // offset 0x4, size 0x4
     float (* * pStq_List)[4]; // offset 0x8, size 0x4
-    unsigned int Vertex_Max; // offset 0xC, size 0x4
-    unsigned int Primitive_Type; // offset 0x10, size 0x4
+    u_int Vertex_Max; // offset 0xC, size 0x4
+    u_int Primitive_Type; // offset 0x10, size 0x4
 }Vertex_Infomeation_List;
 
 u_int HH_Class_Prefix_Blood_FootMark_00(void);

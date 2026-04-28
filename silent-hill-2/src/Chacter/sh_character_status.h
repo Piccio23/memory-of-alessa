@@ -7,9 +7,9 @@
 // total size: 0x1
 struct shInArea {
     // Members
-    unsigned char look_on : 2; // offset 0x0, size 0x1
-    unsigned char feel_on : 2; // offset 0x0, size 0x1
-    unsigned char light_on : 4; // offset 0x0, size 0x1
+    u_char look_on : 2; // offset 0x0, size 0x1
+    u_char feel_on : 2; // offset 0x0, size 0x1
+    u_char light_on : 4; // offset 0x0, size 0x1
 };
 
 // total size: 0xC

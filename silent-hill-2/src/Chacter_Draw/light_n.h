@@ -4,7 +4,7 @@
 typedef struct Light
 {
     // total size: 0xA0
-    signed int kind;         // offset 0x0, size 0x4
+    int kind;                // offset 0x0, size 0x4
     float intensity;         // offset 0x4, size 0x4
     float influence;         // offset 0x8, size 0x4
     float intensity2;        // offset 0xC, size 0x4

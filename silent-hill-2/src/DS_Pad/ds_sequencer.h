@@ -48,7 +48,7 @@ typedef struct DS_Record
 
 typedef struct DS_Record_Header {
     // total size: 0x20
-    unsigned char DataName[16]; // offset 0x0, size 0x10
+    u_char DataName[16]; // offset 0x0, size 0x10
     u_int Revision; // offset 0x10, size 0x4
     u_int Object_Num; // offset 0x14, size 0x4
     u_int Reserved[2]; // offset 0x18, size 0x8
@@ -65,18 +65,18 @@ typedef struct DS_Record_Edit {
 typedef struct DSR_MUD {
     // Members
     float Different_Time; // offset 0x0, size 0x4
-    unsigned int Handle_History; // offset 0x4, size 0x4
-    unsigned int EntryRecord_Count; // offset 0x8, size 0x4
-    unsigned int enQueue_Pos; // offset 0xC, size 0x4
-    unsigned int deQueue_Pos; // offset 0x10, size 0x4
-    unsigned int EventQueue_Count; // offset 0x14, size 0x4
+    u_int Handle_History; // offset 0x4, size 0x4
+    u_int EntryRecord_Count; // offset 0x8, size 0x4
+    u_int enQueue_Pos; // offset 0xC, size 0x4
+    u_int deQueue_Pos; // offset 0x10, size 0x4
+    u_int EventQueue_Count; // offset 0x14, size 0x4
 } DSR_MUD;
 
 // total size: 0xC
 typedef struct DSR_MU_EventDescriptor {
     // Members
-    unsigned int Handle; // offset 0x0, size 0x4
-    unsigned int EventID; // offset 0x4, size 0x4
+    u_int Handle; // offset 0x0, size 0x4
+    u_int EventID; // offset 0x4, size 0x4
     float Value; // offset 0x8, size 0x4
 } DSR_MU_EventDescriptor;
 

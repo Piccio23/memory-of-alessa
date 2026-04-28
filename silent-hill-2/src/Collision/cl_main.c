@@ -2,8 +2,8 @@
 #include "LoadBg/loadbg_cld.h"
 
 static void clCheckColumn2WallHit(struct _CL_HITRESULT * cres /* r18 */, struct _CL_HITPOLY_PLANE * pl /* r17 */, struct _CL_HITPOLY_COLUMN * col /* r16 */);
-static void clCheckHitWallCollision(struct _CL_HITPOLY_COLUMN * col /* r19 */, signed int * whnum /* r18 */, struct _CL_HITPOLY_PLANE * pl /* r17 */, signed int * ptr /* r16 */);
-static void clCheckColumn2ColumnHit(struct _CL_HITPOLY_COLUMN * col /* r19 */, signed int * whnum /* r18 */, struct _CL_HITPOLY_COLUMN * cl /* r17 */, signed int * ptr /* r16 */);
+static void clCheckHitWallCollision(struct _CL_HITPOLY_COLUMN * col /* r19 */, int * whnum /* r18 */, struct _CL_HITPOLY_PLANE * pl /* r17 */, int * ptr /* r16 */);
+static void clCheckColumn2ColumnHit(struct _CL_HITPOLY_COLUMN * col /* r19 */, int * whnum /* r18 */, struct _CL_HITPOLY_COLUMN * cl /* r17 */, int * ptr /* r16 */);
 static void clCollectCharaHeightNormal(struct SubCharacter * sc /* r17 */);
 static CL_SELECT_MAP * clGetHitSectListMOVEInDoor(void);
 
@@ -144,7 +144,7 @@ static void clCheckColumn2ColumnHit(CL_HITPOLY_COLUMN* col, int* whnum, CL_HITPO
     int* cur;
     
     for (cur = ptr; *cur != -1; cur++) {
-        signed int hitchk; // r2
+        int hitchk; // r2
         hitchk = clCheckSubColumnToColumn(&cres, &cl[*cur].p, &col->p);
         
         if (hitchk == 1) {
@@ -331,7 +331,7 @@ static CL_SELECT_MAP* clGetHitSectListMOVEInDoor(void) {
     return clSelectMap;
 }
 
-void clCheckHitEyes(struct _CL_VHIT_RESULT * res /* r2 */, unsigned int id /* r2 */, float * st /* r2 */, float * ed /* r2 */, signed int thru /* r2 */) {
+void clCheckHitEyes(struct _CL_VHIT_RESULT * res /* r2 */, u_int id /* r2 */, float * st /* r2 */, float * ed /* r2 */, int thru /* r2 */) {
     switch (thru) {
         case 1:
             clCheckHitEyeVector(res, id, st, ed);

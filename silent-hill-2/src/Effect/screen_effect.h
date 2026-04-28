@@ -6,8 +6,8 @@
 // total size: 0x10
 typedef struct ScreenEffect_Parameter {
     // Members
-    signed int fade_status; // offset 0x0, size 0x4
-    signed int fade_type; // offset 0x4, size 0x4
+    int fade_status; // offset 0x0, size 0x4
+    int fade_type; // offset 0x4, size 0x4
     float fade_timer_now; // offset 0x8, size 0x4
     float fade_timer_max; // offset 0xC, size 0x4
 } ScreenEffect_Parameter;

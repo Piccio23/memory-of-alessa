@@ -234,8 +234,8 @@ static int Node_Next_Search(Record_Info* pInfo, float Time) {
 }
 
 static int Node_Current_Search(Record_Info * pInfo /* r2 */, float Time /* r29+0x10 */) {
-    signed int result = -1; // r7
-    signed int num = Node_Next_Search(pInfo, Time); // r2
+    int result = -1; // r7
+    int num = Node_Next_Search(pInfo, Time); // r2
 
     if (num > 0) {
         result = num - 1;
@@ -274,12 +274,12 @@ static DS_Record_Edit *EditNode_Current_Search(Record_Info *pInfo, float Time) {
 #define DSR_PERMISSION_ATTR_AND_ID 4
 
 u_int EntryRecord_Entry(u_int* pHandleArray, DS_Record_Header* pHeader, u_int ControllerID, f32 Ratio) {
-    unsigned int result = 0; // r16
-    unsigned int i; // r16
+    u_int result = 0; // r16
+    u_int i; // r16
 
     // validate header & check that we have room for this record
     if ((DSR_FileFormat_ErrorChecker(pHeader) == 0) && (EntryRecord_EntryFreeCount_Get() >= pHeader->Object_Num)) {    
-        unsigned int permission_check = 1;
+        u_int permission_check = 1;
         DS_Object_Info * pObject_Info = (DS_Object_Info*) (pHeader + 1);
 
         // check if we have permission to create the record
