@@ -3,18 +3,6 @@
 
 #include "common.h"
 
-union Q_WORDDATA {
-    unsigned int ui32[4]; // offset 0x0, size 0x10
-    unsigned short us16[8]; // offset 0x0, size 0x10
-    float fl32[4]; // offset 0x0, size 0x10
-    unsigned char uc8[16]; // offset 0x0, size 0x10
-    signed int si32[4]; // offset 0x0, size 0x10
-    signed short ss16[8]; // offset 0x0, size 0x10
-    char sc8[16]; // offset 0x0, size 0x10
-    unsigned long ul64[2]; // offset 0x0, size 0x8
-    u_long128 ul128; // offset 0x0, size 0x10
-};
-
 // total size: 0xB0
 struct shGsLoopEnv {
     // Members

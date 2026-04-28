@@ -76,6 +76,17 @@ typedef union Q
     signed int iv[4];      // offset 0x0, size 0x10
 } Q;
 
+typedef union Q_WORDDATA {
+    u_int ui32[4]; // offset 0x0, size 0x10
+    u_short us16[8]; // offset 0x0, size 0x10
+    float fl32[4]; // offset 0x0, size 0x10
+    u_char uc8[16]; // offset 0x0, size 0x10
+    int si32[4]; // offset 0x0, size 0x10
+    short ss16[8]; // offset 0x0, size 0x10
+    char sc8[16]; // offset 0x0, size 0x10
+    u_long ul64[2]; // offset 0x0, size 0x8
+    __int128 ul128; // offset 0x0, size 0x10
+} Q_WORDDATA;
 typedef struct
 {
     float x;

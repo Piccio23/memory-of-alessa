@@ -3,6 +3,8 @@
 
 #include "common.h"
 #include "Chacter/character.h"
+#include "Event/picture.h"
+
 // this one i've seen in tgs_trial.c
 // https://decomp.me/scratch/tvnWN
 #define SET_EV_STEP(p_step, s_step) \
@@ -14,18 +16,6 @@ do {                                \
 // so i guess they had these too?
 #define SET_EV_P_STEP(p_step) do { ev_p_step = p_step; } while (0)
 #define SET_EV_S_STEP(s_step) do { ev_s_step = s_step; } while (0)
-
-union Q_WORDDATA {
-    unsigned int ui32[4]; // offset 0x0, size 0x10
-    unsigned short us16[8]; // offset 0x0, size 0x10
-    float fl32[4]; // offset 0x0, size 0x10
-    unsigned char uc8[16]; // offset 0x0, size 0x10
-    signed int si32[4]; // offset 0x0, size 0x10
-    signed short ss16[8]; // offset 0x0, size 0x10
-    char sc8[16]; // offset 0x0, size 0x10
-    unsigned long ul64[2]; // offset 0x0, size 0x8
-    __int128 ul128; // offset 0x0, size 0x10
-};
 
 // total size: 0xB0
 struct shGsLoopEnv {
@@ -785,47 +775,6 @@ struct shGsAllEnv {
     struct shGsDrawEnv Now_DrawEnv; // offset 0x1D90, size 0x2A0
 };
 
-// total size: 0x44
-struct PicDraw_Data {
-    // Members
-    struct sh2gfw_AREA_HEAD * ap; // offset 0x0, size 0x4
-    signed int tex; // offset 0x4, size 0x4
-    signed int clut; // offset 0x8, size 0x4
-    signed short x0; // offset 0xC, size 0x2
-    signed short y0; // offset 0xE, size 0x2
-    signed short x1; // offset 0x10, size 0x2
-    signed short y1; // offset 0x12, size 0x2
-    signed short x2; // offset 0x14, size 0x2
-    signed short y2; // offset 0x16, size 0x2
-    signed short x3; // offset 0x18, size 0x2
-    signed short y3; // offset 0x1A, size 0x2
-    signed int us0; // offset 0x1C, size 0x4
-    signed int vt0; // offset 0x20, size 0x4
-    signed int us1; // offset 0x24, size 0x4
-    signed int vt1; // offset 0x28, size 0x4
-    unsigned char r; // offset 0x2C, size 0x1
-    unsigned char g; // offset 0x2D, size 0x1
-    unsigned char b; // offset 0x2E, size 0x1
-    unsigned char a; // offset 0x2F, size 0x1
-    unsigned char alpha_a; // offset 0x30, size 0x1
-    unsigned char alpha_b; // offset 0x31, size 0x1
-    unsigned char alpha_c; // offset 0x32, size 0x1
-    unsigned char alpha_d; // offset 0x33, size 0x1
-    unsigned char alpha_fix; // offset 0x34, size 0x1
-    unsigned char test_ate; // offset 0x35, size 0x1
-    unsigned char test_atst; // offset 0x36, size 0x1
-    unsigned char test_aref; // offset 0x37, size 0x1
-    unsigned char test_afail; // offset 0x38, size 0x1
-    unsigned char test_date; // offset 0x39, size 0x1
-    unsigned char test_datm; // offset 0x3A, size 0x1
-    unsigned char test_zte; // offset 0x3B, size 0x1
-    unsigned char test_ztst; // offset 0x3C, size 0x1
-    unsigned char pad[3]; // offset 0x3D, size 0x3
-    signed short otp; // offset 0x40, size 0x2
-    signed short status; // offset 0x42, size 0x2
-};
-
-// total size: 0x60
 struct Pad_KeyConfig {
     // Members
     signed int enter; // offset 0x0, size 0x4

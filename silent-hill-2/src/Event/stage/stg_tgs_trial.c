@@ -4,21 +4,16 @@
 #include "Event/event_sub.h"
 #include "Event/stage/stg_tgs_trial.h"
 #include "SH2_common/sh2dt.h"
+#include "Event/picture.h"
+#include "Event/event_sub.h"
 
-static signed int EvProgBoxWithKeyCursor();
-static signed int EvProgBoxWithKeyLayer();
+static signed int EvProgBoxWithKeyCursor(void);
+static signed int EvProgBoxWithKeyLayer(void);
 static signed int EvProgBoxWithKeyOpen(signed int alp /* r16 */);
-signed int EvSubItemGet(signed int kind /* r16 */, signed int message /* r2 */);
-signed int EvSubItemUse0(signed int kind /* r19 */, signed int message /* r20 */, signed int se /* r18 */, signed int stereo /* r17 */, float * pos /* r16 */, signed int xxx /* r2 */);
-void EvSubPictureCursor(signed int color /* r16 */);
-signed int SeCall(signed int sd_no /* r17 */, float volume /* r20 */, signed int stereo /* r16 */);
-static float cyl_alp; // size: 0x4, address: 0x11EA360
-extern union fsFileIndex data_pic_hsp_p_box_tex;
-extern union fsFileIndex data_pic_hsp_p_hair_hair_tex;
-extern union fsFileIndex data_pic_hsp_p_hair_tex;
-extern union fsFileIndex data_pic_hsp_pboxkey01_tex;
-extern float ev_cursor_x;
-extern float ev_cursor_y;
+
+extern /* static */ float cyl_alp; // size: 0x4, address: 0x11EA360
+extern /* static */ short tex[9][4][4]; // @ 0x00355FD0
+extern /* static */ short pos[9][4][2]; // @ 0x003560F0
 
 INCLUDE_ASM("asm/nonmatchings/Event/stage/stg_tgs_trial", EvProgTrialStartSet);
 
@@ -28,7 +23,110 @@ int EvProgGetHospitalMap(void) {
 
 INCLUDE_ASM("asm/nonmatchings/Event/stage/stg_tgs_trial", EvProgGetNeedle);
 
-INCLUDE_ASM("asm/nonmatchings/Event/stage/stg_tgs_trial", EvProgGuruguruNumber);
+#line 329
+static int EvProgGuruguruNumber(void) {
+    PicDraw_Data pic; // r29+0x30
+    signed int no; // r2
+    signed int i; // r16
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    switch (ev_p_step) {
+        case 0:
+            SCNowPlayableEventSwitch(sh2jms.player, 1);
+            if (GET_GAME_FLAG(6, 0)) SET_EV_STEP(2, 0)
+            else SET_EV_STEP(10, 0);
+            break;
+
+        case 10:
+            if (EvSubMessage(3))
+                if (ev_cancel) {
+                    ev_prog_flag_set = 0;
+                    SET_EV_STEP(13, 0);
+                } else SET_EV_STEP(2, 0);
+            break;
+
+        case 2:
+            if (EvSubFileLoadAndFadeOut(
+                    NULL,
+                    data_pic_hsp_p_boxnumber_tex,
+                    data_pic_hsp_p_boxnumber_2_tex))
+                SET_EV_STEP(8, 0);
+            break;
+
+        case 8:
+        case 7:
+        case 4:
+            EvSubPictureStart();
+            EvSubPictureDisplayOnly();
+            PictureLoadImage((sh2gfw_AREA_HEAD* ) layer_adr, 2, -1, -1);
+            
+            shQzero(&pic.ap, 0x44);
+            
+            picture_set_ap(&pic, layer_adr);
+            pic.otp = 3;
+            picture_set_alpha(&pic, 0x80);
+            for (i = 0; i < 4; i++) {
+                no = game_flag.guruguru[i];
+                
+                
+                
+                picture_set_bounds(&pic,
+                                   pos[no][i],
+                                   tex[no][i]);
+                picture_set_tex_coords(&pic, tex[no][i]);
+                PictureDraw(&pic);
+            }
+            if (ev_p_step == 7) EvSubPictureFilter();
+            EvSubPictureEnd();
+            if (ev_p_step == 8) {
+                if (shPadTrigger(0, key_config.enter))
+                    SET_EV_STEP(7, 0);
+            } else
+                if (ev_p_step == 7) {
+                    if (EvSubMessage(4))
+    
+                        SET_EV_STEP(4, 0);
+                } else 
+                    if (ScreenEffectFadeCheck()) {
+                    
+                        SET_EV_STEP(13, 0);
+                    }
+            break;
+        
+        case 13:
+            SCNowPlayableEventSwitch(sh2jms.player, 0);
+            return 1;
+    }
+    return 0;
+}
 
 #line 437
 int EvProgLouiseTakecare(void) {

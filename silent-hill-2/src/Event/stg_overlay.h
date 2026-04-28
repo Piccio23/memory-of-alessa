@@ -315,7 +315,7 @@ void MWNotifyOverlayLoaded(void *addr);
 static union fsFileIndex *StgOverlayGetFileID(StgName stg_name);
 static struct Stage_Data *StgOverlayGetStageData(StgName stg_name);
 void UtilMemSet(void *addr, int val, int size);
-void fsSync(int mode, int fid);
+int fsSync(int mode, int fid);
 void shSyncVEnd(int mode);
 void verbose(int , const char *);
 extern u_char D_1F01E00[]; 
