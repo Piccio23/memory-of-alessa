@@ -130,26 +130,26 @@ int EvSubItemGetAndAnim(int kind /* r16 */, int message /* r2 */)  {
             scp = shCharacterGetSubCharacter(item_to_chara[kind], 0);
             if (scp && sh2jms.player->pos.y - scp->pos.y < 100.0f) {
                 PlayerEventAnimeSet(0x4E21);
-                SET_EV_S_STEP(9);
+                EV_SUB_STEP(9);
             } else {
                 PlayerEventAnimeSet(0x65);
-                SET_EV_S_STEP(10);
+                EV_SUB_STEP(10);
             }
             break;
     
         case 9:
             if (ev_cancel) {
                 ev_prog_flag_set = 0;
-                SET_EV_S_STEP(11);
+                EV_SUB_STEP(11);
             } else if (PlayerEventAnimeSuccessFrame()) {
                 shCharacterAnimePause(sh2jms.player);
-                SET_EV_S_STEP(10);
+                EV_SUB_STEP(10);
             }
             break;
         case 10:
             fontMessageNum(msg_buffer, message);
             SeCall(0x2B21, 1.0f, 0);
-            SET_EV_S_STEP(3);
+            EV_SUB_STEP(3);
             break;
         case 3:
             if (fontGetStatus() == -2 || ev_cancel) {
@@ -158,9 +158,9 @@ int EvSubItemGetAndAnim(int kind /* r16 */, int message /* r2 */)  {
                 scp = shCharacterGetSubCharacter(item_to_chara[kind], 0);
                 if (scp && sh2jms.player->pos.y - scp->pos.y < 100.0f) {
                     shCharacterAnimeRestart(sh2jms.player);
-                    SET_EV_S_STEP(8);
+                    EV_SUB_STEP(8);
                 } else {
-                    SET_EV_S_STEP(11);
+                    EV_SUB_STEP(11);
                 }
                 if (scp) {
                     shCharacter_Manage_Delete(scp, 0, 0);
@@ -169,7 +169,7 @@ int EvSubItemGetAndAnim(int kind /* r16 */, int message /* r2 */)  {
             break;
         case 8:
             if (shCharacterAnimeIsEnd(sh2jms.player) || ev_cancel) {
-                SET_EV_S_STEP(11);
+                EV_SUB_STEP(11);
             }
             break;
         case 11:

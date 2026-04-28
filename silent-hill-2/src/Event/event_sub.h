@@ -5,17 +5,13 @@
 #include "Chacter/character.h"
 #include "Event/picture.h"
 
-// this one i've seen in tgs_trial.c
-// https://decomp.me/scratch/tvnWN
-#define SET_EV_STEP(p_step, s_step) \
-do {                                \
-    ev_p_step = p_step;             \
-    ev_s_step = s_step;             \
-} while (0);                        \
+#define EV_PROG_STEP(p_step) \
+do {                                 \
+    ev_p_step = p_step;              \
+    ev_s_step = 0;                   \
+} while (0)
 
-// so i guess they had these too?
-#define SET_EV_P_STEP(p_step) do { ev_p_step = p_step; } while (0)
-#define SET_EV_S_STEP(s_step) do { ev_s_step = s_step; } while (0)
+#define EV_SUB_STEP(s_step) do { ev_s_step = s_step; } while (0)
 
 // total size: 0xB0
 struct shGsLoopEnv {

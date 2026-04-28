@@ -61,16 +61,16 @@ static int EvProgGuruguruNumber(void) {
     switch (ev_p_step) {
         case 0:
             SCNowPlayableEventSwitch(sh2jms.player, 1);
-            if (GET_GAME_FLAG(6, 0)) SET_EV_STEP(2, 0)
-            else SET_EV_STEP(10, 0);
+            if (GET_GAME_FLAG(6, 0)) EV_PROG_STEP(2);
+            else EV_PROG_STEP(10);
             break;
 
         case 10:
             if (EvSubMessage(3))
                 if (ev_cancel) {
                     ev_prog_flag_set = 0;
-                    SET_EV_STEP(13, 0);
-                } else SET_EV_STEP(2, 0);
+                    EV_PROG_STEP(13);
+                } else EV_PROG_STEP(2);
             break;
 
         case 2:
@@ -78,7 +78,7 @@ static int EvProgGuruguruNumber(void) {
                     NULL,
                     data_pic_hsp_p_boxnumber_tex,
                     data_pic_hsp_p_boxnumber_2_tex))
-                SET_EV_STEP(8, 0);
+                EV_PROG_STEP(8);
             break;
 
         case 8:
@@ -108,16 +108,16 @@ static int EvProgGuruguruNumber(void) {
             EvSubPictureEnd();
             if (ev_p_step == 8) {
                 if (shPadTrigger(0, key_config.enter))
-                    SET_EV_STEP(7, 0);
+                    EV_PROG_STEP(7);
             } else
                 if (ev_p_step == 7) {
                     if (EvSubMessage(4))
     
-                        SET_EV_STEP(4, 0);
+                        EV_PROG_STEP(4);
                 } else 
                     if (ScreenEffectFadeCheck()) {
                     
-                        SET_EV_STEP(13, 0);
+                        EV_PROG_STEP(13);
                     }
             break;
         
@@ -132,8 +132,8 @@ static int EvProgGuruguruNumber(void) {
 int EvProgLouiseTakecare(void) {
     switch (ev_p_step) {
         case 0:
-            if (GET_BIT(game_flag.flag[5], 31)) SET_EV_STEP(12, 0)
-            else SET_EV_STEP(11, 0);
+            if (GET_BIT(game_flag.flag[5], 31)) EV_PROG_STEP(12);
+            else EV_PROG_STEP(11);
             SCNowPlayableEventSwitch(sh2jms.player, 1);
             break;
         
@@ -141,14 +141,14 @@ int EvProgLouiseTakecare(void) {
             if (EvSubMessage(3)) {
                 if (ev_cancel) {
                     ev_prog_flag_set = 0;
-                    SET_EV_STEP(13, 0);
-                } else SET_EV_STEP(12, 0);
+                    EV_PROG_STEP(13);
+                } else EV_PROG_STEP(12);
             }
             break;
 
         case 12:
             if (EvSubMessage(9))
-                SET_EV_STEP(13, 0);
+                EV_PROG_STEP(13);
             break;
 
         case 13:
@@ -168,7 +168,7 @@ static int EvProgBoxWithKey(void) {
             SCNowPlayableEventSwitch(sh2jms.player, 1);
             ev_cursor_y = 0.0f;
             ev_cursor_x = 0.0f;
-            SET_EV_STEP(2, 0);
+            EV_PROG_STEP(2);
             break;
 
 
@@ -176,9 +176,9 @@ static int EvProgBoxWithKey(void) {
         case 2:
             if (EvSubFileLoadAndFadeOut(NULL, &data_pic_hsp_p_box_tex, &data_pic_hsp_pboxkey01_tex)) {
                 if (GET_GAME_FLAG(6, 2)) {
-                    SET_EV_STEP(9, 0);
+                    EV_PROG_STEP(9);
                     SeCall(0x4DBA, 1.0f, 0);
-                } else SET_EV_STEP(10, 0);
+                } else EV_PROG_STEP(10);
             }
             break;
         
@@ -191,8 +191,8 @@ static int EvProgBoxWithKey(void) {
             
             if (EvSubItemUse0(0x20, 0x17, 0, 0, 0, 0)) {
                 SET_GAME_FLAG(6, 1);
-                if (GET_GAME_FLAG(6, 5)) SET_EV_STEP(12, 0)
-                else SET_EV_STEP(10, 0);
+                if (GET_GAME_FLAG(6, 5)) EV_PROG_STEP(12)
+                else EV_PROG_STEP(10);
             }
             break;
 
@@ -206,7 +206,7 @@ static int EvProgBoxWithKey(void) {
             if (EvSubMessage(0xA)) {
                 ev_cursor_x = 0.0f;
                 ev_cursor_y = 0.0f;
-                SET_EV_STEP(7, 0);
+                EV_PROG_STEP(7);
             }
             break;
         case 7:
@@ -222,10 +222,10 @@ static int EvProgBoxWithKey(void) {
                 (game_flag.guruguru[3] == game_flag.cylinder[3])) {
                 SET_GAME_FLAG(6, 5);
                 SeCall(0x4A46, 1.0f, 0);
-                SET_EV_STEP(14, 0);
+                EV_PROG_STEP(14);
             } else if (shPadTrigger(0, key_config.cancel)) {
                 
-                SET_EV_STEP(4, 0);
+                EV_PROG_STEP(4);
             }
             break;
 
@@ -237,8 +237,8 @@ static int EvProgBoxWithKey(void) {
             EvSubPictureEnd();
             cyl_alp -= 0.5f * shGetDT();
             if (cyl_alp <= 0.0f) {
-                if (GET_GAME_FLAG(6, 1)) SET_EV_STEP(12, 0)
-                else SET_EV_STEP(16, 0);
+                if (GET_GAME_FLAG(6, 1)) EV_PROG_STEP(12)
+                else EV_PROG_STEP(16);
             }
             break;
         
@@ -247,14 +247,14 @@ static int EvProgBoxWithKey(void) {
             EvSubPictureDisplayOnly();
             EvSubPictureEnd();
             if ((shPadTrigger(0, key_config.enter)) || (shPadTrigger(0, key_config.cancel))) {
-                SET_EV_STEP(4, 0);
+                EV_PROG_STEP(4);
             }
             break;
         
         case 12:
             if (EvSubFileLoadAndFadeOut(NULL, &data_pic_hsp_p_hair_tex, &data_pic_hsp_p_hair_hair_tex)) {
                 ev_timer = 0.0f;
-                SET_EV_STEP(15, 0);
+                EV_PROG_STEP(15);
             }
             break;
         
@@ -264,7 +264,7 @@ static int EvProgBoxWithKey(void) {
             EvProgBoxWithKeyOpen(0x80);
             EvSubPictureEnd();
             if ((shPadTrigger(0, key_config.enter)) || (shPadTrigger(0, key_config.cancel))) {
-                SET_EV_STEP(17, 0);
+                EV_PROG_STEP(17);
             }
             break;
         
@@ -275,7 +275,7 @@ static int EvProgBoxWithKey(void) {
             EvSubPictureFilter();
             EvSubPictureEnd();
             if (EvSubMessage(7)) {
-                SET_EV_STEP(8, 0);
+                EV_PROG_STEP(8);
             }
             break;
         
@@ -283,7 +283,7 @@ static int EvProgBoxWithKey(void) {
             ev_timer += shGetDT();
             if (ev_timer > 2.0f) {
                 ev_timer = 2.0f;
-                SET_EV_STEP(18, 0);
+                EV_PROG_STEP(18);
             }
             EvSubPictureStart();
             EvSubPictureDisplayOnly();
@@ -298,7 +298,7 @@ static int EvProgBoxWithKey(void) {
             EvSubPictureFilter();
             EvSubPictureEnd();
             if (EvSubItemGet(0x32, 0x18)) {
-                SET_EV_STEP(4, 0);
+                EV_PROG_STEP(4);
                 SET_GAME_FLAG(5, 11);
             }
             break;
@@ -313,7 +313,7 @@ static int EvProgBoxWithKey(void) {
             
             EvSubPictureEnd();
             if (ScreenEffectFadeCheck()) {
-                SET_EV_STEP(13, 0);
+                EV_PROG_STEP(13);
             }
             break;
     
