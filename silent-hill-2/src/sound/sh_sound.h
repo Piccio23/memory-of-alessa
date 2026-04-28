@@ -130,4 +130,6 @@ extern int se_load_data;
 extern SOUND_WORK sound_work;
 extern Change_List change_list[242]; // size: 0xB58, address: 0x2B8880
 
+extern void shQzero(void*, int); // we need to find shQzero proper signature
+
 #endif // SH_SOUND_H
