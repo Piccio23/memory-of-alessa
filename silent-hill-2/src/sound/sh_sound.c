@@ -4,6 +4,7 @@
 //#include "SH2_common/sh_vu0.h" we need to find shQzero proper signature
 
 static int SeChange2Dto3D(int se /* r2 */);
+static int SeChange3Dto2D(int se /* r2 */);
 
 INCLUDE_ASM("asm/nonmatchings/sound/sh_sound", SeWait);
 
@@ -11,7 +12,21 @@ void SeForceWait(void) {
     SeWait(0x3C);
 }
 
-INCLUDE_ASM("asm/nonmatchings/sound/sh_sound", SeCallInit);
+void SeCallInit(int sect /* r18 */, int mmode /* r17 */, char* path /* r16 */) {
+    if (dbFlag(1) == 0) {
+        verbose(2, "sh_sound.c:182> ==========1\n");
+        verbose(2, "sh_sound.c:184> sector: %d\n", sect);
+        if (path != 0) {
+            sd_setpath(path);
+        }
+        shSdInit();
+        shSdCall(0x3E8, sect, mmode, 0);
+        shSdCall(0x411, 0, 0, 0);
+        verbose(2, "sh_sound.c:194> ==========2\n");
+        shSdStat();
+        SeForceWait();
+    }
+}
 
 void SeCallReset(void) {
     int i; // r4
@@ -96,9 +111,43 @@ void SeSoundManager(void) {
 
 INCLUDE_ASM("asm/nonmatchings/sound/sh_sound", Se2dManager);
 
-INCLUDE_ASM("asm/nonmatchings/sound/sh_sound", Se2dManageDataVolumeChange);
+void Se2dManageDataVolumeChange(int sd /* r2 */, float vol /* r29+0x10 */) {
+    int i; // r6
 
-INCLUDE_ASM("asm/nonmatchings/sound/sh_sound", Se2dManageDataTimer);
+    for (i = 0; i < 4; i++) {
+        if (se_2d_manage_data[i].sd == sd) {
+            break;
+        }
+    }
+    if (i == 4) {
+        return;
+    }
+    if (vol < 0.0f) {
+        SeStop(sd);
+        return;
+    }
+    if (vol > 1.0f) {
+        vol = 1.0f;
+    }
+    se_2d_manage_data[i].vol = vol;
+}
+
+float Se2dManageDataTimer(int sd /* r2 */, int clear /* r2 */) {
+    int i; // r6
+    
+    for (i = 0; i < 4; i++) {
+        if (se_2d_manage_data[i].sd == sd) {
+            break;
+        }       
+    }
+    if (i == 4) {
+        return -1.0f;
+    }
+    if (clear != 0) {
+        se_2d_manage_data[i].timer = 0.0f;
+    }
+    return se_2d_manage_data[i].timer;
+}
 
 INCLUDE_ASM("asm/nonmatchings/sound/sh_sound", Se3dManager);
 
@@ -124,7 +173,46 @@ int Se3dControl(int sd_no /* r17 */, float volume /* r20 */, float* pos /* r16 *
     return 0x10;
 }
 
-INCLUDE_ASM("asm/nonmatchings/sound/sh_sound", SeStop);
+void SeStop(int sd_no /* r18 */) {
+    int i; // r16
+    int work; // r2
+    
+    if (dbFlag(1)) {
+        return;
+    }
+    if (sd_no == 0) {
+        return;
+    }
+    if (sd_no < 0x9C40) {
+        shSdSeStop(sd_no);
+        for (i = 0; i < 4; i++) {
+            if (se_2d_manage_data[i].sd == sd_no) {
+                break;
+            }
+        }
+        if (i != 4) {
+            se_2d_manage_data[i].sd = 0;
+        }
+        sd_no = SeChange2Dto3D(sd_no);
+        if (!sd_no) {
+            return;
+        }
+    } else {
+        work = SeChange3Dto2D(sd_no);
+        if (work) {
+            shSdSeStop(work);
+        }
+    }
+    for (i = 0; i < 8; i++) {
+        if (se_3d_channel_data[i].sd == sd_no) {
+            shSd3dStop(i);
+            se_3d_channel_data[i].sd = 0;
+            if ((se_3d_channel_data[i].status & 3) == 1) {
+                se_3d_channel_number--;
+            }
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/sound/sh_sound", SeBgmChange);
 
@@ -134,7 +222,15 @@ INCLUDE_ASM("asm/nonmatchings/sound/sh_sound", SeBgmManager);
 
 INCLUDE_ASM("asm/nonmatchings/sound/sh_sound", BgmPageSet);
 
-INCLUDE_ASM("asm/nonmatchings/sound/sh_sound", SeMasterVolumeChange);
+INCLUDE_ASM("asm/nonmatchings/sound/sh_sound", SeMasterVolumeChange); //
+/*
+void SeMasterVolumeChange(void) {
+    if (dbFlag(1) == 0) {
+        shSdCall(0x402, playing.bgm_volume * 8, 0, 0);
+        shSdCall(0x401, playing.se_volume * 8, 0, 0);
+    }
+}
+*/
 
 static int SeChange2Dto3D(int se /* r2 */) {
     int i; // r5
@@ -150,4 +246,16 @@ static int SeChange2Dto3D(int se /* r2 */) {
     return 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/sound/sh_sound", SeChange3Dto2D);
+static int SeChange3Dto2D(int se /* r2 */) {
+    int i; // r3
+    
+    if (se < 0x9C40) {
+        return se;
+    }
+    for (i = 0; change_list[i].sd_3d != 0; i++) {
+        if (change_list[i].sd_3d == se) {
+            return change_list[i].sd_se;
+        }        
+    }
+    return 0;
+}
