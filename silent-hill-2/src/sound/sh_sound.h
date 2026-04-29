@@ -191,7 +191,7 @@ extern SOUND_WORK sound_work;
 extern Change_List change_list[242]; // size: 0xB58, address: 0x2B8880
 //extern Playing_Info playing;
 
-extern void shQzero(void*, int); // we need to find shQzero proper signature
+//extern void shQzero(void*, int); // we need to find shQzero proper signature
 
 extern void sd_setpath(char* dp /* r2 */); // M:\select\sound\sd0712\ee\sd_call.c we need to find a home for lil bro
 
