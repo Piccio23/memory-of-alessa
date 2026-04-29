@@ -4,6 +4,7 @@
 #include "common.h"
 #include "Chacter/character.h"
 #include "Event/picture.h"
+#include "connect.h"
 
 #define EV_PROG_STEP(p_step) \
 do {                                 \
@@ -794,16 +795,6 @@ struct Pad_KeyConfig {
     int padding[6]; // offset 0x48, size 0x18
 };
 
-// total size: 0x30
-typedef struct _SH2_SYS {
-    // Members
-    u_int step[8]; // offset 0x0, size 0x20
-    u_int pre_playable; // offset 0x20, size 0x4
-    int main_status; // offset 0x24, size 0x4
-    u_int soft_reset; // offset 0x28, size 0x4
-    u_int frame_cnt; // offset 0x2C, size 0x4
-} SH2_SYS;
-
 void sh2gfw_Reset_FilterCommand();
 int MovieWaitReady();
 void sh2gfw_Set_PauseRetain();
@@ -862,7 +853,6 @@ extern char* layer_adr;
 extern u_short msg_buffer[];
 extern short item_to_chara[75];
 extern struct shPlayerWork sh2jms;
-extern SH2_SYS Sh2sys;
 extern struct Pad_KeyConfig key_config;
 extern struct shGsAllEnv shGs_AllEnv;
 

@@ -1,3 +1,6 @@
+#ifndef CONNECT_H
+#define CONNECT_H
+
 // work/sh2(CVS全取得)/src/connect.c
 typedef struct _SH2_SYS
 {
@@ -9,3 +12,5 @@ typedef struct _SH2_SYS
     u_int frame_cnt;    // offset 0x2C, size 0x4
 } SH2_SYS;
 extern SH2_SYS Sh2sys;
+
+#endif // CONNECT_H

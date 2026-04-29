@@ -1,4 +1,5 @@
 #ifndef FJ_MAN_H
+#define FJ_MAN_H
 
 #define fjAssert(_cond, _file, _line)    \
     if (_cond)                           \
