@@ -1,5 +1,7 @@
 #include "amusement_01.h"
 #include "Font/font.h"
+#include "SH3_common/sh3dt.h"
+#include "SH3_common/sh_vu0.h"
 
 static void func_01F6DCF0_amusement_01(u_long128 *arg0, int *arg1, u_long128 *arg2, int *arg3, int *arg4);
 static void func_01F6F430_amusement_01(u_long128 *arg0, int *arg1, u_long128 *arg2, int *arg3, int *arg4);
@@ -551,7 +553,163 @@ int func_01F6E810_amusement_01(void) {
 }
 
 
-INCLUDE_ASM("asm/nonmatchings/Event/amusement_01", func_01F6E9A0_amusement_01);
+int func_01F6E9A0_amusement_01(void) {
+    Q sp50 = D_01F74CD0_amusement_01;
+    SubCharacter* heather;
+    int action_level;
+    int i;
+
+    switch (D_01F74CB8_amusement_01) {
+        case 0:
+            D_01F74CC0_amusement_01 = 0;
+            D_01F74CE0_amusement_01 = 0;
+    
+            if (RoomName() == BORLEY_HAUNTED_MANSION_MAZE_1_ROOM) {
+                D_01F74D30_amusement_01 = &D_01F74720_amusement_01;
+            } else {
+                D_01F74D30_amusement_01 = &D_01F747D0_amusement_01;
+            }
+    
+            action_level = GetActionLevel();
+
+            switch (action_level) {
+                case 1:
+                    D_01F74D80_amusement_01 = 55.0f;
+                    D_01F74D20_amusement_01 = 260.0f;
+                    break;
+    
+                 case 2: 
+                    D_01F74D80_amusement_01 = 62.0f;
+                    D_01F74D20_amusement_01 = 300.0f;
+                    break;
+    
+                default:
+                    if (action_level >= 3) {
+                        D_01F74D80_amusement_01 = 75.0f + ((action_level - 3) * 2);
+                        D_01F74D20_amusement_01 = 300.0f + (10.0f * (action_level - 3));
+                    } else {
+                        D_01F74D80_amusement_01 = 55.0f;
+                        D_01F74D20_amusement_01 = 260.0f; 
+                    }
+                    break;
+            }
+    
+            D_01F74D70_amusement_01 = D_01F74D30_amusement_01[D_01F74CC0_amusement_01];
+            D_01F74D60_amusement_01 = D_01F74D30_amusement_01[D_01F74CC0_amusement_01+1];
+            D_01F74CB8_amusement_01 = 1;
+            break;
+
+        case 1:
+            D_01F74D70_amusement_01 = D_01F74D30_amusement_01[D_01F74CC0_amusement_01];
+            D_01F74D60_amusement_01 = D_01F74D30_amusement_01[D_01F74CC0_amusement_01+1];
+            D_01F74D40_amusement_01 = -QUARTER_TURN;
+            D_01F74CB8_amusement_01 = 2;
+            D_01F74D50_amusement_01[0] = (D_01F74D60_amusement_01[0] - D_01F74D70_amusement_01[0]) / 2.0f;
+            D_01F74D54_amusement_01 = (D_01F74D64_amusement_01 - D_01F74D74_amusement_01) / 2.0f;
+            D_01F74D58_amusement_01 = (D_01F74D68_amusement_01 - D_01F74D78_amusement_01) / 2.0f;
+            /* fallthrough */
+
+        case 2: {
+            heather = shCharacterGetSubCharacter(HEATHER_CHARA_ID, -1);
+    
+            for (i = 0; i < 3; i++) {
+                D_01F74880_amusement_01[i] = 
+                           D_01F74D70_amusement_01[i] 
+                        + (D_01F74D50_amusement_01[i] 
+                        + (D_01F74D50_amusement_01[i] * shSinF(D_01F74D40_amusement_01)));
+            }
+    
+            if (vec3_dist(D_01F74880_amusement_01, &heather->pos) >= 2250.0f) {
+                D_01F74D38_amusement_01 = 0.5f * (vec3_dist(D_01F74880_amusement_01, &heather->pos) / 500.0f);
+            } else {
+                if (vec3_dist(D_01F74880_amusement_01, &heather->pos) >= 1500.0f) {
+                    D_01F74D38_amusement_01 = 0.3333f * (vec3_dist(D_01F74880_amusement_01, &heather->pos) / 500.0f);
+                } else {
+                    D_01F74D38_amusement_01 = 1.0f;
+                }
+            }
+    
+            if (vec3_dist_xz(D_01F74880_amusement_01, &heather->pos) >= D_01F74D20_amusement_01) {
+                if (!(GET_BIT(D_1D316A0, 5)) || (D_01F74CC0_amusement_01 != 6)) {
+                    D_01F74D40_amusement_01 += D_01F74D38_amusement_01 * (TO_RAD(D_01F74D80_amusement_01 * shRandF() * shGetDT()));
+                    D_01F74D40_amusement_01 = shAngleRegulate(D_01F74D40_amusement_01);
+                }
+            }
+    
+            for (i = 0; i < 3; i++) {
+                D_01F74880_amusement_01[i] = 
+                       D_01F74D70_amusement_01[i] 
+                    + (D_01F74D50_amusement_01[i] 
+                    + (D_01F74D50_amusement_01[i] * shSinF(D_01F74D40_amusement_01)));
+            }
+            
+            if (!GET_BIT(D_1D3169C, 0x1C) && !func_00190240() &&
+                heather->pos.x >= 59605.0f && heather->pos.x <= 60425.0f &&
+                heather->pos.z <= 102750.0f && heather->pos.z >= 100000.0f) {
+                D_01F74890_amusement_01 = 0.0f;
+                D_01F748A8_amusement_01 = 255.0f;
+                D_01F74894_amusement_01 = 0.0f;
+                func_001C8EA0(&D_01F74890_amusement_01, &D_01F748A0_amusement_01, &D_01F74880_amusement_01, 0);
+                if (!D_01F74CE0_amusement_01) {
+                    func_01F6F3C0_amusement_01();
+                    D_01F74CE0_amusement_01 = 1;
+                }
+            } else {
+                if (D_01F74CE0_amusement_01) {
+                    func_001C0EE0(1);
+                }
+                if (D_01F748A8_amusement_01 != 0.0f) {
+                    D_01F748A8_amusement_01 = D_01F748A8_amusement_01 - 1.0f;
+                    if (D_01F748A8_amusement_01 < 0.0f) {
+                        D_01F748A8_amusement_01 = 0.0f;
+                    }
+                }
+                if (D_01F74890_amusement_01 != 1.7f) {
+                    D_01F74890_amusement_01 += 0.11333334f;
+                    if (D_01F74890_amusement_01 > 1.7f) {
+                        D_01F74890_amusement_01 = 1.7f;
+                    }
+                }
+                if (D_01F74894_amusement_01 != 0.3f) {
+                    D_01F74894_amusement_01 += 0.1f * 0.2f;
+                    if (D_01F74894_amusement_01 > 0.3f) {
+                        D_01F74894_amusement_01 = 0.3f;
+                    }
+                }
+                func_001C8EA0(&D_01F74890_amusement_01, &D_01F748A0_amusement_01, &D_01F74880_amusement_01, 0);
+            }
+
+            if (GET_BIT(D_1D316A0, 5) && D_01F74CC0_amusement_01 == 6) {
+                func_001E2480(221, &sp50, 1.0f);
+            } else {
+                if (vec3_dist_xz(D_01F74880_amusement_01, &heather->pos) <= 250.0f) {
+                    func_001E2480(221, &sp50, 1.0f);
+                } else {
+                    if (vec3_dist_xz(D_01F74880_amusement_01, &heather->pos) <= 1400.0f) {
+                        func_001E2480(221, &sp50, 0.0001f * (1400.0f - vec3_dist_xz(D_01F74880_amusement_01, &heather->pos)));
+                    }
+                }
+            }
+
+            if (func_00190240()) {
+                D_1D3169C &= ~0x1000;
+                fontClear();
+            }
+
+            if (D_01F74D40_amusement_01 >= QUARTER_TURN) {
+                D_01F74CC0_amusement_01++;
+                if (D_01F74D30_amusement_01[D_01F74CC0_amusement_01 + 1][0] == 0.0f) {
+                    D_01F74CB8_amusement_01 = 0;
+                } else {
+                    D_01F74CB8_amusement_01 = 1;
+                }
+            }
+            break;
+        }
+    }
+
+    return 0;
+}
 
 void func_01F6F3C0_amusement_01(void) {
     func_001C18C0(&D_01F748B0_amusement_01);
@@ -560,7 +718,7 @@ void func_01F6F3C0_amusement_01(void) {
     D_01F74D18_amusement_01 = 2;
 }
 
-void func_01F6F430_amusement_01(u_long128* arg0, int* arg1, u_long128* arg2, int* arg3, int* arg4) {
+static void func_01F6F430_amusement_01(u_long128* arg0, int* arg1, u_long128* arg2, int* arg3, int* arg4) {
     sceVu0FVECTOR sp0;
     sceVu0FVECTOR sp10;
     

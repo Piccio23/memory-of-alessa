@@ -11,4 +11,16 @@ float shSway1f_asm(float, float);
 
 void shMulMatrix(float (* m0)[4], float (* m1)[4], float (* m2)[4]);
 
+void shRotMatrixY(float (* m0)[4], float (* m1)[4], float);
+
+void shRotMatrixX(float (* m0)[4], float (* m1)[4], float);
+
+void shMulMatrix(float (* m0)[4], float (* m1)[4], float (* m2)[4]);
+
+float shAngleRegulate(float);
+
+float shSinF(float);
+
+float shRandF(void);
+
 #endif // SH_VU0_H

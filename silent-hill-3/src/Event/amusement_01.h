@@ -42,13 +42,76 @@ typedef union DWORD
 
 int func_01F6D680_amusement_01(void);
 
-void func_001C0EB0(void (*)(u_long128 *, int *, u_long128 *, int *, int *), int, int);
+void func_01F6D7A0_amusement_01(void);
 
-void func_01F6DCB0_amusement_01();
+int func_01F6D7C0_amusement_01(void);
 
-void func_01F6DDC0_amusement_01();
 
-void func_01F703B0_amusement_01(float, float);
+int func_01F6D840_amusement_01(void);
+
+void func_01F6DC40_amusement_01(void);
+
+void func_01F6DCB0_amusement_01(void);
+
+void func_01F6DDC0_amusement_01(void);
+
+int func_01F6DDE0_amusement_01(void);
+
+int func_01F6DF10_amusement_01(void);
+
+int func_01F6E1A0_amusement_01(void);
+
+int func_01F6E220_amusement_01(void);
+
+void func_01F6E2A0_amusement_01(void);
+
+int func_01F6E710_amusement_01(void);
+
+int func_01F6E790_amusement_01(void);
+
+int func_01F6E810_amusement_01(void);
+
+int func_01F6E9A0_amusement_01(void);
+
+void func_01F6F3C0_amusement_01(void);
+
+int func_01F6F4E0_amusement_01(void);
+
+int func_01F6F5C0_amusement_01(void);
+
+int func_01F6F6C0_amusement_01(void);
+
+int func_01F6F7A0_amusement_01(void);
+
+int func_01F6FA20_amusement_01(void);
+
+int func_01F6FB50_amusement_01(void);
+
+int func_01F6FC80_amusement_01(void);
+
+int func_01F6FDC0_amusement_01(void);
+
+int func_01F6FED0_amusement_01(void);
+
+int func_01F70000_amusement_01(void);
+
+int func_01F701B0_amusement_01(void);
+
+int func_01F702A0_amusement_01(void);
+
+void func_01F70390_amusement_01(void);
+
+void func_01F703B0_amusement_01(float fparg0, float fparg1);
+
+int func_01F70750_amusement_01(void);
+
+void func_01F70780_amusement_01(void);
+
+void func_01F70870_amusement_01(void);
+
+void func_01F709D0_amusement_01(void);
+
+void func_01F70A90_amusement_01(void);
 
 extern float func_001643C0(void);
 extern int func_0016C540(float *, float *);
@@ -62,9 +125,7 @@ extern int D_01F713D0_amusement_01;
 extern u_int D_1D3169C;
 
 extern int SeCall(float, float, int);
-extern float shAngleRegulate(float);
-extern float shGetDT(void);
-extern float shSinF(float);
+
 extern int RoomName(void);
 extern void func_001C2A60(int, float);
 extern void func_0016C3C0(void);
@@ -111,13 +172,9 @@ extern void func_0016CA80(int);
 extern void func_0016E150(int);
 extern void func_001C0EE0(int a0);
 extern void func_001C7C80(u_long128*, u_long128*, u_long128*, int);
-extern float shGetDT(void);
 extern int func_0016E0F0(void);
+void func_001E2480(int, u_long128*, float);
 
-extern void shRotMatrixY(float (* m0)[4] /* r2 */, float (* m1)[4] /* r2 */, float);
-extern void shRotMatrixX(float (* m0)[4] /* r2 */, float (* m1)[4] /* r2 */, float);
-extern void shMulMatrix(float (* m0)[4] /* r2 */, float (* m1)[4] /* r2 */, float (* m2)[4] /* r2 */);
- 
 extern Amusement01Object* func_001AFE30(int, int); 
 extern void func_00121300(sceVu0FMATRIX*, sceVu0FMATRIX*, float);
 
@@ -181,6 +238,31 @@ extern u_long128 D_01F748C0_amusement_01;
 extern sceVu0FVECTOR D_01F748D0_amusement_01;
 extern sceVu0FVECTOR D_01F748E0_amusement_01;
 
+extern sceVu0FVECTOR D_01F74720_amusement_01;
+extern sceVu0FVECTOR* D_01F74D30_amusement_01;
+extern u_int D_01F74CC0_amusement_01;
+extern sceVu0FVECTOR D_01F74D70_amusement_01;
+extern Q D_01F74CD0_amusement_01;
+extern sceVu0FVECTOR D_01F747D0_amusement_01;
+extern sceVu0FVECTOR D_01F74880_amusement_01;
+extern float D_01F74890_amusement_01;
+extern float D_01F74894_amusement_01;
+extern int D_01F748A0_amusement_01;
+extern float D_01F748A8_amusement_01;
+extern int D_01F74CE0_amusement_01;
+extern float D_01F74D20_amusement_01;
+extern float D_01F74D38_amusement_01;
+extern float D_01F74D40_amusement_01;
+extern sceVu0FVECTOR D_01F74D50_amusement_01;
+extern float D_01F74D54_amusement_01;
+extern float D_01F74D58_amusement_01;
+extern float D_01F74D64_amusement_01;
+extern float D_01F74D68_amusement_01;
+extern sceVu0FVECTOR D_01F74D60_amusement_01;
+extern float D_01F74D74_amusement_01;
+extern float D_01F74D78_amusement_01;
+extern float D_01F74D80_amusement_01;
+
 extern int D_01F72DA0_amusement_01;
 extern int D_01F72F30_amusement_01;
 extern int D_01F72FD0_amusement_01;
@@ -236,5 +318,38 @@ float moon_candle_amusement_01(float x, float y) {        \
     return charm * charm + gem + gem;                     \
 }
 /* end candles */
+
+static inline float vec3_dist(sceVu0FVECTOR v, sceVu0FVECTOR w) {
+    float d;
+    asm("lwc1 %2, 0(%0)\n\
+         lwc1 f8, 0(%1)\n\
+         lwc1 f9, 4(%0)\n\
+         sub.s %2, %2, f8\n\
+         lwc1 f10, 4(%1)\n\
+         mula.s %2, %2;\n\
+         lwc1 %2, 8(%0)\n\
+         lwc1 f8, 8(%1)\n\
+         sub.s f9, f9, f10\n\
+         sub.s %2, %2, f8\n\
+         madda.s f9, f9\n\
+         madd.s %2, %2, %2;\n\
+         sqrt.s %2, %2"
+        : "+r"(v), "+r"(w), "+f"(d) :: "f8", "f9", "f10");
+    return d;
+}
+static inline float vec3_dist_xz(sceVu0FVECTOR v, sceVu0FVECTOR w) {
+    float d;
+    asm("lwc1 %2, 0(%0)\n\
+         lwc1 f8, 0(%1)\n\
+         lwc1 f9, 8(%0)\n\
+         lwc1 f10, 8(%1)\n\
+         sub.s %2, %2, f8\n\
+         sub.s f9, f9, f10\n\
+         mula.s %2, %2;\n\
+         madd.s %2, f9, f9\n\
+         sqrt.s %2, %2" 
+        : "+r"(v), "+r"(w), "+f"(d) :: "f8", "f9", "f10");
+    return d;
+}
 
 #endif
