@@ -19,6 +19,80 @@ typedef struct FOG_PART_DATA {
     int erase; // offset 0x5C, size 0x4
 } FOG_PART_DATA;
 
+
+typedef struct FOG_ASM_DATA1 {
+    // total size: 0x70
+    float part_size; // offset 0x0, size 0x4
+    float wall_range; // offset 0x4, size 0x4
+    float rev_rate; // offset 0x8, size 0x4
+    float part_m_rate; // offset 0xC, size 0x4
+    float escape_range; // offset 0x10, size 0x4
+    float r_escape_range; // offset 0x14, size 0x4
+    float alpha_max; // offset 0x18, size 0x4
+    float pad1; // offset 0x1C, size 0x4
+    float minus_alpha; // offset 0x20, size 0x4
+    float rand_rate1; // offset 0x24, size 0x4
+    float rand_rate2; // offset 0x28, size 0x4
+    float rand_rate3; // offset 0x2C, size 0x4
+    float fadepos; // offset 0x30, size 0x4
+    float r_fadepos; // offset 0x34, size 0x4
+    float pad2; // offset 0x38, size 0x4
+    float pad3; // offset 0x3C, size 0x4
+    float maxpos; // offset 0x40, size 0x4
+    float maxpos_x2; // offset 0x44, size 0x4
+    float screendiv; // offset 0x48, size 0x4
+    float r_maxpos; // offset 0x4C, size 0x4
+    float gridrate; // offset 0x50, size 0x4
+    float r_height; // offset 0x54, size 0x4
+    float alpha; // offset 0x58, size 0x4
+    float double_rate; // offset 0x5C, size 0x4
+    float higher_y; // offset 0x60, size 0x4
+    float lower_y; // offset 0x64, size 0x4
+    float y_max; // offset 0x68, size 0x4
+    float higher_y2; // offset 0x6C, size 0x4
+} FOG_ASM_DATA1;
+
+
+typedef struct FOG_ASM_DATA2 {
+    // total size: 0x70
+    float center_x; // offset 0x0, size 0x4
+    float center_y; // offset 0x4, size 0x4
+    float part_size_proj; // offset 0x8, size 0x4
+    float center_w; // offset 0xC, size 0x4
+    float screen_width; // offset 0x10, size 0x4
+    float screen_height; // offset 0x14, size 0x4
+    float pad1; // offset 0x18, size 0x4
+    float w_width; // offset 0x1C, size 0x4
+    float part_size; // offset 0x20, size 0x4
+    float pixel_aspect; // offset 0x24, size 0x4
+    float part_size_proj2; // offset 0x28, size 0x4
+    float r_part_size; // offset 0x2C, size 0x4
+    float tex_sth; // offset 0x30, size 0x4
+    float floor_y; // offset 0x34, size 0x4
+    float tex_move_speed; // offset 0x38, size 0x4
+    float n128; // offset 0x3C, size 0x4
+    float near_w; // offset 0x40, size 0x4
+    float near_w2; // offset 0x44, size 0x4
+    float r_near_w2; // offset 0x48, size 0x4
+    float nr_128; // offset 0x4C, size 0x4
+    float light_max; // offset 0x50, size 0x4
+    float light_rate; // offset 0x54, size 0x4
+    float light_under; // offset 0x58, size 0x4
+    float r_light_under; // offset 0x5C, size 0x4
+    float d_rate; // offset 0x60, size 0x4
+    float d_under; // offset 0x64, size 0x4
+    float d_rate2; // offset 0x68, size 0x4
+    float proj; // offset 0x6C, size 0x4
+} FOG_ASM_DATA2;
+
+typedef struct FOG_ASM_DATA3 {
+    // total size: 0x10
+    float maxpos; // offset 0x0, size 0x4
+    float r_screendiv; // offset 0x4, size 0x4
+    float movespeed; // offset 0x8, size 0x4
+    float r_double; // offset 0xC, size 0x4
+} FOG_ASM_DATA3;
+
 typedef struct FOG_ASM_DATA_P {
     // total size: 0x20
     FOG_PART_DATA* part; // offset 0x0, size 0x4
@@ -136,5 +210,23 @@ typedef struct FOG_WORK {
     struct FOG_ENV_DATA* EnvTop; // offset 0x15E84, size 0x4
     struct FOG_ENV_DATA* EnvNow; // offset 0x15E88, size 0x4
 } FOG_WORK;
+
+typedef struct FOG_BLOW_POINT {
+    // total size: 0x20
+    float pos[4]; // offset 0x0, size 0x10
+    float vec[4]; // offset 0x10, size 0x10
+} FOG_BLOW_POINT;
+
+typedef struct FOG_WORK2 {
+    // total size: 0x58
+    short PartNum; // offset 0x0, size 0x2
+    short BlowPointNum; // offset 0x2, size 0x2
+    int BlowPointID; // offset 0x4, size 0x4
+    FOG_BLOW_POINT* BlowPoint; // offset 0x8, size 0x4
+    int BlowTimer[16]; // offset 0xC, size 0x40
+    int BlowInterval; // offset 0x4C, size 0x4
+    float Gravity; // offset 0x50, size 0x4
+    float Expand; // offset 0x54, size 0x4
+} FOG_WORK2;
 
 #endif // FOG_H
