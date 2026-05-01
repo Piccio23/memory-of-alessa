@@ -2,6 +2,7 @@
 #include "SH2_common/sh2dt.h"
 #include "sound/sh_sd_call.h"
 #include "Font/font.h"
+#include "SH2_common/playing_info.h"
 
 extern /* static */ float sbt_timer; 
 
