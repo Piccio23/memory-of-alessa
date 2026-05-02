@@ -359,6 +359,8 @@ segments:
       - [0x1a9c38, data,    data_0x1a9c38]
       - [0x1aa0c0, .data,   Effect/ef_common]
       - [0x1aa160, data,    data_0x1aa160]
+      - [0x1b87c0, .data,   sound/sh_sound]
+      - [0x1b9ae0, data,    data_0x1b9ae0]
       - [0x26f430, .data,   Effect2/hh_class_object_execute]
       - [0x26f450, data,    data_0x26f450]
       - [0x27c230, .data,   Effect2/hh_memory_manage]
