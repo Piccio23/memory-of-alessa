@@ -122,9 +122,8 @@ segments:
       - [0x1b99a0, c,       movie/pss_vobuf]
       - [0x1b9c20, asm,     text_0x1b9c20]
       - [0x1ba6a0, asm,     Enemy/en_ap2]        # SCRAPER
-      - [0x1bab20, asm,     text_0x1bab20]
+      - [0x1c2760, asm,     text_0x1c2760]
       - [0x1d2630, asm,     Enemy/en_shb]        # GOD
-      - [0x1d2a40, asm,     text_0x1d2a40]
       - [0x1d75a0, asm,     Enemy/en_rod]        # SEWER_MONSTER
       - [0x1d7610, asm,     text_0x1d7610]
       - [0x1e01c0, asm,     Enemy/en_mry]        # CAROUSEL_HORSE
