@@ -56,6 +56,8 @@ segments:
       - [0x05e0f0, asm,     text_0x05e0f0]
       - [0x06fc20, asm,     Event/picture]
       - [0x070990, asm,     text_0x070990]
+      - [0x077880, c,       sh3shd/sh3shd_shadow_vu1_packet]
+      - [0x0782b0, asm,     text_0x0782b0]
       - [0x09afb0, c,       SH3_common/sh_vu0]
       - [0x09b9d0, asm,     text_0x09b9d0]
       - [0x09ec40, c,       Collision/cl_calc]
