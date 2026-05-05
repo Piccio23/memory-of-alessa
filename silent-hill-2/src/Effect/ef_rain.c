@@ -62,8 +62,8 @@ static int efRainDropDrawSpray(EF_RAINDROP_DATA* dat /* r16 */)  {
     line.rgba[3] = 0xFF;
 
     for (i = 0; i < 4; i++) {
-        vec_copy(line.v[0], dat->v[i]);
-        vec_copy(line.v[1], dat->v[i]);
+        volatile_vec_copy(line.v[0], dat->v[i]);
+        volatile_vec_copy(line.v[1], dat->v[i]);
         line.v[1][1] -= 10.0f;
         efRainDropDrawLINE(&line);
     }
