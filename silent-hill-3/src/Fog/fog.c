@@ -7,7 +7,7 @@ extern FOG_WORK fwork;
 extern FOG_PACK_WORK pwork;
 
 extern /* static */ FOG_ASM_DATA1 fog_asm_data1;
-extern /* static */ FOG_ASM_DATA2 fog_asm_data2;
+extern /* static */ SH3_FOG_ASM_DATA2 fog_asm_data2;
 extern /* static */ FOG_ASM_DATA_P fog_asm_data_p;
 extern /* static */ FOG_ASM_DATA3 fog_asm_data3;
 
@@ -106,9 +106,16 @@ void fogSetEnvironment(FOG_ENV_DATA* edata) {
     if (f2) fogInitParticle();
 }
 
-INCLUDE_ASM("asm/nonmatchings/Fog/fog", fogInitScreen);
+void fogInitScreen(void) {
+    fogInitWind();
+    fogInitParticle();
+}
 
-INCLUDE_ASM("asm/nonmatchings/Fog/fog", func_001E7520);
+void fogInitWind(void) {
+    vec_zero(fwork.WindV);
+    fogChangeWind(fwork.WindDef);
+    shFill(&fwork.GridDense, 0x3f800000 /* 1.0f */, 512);
+}
 
 INCLUDE_ASM("asm/nonmatchings/Fog/fog", fogChangeWind);
 
@@ -203,7 +210,34 @@ INCLUDE_ASM("asm/nonmatchings/Fog/fog", fogMoveParticle);
 
 INCLUDE_ASM("asm/nonmatchings/Fog/fog", fog_load_objdata);
 
-INCLUDE_ASM("asm/nonmatchings/Fog/fog", fog_set_stay);
+void fog_set_stay(void) {
+    float* fv = (float*) (SCRATCHPAD_START | 0x3ff0); // r2
+    float* dn = (float*) (SCRATCHPAD_START | 0x800); // r5
+    int px; // r6
+    int py; // r7
+    int pz; // r8
+    int tx; // r4
+    int ty; // r9
+    int tz; // r3
+    int i; // r10
+
+    vec_sub_reverse(fwork.LocalPosV, fwork.StayPoint, fv);
+    vec_scale(4.0f / fwork.MaxPos, fv, fv);
+    if (fwork.Double) {
+        fv[1] *= 1 << fwork.Double;
+    }
+    px = float_floor(fv[0] - 0.5f) & 7;
+    py = float_floor(fv[1] - 0.5f) & 7;
+    pz = float_floor(fv[2] - 0.5f) & 7;
+    for (i = 0; i < 8; i++) {
+        tx = px + (i & 1);
+        ty = py + ((i >> 1) & 1);
+        tz = pz + (i >> 2);
+        if ((tx >= 0) && (ty >= 0) && (tz >= 0) && (tx < 8) && (ty < 8) && (tz < 8)) {
+            dn[((pz << 6) | (px | (py << 3)))] -= fwork.PartNum;
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Fog/fog", fog_part_wall);
 
@@ -344,18 +378,38 @@ void fogSetLocalPosV(void) {
     sceVu0CopyVector((float*) (SCRATCHPAD_START | 0x3fe0), &TVector);
 }
 
-INCLUDE_ASM("asm/nonmatchings/Fog/fog", func_001EA980);
+void func_001EA980(void* LightPosV) {
+    vec_copy(fwork.LightPosV, LightPosV);
+    fwork.LightPosV[3] = 1.0f;
+}
 
-INCLUDE_ASM("asm/nonmatchings/Fog/fog", func_001EA9A0);
+void func_001EA9A0(void) {
+    SET_BIT(fwork.Flag, 2);
+}
 
-INCLUDE_ASM("asm/nonmatchings/Fog/fog", func_001EA9C0);
+void func_001EA9C0(void) {
+    UNSET_BIT(fwork.Flag, 2);
+}
 
-INCLUDE_ASM("asm/nonmatchings/Fog/fog", func_001EA9E0);
+void func_001EA9E0(int WindDef) {
+    if (WindDef < 0 || WindDef >= 19) WindDef = 0;
+    fwork.WindDef = WindDef;
+}
 
-INCLUDE_ASM("asm/nonmatchings/Fog/fog", fogSetSpeedLevel);
+void fogSetSpeedLevel(float SpeedLevel) {
+    fwork.SpeedLevel = SpeedLevel;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Fog/fog", func_001EAA10);
 
-INCLUDE_ASM("asm/nonmatchings/Fog/fog", func_001EAA60);
+void func_001EAA60(int light_max, float light_rate, int light_under) {
+    fog_asm_data2.light_max = light_max;
+    fog_asm_data2.light_rate = light_rate;
+    fog_asm_data2.light_under = light_under;
+}
 
-INCLUDE_ASM("asm/nonmatchings/Fog/fog", func_001EAA80);
+
+void func_001EAA80(u_char x, u_char y) {
+    fog_asm_data2.center_x = x;
+    fog_asm_data2.center_y = y;
+}

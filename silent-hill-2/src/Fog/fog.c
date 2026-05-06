@@ -120,9 +120,17 @@ void fogSetEnvironment(FOG_ENV_DATA* edata) {
     if (f2) fogInitParticle();
 }
 
-INCLUDE_ASM("asm/nonmatchings/Fog/fog", fogInitScreen);
+void fogInitScreen(void) {
+    fogInitWind();
+    fogInitParticle();
+    fogInitParticle2();
+}
 
-INCLUDE_ASM("asm/nonmatchings/Fog/fog", fogInitWind);
+void fogInitWind(void) {
+    vec_zero(fwork.WindV);
+    fogChangeWind(fwork.WindDef);
+    shFill(&fwork.GridDense, 0x3f800000 /* 1.0f */, 512);
+}
 
 INCLUDE_ASM("asm/nonmatchings/Fog/fog", fogChangeWind);
 
@@ -218,7 +226,34 @@ INCLUDE_ASM("asm/nonmatchings/Fog/fog", fogMoveParticle);
 
 INCLUDE_ASM("asm/nonmatchings/Fog/fog", fog_load_objdata);
 
-INCLUDE_ASM("asm/nonmatchings/Fog/fog", fog_set_stay);
+void fog_set_stay(void) {
+    float* fv = (float*) (SCRATCHPAD_START | 0x3ff0); // r2
+    float* dn = (float*) (SCRATCHPAD_START | 0x800); // r5
+    int px; // r6
+    int py; // r7
+    int pz; // r8
+    int tx; // r4
+    int ty; // r9
+    int tz; // r3
+    int i; // r10
+
+    vec_sub_reverse(fwork.LocalPosV, fwork.StayPoint, fv);
+    vec_scale(4.0f / fwork.MaxPos, fv, fv);
+    if (fwork.Double) {
+        fv[1] *= 1 << fwork.Double;
+    }
+    px = float_floor(fv[0] - 0.5f) & 7;
+    py = float_floor(fv[1] - 0.5f) & 7;
+    pz = float_floor(fv[2] - 0.5f) & 7;
+    for (i = 0; i < 8; i++) {
+        tx = px + (i & 1);
+        ty = py + ((i >> 1) & 1);
+        tz = pz + (i >> 2);
+        if ((tx >= 0) && (ty >= 0) && (tz >= 0) && (tx < 8) && (ty < 8) && (tz < 8)) {
+            dn[((pz << 6) | (px | (py << 3)))] -= fwork.PartNum;
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Fog/fog", fog_part_wall);
 

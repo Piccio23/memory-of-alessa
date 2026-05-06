@@ -305,6 +305,7 @@ fogGetObj = 0x001e8540;
 fogSetObj2 = 0x001e8470;
 fogSetColor = 0x001ea440;
 fogInit = 0x001e6b20;
+fogInitWind = 0x001E7520;
 fogSetAspectRatio = 0x001ea580;
 fogSetFloorY = 0x001ea5c0;
 fogSetWorldScreenM = 0x001ea5e0;

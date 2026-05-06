@@ -274,4 +274,21 @@ inline void vec_sub_reverse(void* y, void* x, void* out) {
     : "+r"(x), "+r"(y), "+r"(out));
 }
 
+inline int float_floor(float x) {
+    int out;
+    asm ("mfc1 %1, %0\n\
+
+          addi t7, zero, 1\n\
+          slt %1, %1, zero\n\
+          cvt.w.s %0, %0\n\
+
+          movz t7, zero, %1\n\
+
+          mfc1 %1, %0\n\
+
+          sub %1, %1, t7"
+    : "+f"(x), "+r"(out) :: "t7");
+    return out;
+}
+
 #endif // FOG_SHARED_H
