@@ -32,7 +32,7 @@ void shSetMiniMaxN(float* min, float* max, float* v, int n);
 char shScreenClipI(int* v0);
 char shScreenClipF(float* v0);
 void shQzero(void*, int);
-void shFill(void);
+void shFill(void*, int, int);
 void shMulMatrix(float m0[4], float m1[4], float m2[4]);
 
 #endif // SH_VU0_H

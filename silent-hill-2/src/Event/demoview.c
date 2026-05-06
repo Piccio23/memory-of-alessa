@@ -71,7 +71,7 @@ void SubtitlesManager(void) {
                 if (((int) sbt_timer > sbt_msg_time->start) && !GET_BIT(demo_status, 3)) {
                     fontMessageNum(msg_buffer, sbt_msg_no);
                     sbt_msg_no++;
-                    SET_BIT(demo_status, 8);
+                    SET_BIT(demo_status, 3);
                 }
             }
         }

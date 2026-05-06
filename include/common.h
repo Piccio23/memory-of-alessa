@@ -37,7 +37,7 @@ typedef signed char s_char;
 
 /* bit helpers */
 #define GET_BIT(x, i) (((x) >> (i)) & 1)
-#define SET_BIT(x, i) ((x) |= (i))
+#define SET_BIT(x, i) ((x) |= (1 << (i)))
 #define UNSET_BIT(x, i) ((x) &= ~(1 << (i)))
 
 /* `game_flag` helpers */

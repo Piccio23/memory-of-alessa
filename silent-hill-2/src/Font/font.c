@@ -134,7 +134,7 @@ void fontNextMessage(void) {
             font.wait_count = (((wm & 0xFFF) * 0x3C) / 60);
         }
     }
-    SET_BIT(font.flag, 0x2);
+    SET_BIT(font.flag, 1);
 }
 
 void fontSet(u_short code /* r2 */, u_short x /* r17 */, u_short y /* r16 */) {        
@@ -216,13 +216,13 @@ int fontGetStatus(void) {
 }
 
 void fontWide(u_short w /* r2 */, u_short h /* r2 */) {
-    SET_BIT(font.flag, 0x400);
+    SET_BIT(font.flag, 10);
     font.wide_w = w;
     font.wide_h = h;
 }
 
 void fontAllCenterOn(void) {
-    SET_BIT(font.flag, 0x100);
+    SET_BIT(font.flag, 8); // 0x100
 }
 
 void fontAllCenterOff(void) {
