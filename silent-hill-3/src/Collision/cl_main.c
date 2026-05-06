@@ -103,11 +103,11 @@ INCLUDE_ASM("asm/nonmatchings/Collision/cl_main", Line2PlaneBoundaryCheckXZ);
 INCLUDE_ASM("asm/nonmatchings/Collision/cl_main", clCheckCrossLine2BoxXZ);
 
 int clCheckCrossLine2LineXZ(float * va0, float * va1, float * vb0, float * vb1) {
-    float bp[4]; // r29
-    float p0[4]; // r29+0x10
-    float p1[4]; // r29+0x20
-    float outer0; // r4
-    float outer1; // r1
+    float bp[4];
+    float p0[4];
+    float p1[4];
+    float outer0;
+    float outer1;
     vec_sub(va1, va0, bp);
     vec_sub(vb0, va0, p0);
     vec_sub(vb1, va0, p1);

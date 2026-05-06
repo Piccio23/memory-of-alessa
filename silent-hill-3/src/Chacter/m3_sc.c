@@ -213,8 +213,8 @@ int shCharacter_Manage_Init() {
 INCLUDE_ASM("asm/nonmatchings/Chacter/m3_sc", shCharacter_Manage_Create);
 
 int shCharacter_Manage_Delete(u_short kind, u_short id) { 
-    SubCharacter * del_scp; // r16
-    int delete_on = 0; // r7
+    SubCharacter * del_scp;
+    int delete_on = 0;
 
     del_scp = D_003DAD54;
     while (del_scp != NULL) {

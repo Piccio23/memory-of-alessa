@@ -70,10 +70,10 @@ void SortEnvPrim(void) {
 }
 
 void Model3Draw_n(void* scp_d_, void* model_, void* work_, float (*mwm)[4]) {
-    struct Model * model = (Model* )model_; // r2
-    struct ModelWork * mwork = (ModelWork*) work_; // r16
-    struct SubCharacterDisp * scp_d = (SubCharacterDisp *) scp_d_; // r17
-    int pef; // r2
+    struct Model * model = (Model* )model_;
+    struct ModelWork * mwork = (ModelWork*) work_;
+    struct SubCharacterDisp * scp_d = (SubCharacterDisp *) scp_d_;
+    int pef;
     float* cluster_weights;
 
 

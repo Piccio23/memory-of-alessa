@@ -42,11 +42,11 @@ utilHeapCtrl* utilHeapInit(void* buf, u_int bytesize) {
 
 void* utilHeapMalloc(utilHeapCtrl* heapctrl, u_int n)
 {
-    utilHeapMBlock * mblock; // r3 $v1
-    utilHeapMBlock * next; // r2 $v0
-    u_int size; // r6 $a2
-    u_int postsize; // r2 $v0
-    utilHeapMBlock * postblock; // r7 $a3
+    utilHeapMBlock * mblock;
+    utilHeapMBlock * next;
+    u_int size;
+    u_int postsize;
+    utilHeapMBlock * postblock;
 
     n = CEIL16(n);
     if (n == 0) return NULL;

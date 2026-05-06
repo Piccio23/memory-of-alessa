@@ -19,19 +19,19 @@ INCLUDE_ASM("asm/nonmatchings/Chacter_Draw/model3_vu1_n", func_001D72C0);
 INCLUDE_ASM("asm/nonmatchings/Chacter_Draw/model3_vu1_n", func_001D7530);
 
 static void MakeNormalPacket(Part* part, sceVif1Packet* pk) {
-    int n_textures = part->n_textures; // r29+0xA0
-    unsigned short * text_pos_indices = (u_short*)((u_int)part + part->text_pos_indices_offset); // r29+0xB0
-    TextPosParam * text_pos_params = model_common_work->text_pos_params; // r30
-    TextureParam * texture_params = (TextureParam*) ((u_int)part + part->texture_params_offset); // r23
-    int mpg = ((part->backclip == 0) ? 0x16: 0x18); // r16
-    sceDmaChan* fromSPR = sceDmaGetChan(8); // r17
-    int i = 0; // r18
+    int n_textures = part->n_textures;
+    unsigned short * text_pos_indices = (u_short*)((u_int)part + part->text_pos_indices_offset);
+    TextPosParam * text_pos_params = model_common_work->text_pos_params;
+    TextureParam * texture_params = (TextureParam*) ((u_int)part + part->texture_params_offset);
+    int mpg = ((part->backclip == 0) ? 0x16: 0x18);
+    sceDmaChan* fromSPR = sceDmaGetChan(8);
+    int i = 0;
     for (i = 0; i < n_textures; i++) {
         int text_pos_index = text_pos_indices[i];
         TextPosParam *text_pos = (TextPosParam *)(text_pos_params + text_pos_index);
         TextureParam *texture = (TextureParam*) &texture_params[i];
         NDrawData * spr = &spr_data->ndraw[i % 2];
-        NDrawData * data; // r2
+        NDrawData * data;
         sceVif1PkCnt(pk, 0U);
         sceVif1PkAddCode(pk, 0x11000000U);
         sceVif1PkAddCode(pk, D_01EE8088 | 0x6C080000); // xitop
@@ -69,8 +69,8 @@ void func_001D7B40(Part* part, sceVif1Packet* pk) {
 }
 
 void MakeSpecularPacket(Part* part, sceVif1Packet* pk) {
-    int mpg; // r16
-    struct Data * data; // r2
+    int mpg;
+    struct Data * data;
 
     mpg = (part->backclip == 0) ? 0x1e : 0x20;
 

@@ -1,8 +1,8 @@
 #include "dbfntprint.h"
 
 int printline(char* cp, char* top) {
-    char line[128]; // r29+0x20
-    int l; // r16
+    char line[128];
+    int l;
     l = cp - top;
     if (l > 0) {
         // ensure less than 128 lines

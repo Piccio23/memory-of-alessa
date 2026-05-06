@@ -549,8 +549,8 @@ INCLUDE_ASM("asm/nonmatchings/Chacter_Draw/model3_vu0_n", func_001D5910);
 void MakePartPacket_0x001D5C50(Part *part)
 {
     u_long128 *packet_buffer = (u_long128 *)ktVif0PkBufNext();
-    sceVif0Packet packet;        // r29+0x30
-    sceVif0Packet *pk = &packet; // r16;
+    sceVif0Packet packet;
+    sceVif0Packet *pk = &packet;
     Data* data;
     int result;
 
@@ -635,8 +635,8 @@ INCLUDE_ASM("asm/nonmatchings/Chacter_Draw/model3_vu0_n", func_001D6000);
 void MakeCalcPartPacket(Part *part)
 {
     u_long128 *packet_buffer = (u_long128 *)ktVif0PkBufNext();
-    sceVif0Packet packet;        // r29+0x30
-    sceVif0Packet *pk = &packet; // r16;
+    sceVif0Packet packet;
+    sceVif0Packet *pk = &packet;
     Data* data;
 
     sceVif0PkInit(pk, (u_int *)READ_UNCACHED(packet_buffer));

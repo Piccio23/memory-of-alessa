@@ -50,12 +50,12 @@ void Sequencer_Type_Hispeed(MysterySequenceData *unk, EntryRecord *pER)
 
 void Sequencer_Type_Lowspeed(MysterySequenceData *unk, EntryRecord * pER /* r18 */) {
 
-    Record_Info * pInfo; // r16
-    float time; // r20
-    int Node; // r17
-    int Node_Next; // r2
-    DS_Record * pDSR; // r2
-    float now_act_lv_f; // r29+0x50
+    Record_Info * pInfo;
+    float time;
+    int Node;
+    int Node_Next;
+    DS_Record * pDSR;
+    float now_act_lv_f;
     
     pInfo = &pER->Info;
     time = pER->Time_Count;
@@ -73,9 +73,9 @@ void Sequencer_Type_Lowspeed(MysterySequenceData *unk, EntryRecord * pER /* r18 
 
 static void Sequencer_Type_Hispeed_Edit(MysterySequenceData *unk, EntryRecord * pER /* r16 */) {
 
-    Record_Info * pInfo; // r2
-    float time; // r20   
-    DS_Record_Edit * pDSR; // r17
+    Record_Info * pInfo;
+    float time;
+    DS_Record_Edit * pDSR;
     u_int now_act_lv_i;
     float section_0;   
     float section_1;
@@ -165,12 +165,12 @@ INCLUDE_ASM("asm/nonmatchings/DS_Pad/ds_sequencer", func_0013C5F0);
 INCLUDE_ASM("asm/nonmatchings/DS_Pad/ds_sequencer", func_0013C6B0);
 
 static float ActuaterLV_Complement(DS_Record * pDSR /* r2 */, float Time /* r29 */) {
-    float result; // r29
-    float time_current; // r29    
-    float time_next; // r29
-    float comp_ratio; // r3
-    float act_lv_current; // r29    
-    float act_lv_next; // r29
+    float result;
+    float time_current;
+    float time_next;
+    float comp_ratio;
+    float act_lv_current;
+    float act_lv_next;
     
     time_current = pDSR->Time;
     time_next = pDSR[1].Time;
@@ -184,12 +184,12 @@ static float ActuaterLV_Complement(DS_Record * pDSR /* r2 */, float Time /* r29 
 
 static float ActuaterLV_Complement_Edit(DS_Record_Edit * pDSR /* r2 */, float Time /* r29 */) {
 
-    float result; // r29
-    float time_current; // r29
-    float time_next; // r29
-    float comp_ratio; // r3  
-    float act_lv_current; // r29
-    float act_lv_next; // r29
+    float result;
+    float time_current;
+    float time_next;
+    float comp_ratio;
+    float act_lv_current;
+    float act_lv_next;
 
     time_current = pDSR->Record.Time;
     time_next = pDSR->pNext->Record.Time;
@@ -218,8 +218,8 @@ static int Node_Next_Search(Record_Info* pInfo, float Time) {
 }
 
 static int Node_Current_Search(Record_Info * pInfo /* r2 */, float Time /* r29+0x10 */) {
-    int result = -1; // r7
-    int num = Node_Next_Search(pInfo, Time); // r2
+    int result = -1;
+    int num = Node_Next_Search(pInfo, Time);
 
     if (num > 0) {
         result = num - 1;

@@ -164,10 +164,10 @@ INCLUDE_ASM("asm/nonmatchings/Effect2/hh_class_manager", func_00141C80);
 INCLUDE_ASM("asm/nonmatchings/Effect2/hh_class_manager", func_00141D50);
 
 static u_int InstanceTable_All_Initialize(struct Object_Group_Infomeation * pInfo /* r16 */) {
-    u_int result = 0; // r2
-    u_int i; // r3
-    struct Object_Instance * pCurrent; // r4
-    struct Object_Instance * pPrev; // r5
+    u_int result = 0;
+    u_int i;
+    struct Object_Instance * pCurrent;
+    struct Object_Instance * pPrev;
 
     if(pInfo != NULL){
         memset(pInfo->InstanceTable_Info.pInstanceTable, 0, pInfo->InstanceTable_Info.Instance_Max * sizeof(struct Object_Instance));

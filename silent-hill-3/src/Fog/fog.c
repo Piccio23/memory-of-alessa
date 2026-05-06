@@ -24,12 +24,12 @@ void fogInit(void) {
 INCLUDE_ASM("asm/nonmatchings/Fog/fog", func_001E6B90);
 
 void fogSetEnvironment(FOG_ENV_DATA* edata) {
-    float d; // r1
-    float m; // r20
-    u_char f; // r16
-    u_char f2; // r17
-    char Double; // r2
-    int old; // r2
+    float d;
+    float m;
+    u_char f;
+    u_char f2;
+    char Double;
+    int old;
 
     if (edata == fwork.EnvNow) {
         if ((fwork.WindTimer -= shGetDF()) <= 0) {
@@ -211,15 +211,15 @@ INCLUDE_ASM("asm/nonmatchings/Fog/fog", fogMoveParticle);
 INCLUDE_ASM("asm/nonmatchings/Fog/fog", fog_load_objdata);
 
 void fog_set_stay(void) {
-    float* fv = (float*) (SCRATCHPAD_START | 0x3ff0); // r2
-    float* dn = (float*) (SCRATCHPAD_START | 0x800); // r5
-    int px; // r6
-    int py; // r7
-    int pz; // r8
-    int tx; // r4
-    int ty; // r9
-    int tz; // r3
-    int i; // r10
+    float* fv = (float*) (SCRATCHPAD_START | 0x3ff0);
+    float* dn = (float*) (SCRATCHPAD_START | 0x800);
+    int px;
+    int py;
+    int pz;
+    int tx;
+    int ty;
+    int tz;
+    int i;
 
     vec_sub_reverse(fwork.LocalPosV, fwork.StayPoint, fv);
     vec_scale(4.0f / fwork.MaxPos, fv, fv);
