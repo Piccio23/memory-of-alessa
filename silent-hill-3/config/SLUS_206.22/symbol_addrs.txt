@@ -84,6 +84,10 @@ Fake_SetTexSlot = 0x001b5c90;
 sh3gfw_Lock_AllTexSlot_For_Shadow = 0x001b5ce0;
 sh3gfw_UnLock_AllTexSlot_For_Shadow = 0x001b5d40;
 sh3gfw_SetSlot2Tex = 0x001b5db0;
+sh3gfw_get_viewTriangle = 0x001A9F80;
+
+// vw
+vwGetViewPosition = 0x001B42A0;
 
 // cl_main
 rodata_jyun = 0x00361bc0; // size:0x14
@@ -220,6 +224,7 @@ model_common_work = 0x1EE8090;
 
 // sce
 sceVu0CopyMatrix = 0x001210A8;
+sceVu0RotMatrixY = 0x00121300;
 sceVif0PkCnt = 0x0011FD90;
 sceVif0PkRef = 0x0011FDE8;
 sceVif0PkAddCode = 0x0011FF60;
@@ -242,7 +247,11 @@ sceSifSetDma = 0x0155DF0;
 sceSifDmaStat = 0x0155DE0;
 sceMpegIsEnd = 0x0011E070;
 sceMpegReset = 0x0011E090;
+sceVu0FTOI0Vector = 0x001210E0;
 FlushCache = 0x0100CE0;
+
+// sh3gfw_viewclip
+inclip = 0x00361D30;
 
 // sdk
 litodp = 0x00124b50;
@@ -978,7 +987,6 @@ sceVu0CopyVector = 0x121098;
 func_0015DFC0 = 0x15DFC0;
 func_001C2B80 = 0x1C2B80;
 func_0015DFE0 = 0x15DFE0;
-func_00121300 = 0x121300;
 func_001C18C0 = 0x1C18C0;
 func_001C2290 = 0x1C2290;
 func_00163A90 = 0x163A90;

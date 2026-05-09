@@ -1148,7 +1148,7 @@ void func_01F703B0_amusement_01(float fparg0, float fparg1) {
     func_001C2AE0(1, matrix0);
     func_001C2AE0(2, matrix1);
     sceVu0UnitMatrix(matrix2);
-    func_00121300(matrix2, matrix2, TO_RAD(D_01F74CE8_amusement_01));
+    sceVu0RotMatrixY(matrix2, matrix2, TO_RAD(D_01F74CE8_amusement_01));
 
     mat_copy(matrix3, func_001AFE30(3, 1)->matrix);
     shMulMatrix(matrix2, matrix3, matrix2);

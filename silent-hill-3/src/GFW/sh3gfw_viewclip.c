@@ -1,0 +1,200 @@
+#include "common.h"
+#include "GFW/sh3gfw_viewclip.h"
+
+#pragma optimization_level 2
+
+// static void sh3gfw_get_blockORIGIN(float (* bbox)[4], float* origin){
+static void func_001A9C10(float (* bbox)[4], float* origin) {
+    int ix;
+    int iz;
+    int tmp[4];
+ 
+    sceVu0ScaleVector(origin, origin, 0.0f);
+    for (ix = 0; ix < 4; ix++) {
+        sceVu0AddVector(origin, origin, bbox[ix]);
+    }
+    
+    sceVu0ScaleVector(origin, origin, 0.25f);
+    sceVu0FTOI0Vector(tmp, origin);
+
+    ix = tmp[0] / 20000;    
+    iz = tmp[2] / 20000;
+
+    
+    
+    if (tmp[0] < 0) ix--;
+    if (tmp[2] < 0) iz--;
+    
+    origin[0] = 20000.0f * ix;
+    origin[1] = 0.0f;
+    origin[2] = 20000.0f * iz;
+    origin[3] = 1.0f;
+
+}
+
+
+// int sh3gfw_Get_CamTilePos(float* origin) {
+int func_001A9D50(float* origin) {
+    int ssx, ssz;
+    float svt[4];
+
+    vwGetViewPosition(svt);
+    svt[3] = 1.0f;
+    sceVu0SubVector(svt, svt, origin);
+
+    ssz = svt[2] / 2500.0f;
+    ssx = svt[0] / 2500.0f;
+    return ssx + (ssz * 8);
+}
+
+INCLUDE_ASM("asm/nonmatchings/GFW/sh3gfw_viewclip", sh3gfw_set_objclip_matrix);
+
+extern /* static */ float inclip;
+void sh3gfw_get_viewTriangle(sceVu0FMATRIX view_triangle) {
+    sceVu0FMATRIX work;
+    sceVu0FVECTOR camera_params;
+    int i;
+    float x;
+    float z;
+    
+    sceVu0UnitMatrix(work);
+    func_001B3F00(camera_params);
+    sceVu0RotMatrixY(work, work, camera_params[1]);
+
+    x = func_001B4110();
+    z = 512.0f * x / func_001B4100();
+    
+    for (i = 0; i < 3; i++) {
+        sceVu0ScaleVector(view_triangle[i], view_triangle[i], 0.0f);
+    }
+    
+    view_triangle[1][0] = 0.5f * z * inclip;
+    view_triangle[1][2] = x;
+    view_triangle[2][0] = -0.5f * z * inclip;
+    view_triangle[2][2] = x;
+    func_001B3E80(camera_params);
+    
+    for (i = 0; i < 3; i++) {
+        sceVu0ApplyMatrix(view_triangle[i], work, view_triangle[i]);
+        sceVu0AddVector(view_triangle[i], view_triangle[i], camera_params);
+        view_triangle[i][1] = 0.0f;
+    }
+}
+
+INCLUDE_ASM("asm/nonmatchings/GFW/sh3gfw_viewclip", sh3gfw_get_ViewRecTangle);
+
+void sh3gfw_make_tagclipdata(sceVu0FVECTOR origin, sceVu0FMATRIX view_triangle, sceVu0IVECTOR view_rect, u_char* tagbuffer) {
+    int ix;
+    int iz;
+    int stx;
+    int enx;
+    int stz;
+    int enz;
+    int index;
+    sceVu0FMATRIX rect;
+    int clip;
+    int ssx;
+    int ssz;
+    sceVu0FVECTOR svt;
+    
+    stx = view_rect[0];
+    enx = view_rect[1];
+
+    stz = view_rect[2];
+    enz = view_rect[3];
+    
+    if (stx >= 8) stx = 7;
+    if (enx < 0) enx = 0;
+    if (stz >= 8) stz = 7;
+    if (enz < 0) enz = 0;
+    
+    rect[0][0] = enx * 0x9C4;
+    rect[0][1] = 0;
+
+    rect[0][2] = enz * 0x9C4;
+    rect[0][3] = 0;
+    sceVu0AddVector(rect[0], rect[0], origin);
+    
+    sceVu0CopyVector(rect[1], rect[0]);
+    rect[1][2] += 2500.0f;
+    
+    sceVu0CopyVector(rect[2], rect[0]);
+    rect[2][0] += 2500.0f;
+    
+    sceVu0CopyVector(rect[3], rect[0]);
+    rect[3][0] += 2500.0f;
+    rect[3][2] += 2500.0f;
+
+    for (iz = enz; iz <= stz; iz++) {
+        for (ix = enx; ix <= stx; ix++) {
+            clip = sh3_ClipHitCheckSquare(/* Env_ctl.objclip_mat */ &D_01D970D0, rect, view_triangle);
+            
+            if (clip) {
+                index = ix + iz * 8;
+                tagbuffer[index] = 0x20;
+            }
+            
+            sceVu0CopyVector(rect[0], rect[2]);
+            sceVu0CopyVector(rect[1], rect[3]);
+            rect[2][0] += 2500.0f;
+            rect[3][0] += 2500.0f;
+        }
+        
+        rect[0][2] = rect[1][2];
+        rect[2][2] = rect[3][2];
+        rect[1][2] += 2500.0f;
+        rect[3][2] += 2500.0f;
+        
+        rect[0][0] = *origin + enx * 0x9C4;
+        rect[1][0] = rect[0][0];
+        
+        rect[2][0] = rect[0][0] + 2500.0f;
+        rect[3][0] = rect[2][0];
+    }
+
+    vwGetViewPosition(svt);
+    svt[3] = 1.0f;
+    sceVu0SubVector(svt, svt, origin);
+    
+    ssz = svt[2] / 2500.0f;
+    ssx = svt[0] / 2500.0f;
+    
+    for (iz = ssz - 1; iz <= ssz + 1; iz++) {
+        if (iz >= 0 && iz < 8) {
+            for (ix = ssx - 1; ix <= ssx + 1; ix++) {
+                if (ix >= 0 && ix < 8) {
+                    tagbuffer[ix + iz * 8] = 0x20;
+                }
+            }
+        }
+    }
+}
+
+INCLUDE_ASM("asm/nonmatchings/GFW/sh3gfw_viewclip", sh3_ClipHitCheckSquare);
+
+INCLUDE_ASM("asm/nonmatchings/GFW/sh3gfw_viewclip", func_001AA9B0);
+
+INCLUDE_ASM("asm/nonmatchings/GFW/sh3gfw_viewclip", func_001AA9E0);
+
+#ifdef NON_MATCHING
+void func_001AAA90(Sh3Gfw_Work* arg0) {
+    float sp20[4];
+    float sp30[4][4];
+    int sp70[4];
+
+    func_001AEA40(sp30, arg0);
+    func_001A9B60(&arg0->pBM);
+    func_001A9C10(sp30, sp20);
+    sh3gfw_get_ViewRecTangle(sp20, &D_01D97090, sp70, func_001A9D50(sp20));
+    sh3gfw_make_tagclipdata(sp20, &D_01D97090, sp70, &arg0->pBM);
+    func_001AAB60(arg0);
+}
+#else
+INCLUDE_ASM("asm/nonmatchings/GFW/sh3gfw_viewclip", func_001AAA90)
+#endif
+
+INCLUDE_ASM("asm/nonmatchings/GFW/sh3gfw_viewclip", func_001AAB30);
+
+INCLUDE_ASM("asm/nonmatchings/GFW/sh3gfw_viewclip", func_001AAB60);
+
+INCLUDE_ASM("asm/nonmatchings/GFW/sh3gfw_viewclip", func_001AABB0);

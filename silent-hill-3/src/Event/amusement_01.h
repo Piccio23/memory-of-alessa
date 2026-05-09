@@ -176,7 +176,6 @@ extern int func_0016E0F0(void);
 void func_001E2480(int, u_long128*, float);
 
 extern Amusement01Object* func_001AFE30(int, int); 
-extern void func_00121300(sceVu0FMATRIX*, sceVu0FMATRIX*, float);
 
 extern int D_01F74D00_amusement_01;
 extern sceVu0FVECTOR D_01F74670_amusement_01;
