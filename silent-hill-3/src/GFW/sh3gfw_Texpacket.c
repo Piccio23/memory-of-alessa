@@ -76,7 +76,7 @@ void sh3gfw_UnLock_AllTexSlot_For_Shadow(void) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/GFW/sh3gfw_Texpacket", func_001B5DA0);
+INCLUDE_ASM("asm/nonmatchings/GFW/sh3gfw_Texpacket", sh3gfw_EnQue_TexSlot);
 
 INCLUDE_ASM("asm/nonmatchings/GFW/sh3gfw_Texpacket", sh3gfw_SetSlot2Tex);
 
