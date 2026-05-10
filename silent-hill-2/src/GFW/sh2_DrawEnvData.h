@@ -73,4 +73,30 @@ typedef struct sh2gfw_Env_ctl {
 
 extern sh2gfw_Env_ctl Env_ctl; // size: 0x3F0, address: 0x2AD780 Env_ctl;
 
+void* Get_NowDrawEnvData(void);
+
+int Get_NowParallelNum(void);
+
+int Get_NowFakePointNum(void);
+
+int Get_NowFakeSpotNum(void);
+
+int Check_NowSpotFakeOrJms(void);
+
+int Get_NowRoomShadowDense(void);
+
+int Get_NowRoomShadowColor(void);
+
+void* Get_NowRoomShadowForceLight(int* ltype);
+
+int Check_IgnoreJmsSpot_for_Shadow(void);
+
+int* Get_NowMapId(void);
+
+void Get_NowPallarelCol(float* pdir, int nn);
+
+void Set_DrawEnvData(int mapid, int NightOrDay);
+
+void SetupDrawEnvData(void);
+
 #endif // SH2_DRAWENVDATA_H
