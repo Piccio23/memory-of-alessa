@@ -125,24 +125,24 @@ void sh3gfw_get_viewTriangle(sceVu0FMATRIX view_triangle) {
     sceVu0FMATRIX work;
     sceVu0FVECTOR camera_params;
     int i;
-    float x;
     float z;
+    float x;
     
     sceVu0UnitMatrix(work);
     func_001B3F00(camera_params);
     sceVu0RotMatrixY(work, work, camera_params[1]);
 
-    x = func_001B4110();
-    z = 512.0f * x / func_001B4100();
+    z = func_001B4110();
+    x = 512.0f * z / func_001B4100();
     
     for (i = 0; i < 3; i++) {
         sceVu0ScaleVector(view_triangle[i], view_triangle[i], 0.0f);
     }
     
-    view_triangle[1][0] = 0.5f * z * inclip;
-    view_triangle[1][2] = x;
-    view_triangle[2][0] = -0.5f * z * inclip;
-    view_triangle[2][2] = x;
+    view_triangle[1][0] = 0.5f * x * inclip;
+    view_triangle[1][2] = z;
+    view_triangle[2][0] = -0.5f * x * inclip;
+    view_triangle[2][2] = z;
     func_001B3E80(camera_params);
     
     for (i = 0; i < 3; i++) {
@@ -264,8 +264,18 @@ void func_001AAA90(Sh3Gfw_Work* arg0) {
 INCLUDE_ASM("asm/nonmatchings/GFW/sh3gfw_viewclip", func_001AAA90)
 #endif
 
-INCLUDE_ASM("asm/nonmatchings/GFW/sh3gfw_viewclip", func_001AAB30);
+void func_001AAB30(void) {
+    sh3gfw_get_viewTriangle(Env_ctl.camera_mat);
+}
 
-INCLUDE_ASM("asm/nonmatchings/GFW/sh3gfw_viewclip", func_001AAB60);
+#ifdef NON_MATCHING
+void func_001AAB60(Sh3Gfw_Work* arg0) {
+    func_001AACD0();
+    func_001AAD30(arg0);
+    arg0->unk76C = func_001C2C00();
+}
+#else
+INCLUDE_ASM("asm/nonmatchings/GFW/sh3gfw_viewclip", func_001AAB60)
+#endif
 
 INCLUDE_ASM("asm/nonmatchings/GFW/sh3gfw_viewclip", func_001AABB0);
