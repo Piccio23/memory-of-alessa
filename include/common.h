@@ -135,7 +135,7 @@ static inline void vec_sub(void* x, void* y, void* out) {
 }
 
 static inline void vec_scale(float s, void* v, void* out) {
-    asm ("mfc1 t7, %1\n
+    asm ("mfc1 t7, %1;\
           lqc2 vf4, 0(%0)\n\
           qmtc2 t7, vf5\n\
           vmulx.xyzw vf4, vf4, vf5x\n\

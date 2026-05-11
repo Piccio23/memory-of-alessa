@@ -48,8 +48,7 @@ static inline float vec3_length(void* v) {
     asm("lwc1    %1,0(%0)\n\
         lwc1     f8,4(%0)\n\
         lwc1     f9,8(%0)\n\
-        mula.s   %1,%1\n\
-        
+        mula.s   %1,%1;\
         madda.s  f8,f8\n\
         madd.s   %1,f9,f9\n\
         sqrt.s   %1, %1"
