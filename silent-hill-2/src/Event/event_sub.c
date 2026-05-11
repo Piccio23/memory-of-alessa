@@ -6,6 +6,7 @@
 #include "sound/sh_sound.h"
 #include "Multi_thr/filesys/fileserv.h"
 #include "Effect/screen_effect.h"
+#include "GFW/sh2_GsAllEnv.h"
 
 static int ItemUseSeTiming(int kind /* r2 */, int boa /* r2 */);
 
