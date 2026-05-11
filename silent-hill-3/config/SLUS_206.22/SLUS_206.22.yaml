@@ -97,7 +97,7 @@ segments:
       - [0x0eca00, asm,     text_0x1ec480]
       - [0x0ef080, c,       Effect2/hh_class_cartridge]
       - [0x0f0920, asm,     text_0x0f0920]
-      - [0x0fdfa0, asm,     cri/cri_0] 
+      - [0x0f2ec0, asm,     cri/cri_0] 
       - [0x10eff0, asm,     text_0x10eff0]
       - [0x10f050, c,       Multi_thr/scf/ps2_scf]
       - [0x10f350, asm,     text_0x10f350]
