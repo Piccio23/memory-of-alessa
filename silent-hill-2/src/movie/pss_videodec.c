@@ -18,7 +18,37 @@ INCLUDE_ASM("asm/nonmatchings/movie/pss_videodec", videoDecSetState);
 
 INCLUDE_ASM("asm/nonmatchings/movie/pss_videodec", videoDecPutTs);
 
-INCLUDE_ASM("asm/nonmatchings/movie/pss_videodec", videoDecFlush);
+int videoDecFlush(VideoDec *vd) {
+    u_char *pd0;
+    u_char *pd1;
+    u_char seq_end_code[4] = {0x00, 0x00, 0x01, 0xb7};
+    int d0;
+    int d1;
+    u_char *pd0_unc;
+    u_char *pd1_unc;
+    int size;
+
+    videoDecBeginPut(vd, &pd0, &d0, &pd1, &d1);
+
+    if (d0 + d1 < 4) {
+        return 0;
+    }
+
+    pd0_unc = (u_char*)UncAddr(pd0);
+    pd1_unc = (u_char*)UncAddr(pd1);
+
+    size = cpy2area(pd0_unc, d0, pd1_unc, d1, seq_end_code, 4, NULL, 0);
+
+    videoDecEndPut(&videoDec, size);
+
+    viBufFlush(&vd->vibuf);
+
+    if (vd->state == VD_STATE_NORMAL) {
+        vd->state = VD_STATE_FLUSH;
+    }
+
+    return 1;
+}
 
 INCLUDE_ASM("asm/nonmatchings/movie/pss_videodec", videoDecMain);
 
