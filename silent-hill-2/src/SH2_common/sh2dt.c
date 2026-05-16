@@ -1,10 +1,11 @@
 #include "sh2dt.h"
 
-void shSetDF(int fpi /* r2 */) { 
-    
-    sh2FramePerIntSave = sh2FramePerInt = fpi;                                 
-    sh2DeltaTimePerFrame = fpi / 60.0f;
-    sh2FramePerSec = 60.0f / fpi;  
+void shSetDF(int fpi) { 
+    sh2FramePerIntSave 
+        = sh2FramePerInt
+        = fpi;                                 
+    sh2DeltaTimePerFrame = fpi / 60.0f,
+    sh2FramePerSec       = 60.0f / fpi;
 }
 
 int shGetDF(void) {
@@ -29,7 +30,7 @@ void shSetDFZero(void) {
     sh2FramePerSec = 0.0f;
 }
 
-void shSetDFreal(int fpi /* r2 */) {
+void shSetDFreal(int fpi) {
     sh2FramePerIntReal = fpi;
     sh2DeltaTimePerFrameReal = fpi / 60.0f;
 }
