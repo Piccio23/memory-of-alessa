@@ -1,28 +1,29 @@
 #include "pad.h"
 
+
 void shPadInit(void) {
-    shQzero(&pad, 0x40);
-    shQzero(&pad_bak, 0x28);
-    shQzero(&padf, 0x28);
+    shQzero(&pad, sizeof pad);
+    shQzero(&pad_bak, sizeof pad_bak);
+    shQzero(&padf, sizeof padf);
     pad_x = 1;
-    key_config.item = 4;
-    key_config.front_move = 0x400;
-    key_config.back_move = 0x800;
-    key_config.right_move = 0x20000;
-    key_config.left_move = 0x10000;
-    key_config.right_turn = 0x100;
-    key_config.left_turn = 0x200;
-    key_config.search_view = 0x40000;
-    key_config.ready = 0x80000;
-    key_config.pause = 8;
-    key_config.map = 0x1000;
-    key_config.skip = 4;
-    key_config.enter = 0x4000;
-    key_config.action = 0x4000;
-    key_config.cancel = 0x8000;
-    key_config.light = 0x2000;
-    key_config.dash = 0x8000;
-    key_config.attack = 0x4000;
+    key_config.item = PAD_KEY_SELECT;
+    key_config.front_move = PAD_KEY_DPAD_UP;
+    key_config.back_move = PAD_KEY_DPAD_DOWN;
+    key_config.right_move = PAD_KEY_R1;
+    key_config.left_move = PAD_KEY_L1;
+    key_config.right_turn = PAD_KEY_DPAD_RIGHT;
+    key_config.left_turn = PAD_KEY_DPAD_LEFT;
+    key_config.search_view = PAD_KEY_L2;
+    key_config.ready = PAD_KEY_R2;
+    key_config.pause = PAD_KEY_START;
+    key_config.map = PAD_KEY_TRIANGLE;
+    key_config.skip = PAD_KEY_SELECT;
+    key_config.enter = PAD_KEY_CROSS;
+    key_config.action = PAD_KEY_CROSS;
+    key_config.cancel = PAD_KEY_CIRCLE;
+    key_config.light = PAD_KEY_CIRCLE;
+    key_config.dash = PAD_KEY_SQUARE;
+    key_config.attack = PAD_KEY_CROSS;
     shPadSetGameKeyAssign();
 }
 
@@ -228,12 +229,10 @@ int shPadRepeat(int port /* r17 */, int key /* r16 */) {
 }
 
 static u_long kc2ga(u_long kconf_button) {
-
     u_long rem;
     u_long bit;
-    u_long ret;
+    u_long ret = 0;
 
-    ret = 0;
     for (bit = 1, rem = kconf_button; rem != 0; bit <<= 1, rem >>= 1) {
         switch (bit & kconf_button) {
             case 0x100:    ret |= 0x1;    break;

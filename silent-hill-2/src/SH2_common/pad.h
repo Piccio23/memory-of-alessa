@@ -3,6 +3,21 @@
 
 #include "sh2_common.h"
 
+#define PAD_KEY_SELECT     (1 << 2)
+#define PAD_KEY_START      (1 << 3)
+#define PAD_KEY_DPAD_RIGHT (1 << 8)
+#define PAD_KEY_DPAD_LEFT  (1 << 9)
+#define PAD_KEY_DPAD_UP    (1 << 10)
+#define PAD_KEY_DPAD_DOWN  (1 << 11)
+#define PAD_KEY_TRIANGLE   (1 << 12)
+#define PAD_KEY_CIRCLE     (1 << 13)
+#define PAD_KEY_CROSS      (1 << 14)
+#define PAD_KEY_SQUARE     (1 << 15)
+#define PAD_KEY_L1         (1 << 16)
+#define PAD_KEY_R1         (1 << 17)
+#define PAD_KEY_L2         (1 << 18)
+#define PAD_KEY_R2         (1 << 19)
+
 // total size: 0x26
 struct shGameKeyAssign {
     // Members
@@ -31,7 +46,7 @@ struct shGameKeyAssign {
 };
 
 // total size: 0x60
-struct Pad_KeyConfig {
+typedef struct Pad_KeyConfig {
     // Members
     int enter; // offset 0x0, size 0x4
     int cancel; // offset 0x4, size 0x4
@@ -52,7 +67,7 @@ struct Pad_KeyConfig {
     int pause; // offset 0x40, size 0x4
     int map; // offset 0x44, size 0x4
     int padding[6]; // offset 0x48, size 0x18
-};
+} Pad_KeyConfig;
 
 void libShPadRead(int a, int b, void *c); //NOT SURE ABOUT THIS
 

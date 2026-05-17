@@ -12,6 +12,7 @@ options:
   undefined_funcs_auto_path: linkers/sh2_undefined_funcs_auto.main.txt
   undefined_syms_auto_path: linkers/sh2_undefined_syms_auto.main.txt
   symbol_addrs_path: symbol_addrs.txt
+  reloc_addrs_path: reloc_addrs.txt
   migrate_rodata_to_functions: True
   pair_rodata_to_text: True
 segments:
@@ -205,7 +206,7 @@ segments:
       - [0x10e950, asm, GFW/sh2gfw_SemiTrans_FrameWork]
       - [0x10f800, c,   jump_menu]
       - [0x110cf0, asm, DBG/dbflow]
-      - [0x110fc0, asm, Item/otn_option]
+      - [0x110fc0, c,   Item/otn_option]
       - [0x11c4c0, asm, Chacter/m3_play_common]
       - [0x120870, c,   SH2_common/sh2dt]
       - [0x120990, asm, Chacter/m3_maria]
@@ -406,6 +407,8 @@ segments:
       - [0x2969d0, rodata,  rodata_0x2969d0]
       - [0x296e00, .rodata, Effect/screen_effect]
       - [0x296e80, rodata,  rodata_0x296e80]
+      - [0x296f70, .rodata, Item/otn_option]
+      - [0x296fb0, rodata,  rodata_0x296fb0]
       - [0x2988d0, .rodata, Event/stg_overlay]
       - [0x298ac8, rodata,  rodata_0x298ac8]
       - [0x298e00, .rodata, Effect/ef_sparks]
