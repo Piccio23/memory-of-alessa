@@ -277,26 +277,31 @@ $(BUILD)/objdiff/%.json: $(CONFIG)/%.yaml
 	$(GENERATE_EXPECTED) --objdiff-output-path=$(BUILD)/objdiff/$*.json --make-full-disasm-for-code $(SPLAT_CONFIG) $<
 ###############################################################
 $(WIBO):
+	touch $(WIBO)
 	wget -O $@ $(WIBO_HOST)/$(WIBO_BINARY)
 	chmod +x $(WIBO)
 
 $(MWCC):
 	@mkdir -p "$(@D)"
+	touch $(MWCC)
 	wget -O- $(COMPILERS_HOST)/$(MWCC_TAR) | tar xzv -C "$(@D)"
 	chmod +x $(MWCC)
 
 $(MWLD):
 	@mkdir -p "$(@D)"
+	touch $(MWLD)
 	wget -O- $(COMPILERS_HOST)/$(MWLD_TAR) | tar xzv -C "$(@D)"
 	chmod +x $(MWLD)
 
 $(AS):
 	@mkdir -p "$(@D)"
+	touch $(AS)
 	wget -O- $(BINUTILS_HOST)/$(BINUTILS_TAR) | tar xzv -C "$(@D)"
 	@chmod +x $(@D)/*
 
 $(OBJDIFF):
 	@mkdir -p "$(@D)"
+	touch $(OBJDIFF)
 	wget -O $@ $(OBJDIFF_HOST)/$(OBJDIFF_BINARY)
 	@chmod +x $@
 
