@@ -231,21 +231,41 @@ typedef struct FOG_WORK2 {
     float Expand; // offset 0x54, size 0x4
 } FOG_WORK2;
 
-inline int float_floor(float x) {
-    int out;
-    asm ("mfc1 %1, %0\n\
+// ???
+typedef struct ScratchpadFog {
+    u_char unk0[0x3FE0];
+    sceVu0FVECTOR Wind2;
+    sceVu0FVECTOR Wind;
+} ScratchpadFog;
 
+static inline int float_floor(float x) {
+    int out;
+    asm ("mfc1 %1, %0;\
           addi t7, zero, 1\n\
           slt %1, %1, zero\n\
-          cvt.w.s %0, %0\n\
-
+          cvt.w.s %0, %0;\
           movz t7, zero, %1\n\
-
-          mfc1 %1, %0\n\
-
+          mfc1 %1, %0;\
           sub %1, %1, t7"
     : "+f"(x), "+r"(out) :: "t7");
     return out;
+}
+
+static inline float float_sign(float x) {
+    asm (".set noreorder;\
+         sub.s $f8, $f8;\
+         lui  $t7,0x3F80;\
+         c.eq.s $f8,%1;\
+         bc1tl lab;\
+         mov.s %0,$f8;\
+         c.lt.s %0,$f8;\
+         mtc1 $t7,%0;\
+         bc1tl lab;\
+         neg.s %0,%0;\
+         lab:
+         .set reorder;\
+    " : "=f"(x) : "f"(x) : "f8", "t7");
+    return x;
 }
 
 #endif // FOG_SHARED_H

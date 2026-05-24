@@ -3,15 +3,16 @@
 
 #include "common.h"
 
+// E:\work\sh2(CVS全取得)\src\SH2_common\sh_vu0.c
 float shAngleRegulate(float);
-float shAtanV(void);
+float shAtanV(void*);
 float shAtan2(float y, float x);
 float shAtan_asm(float angle);
 void sh_ecossin(void);
 float shSinF(float);
 float shCosF(float);
-void shSinCosV(void);
-void shSinCosV_Scale(void);
+void shSinCosV(void*, float);
+void shSinCosV_Scale(void*, float, float);
 void shRotVectorY(void);
 void shRotMatrixX(void);
 void shRotMatrixY(void);
@@ -23,7 +24,7 @@ int shPopRandSeed(void);
 int shRandI(void);
 float shRandF(void);
 void shRandF_asm(void);
-void shRandV_Scale(void);
+void shRandV_Scale(void*, float);
 void shRandV_asm(void);
 float shSway1f(float, float);
 void shSway1f_asm(void);

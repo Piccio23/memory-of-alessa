@@ -56,6 +56,18 @@ static inline float vec3_length(void* v) {
     return d;
 }
 
+// @todo: combine with the inline from `vc_play.h`
+static inline float vec2_length(float* a, float* b) {
+    float result;
+    asm volatile("lwc1   $f13,0(%1)\n\
+        lwc1   $f8,0(%2)\n\
+        mula.s $f13, $f13\n\
+        madd.s %0, $f8, $f8\n\
+        sqrt.s %0, %0"
+        : "=f"(result) : "m"(a), "m"(b) : "f20", "f8", "f13");
+    return result;
+}
+
 static inline float float_abs(float x) {
     asm("abs.s %0, %0" : "+f"(x)); return x;
 }

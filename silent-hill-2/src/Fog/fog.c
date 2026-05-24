@@ -5,6 +5,8 @@
 #include "Font/fj_man.h"
 #include "vec.h"
 
+#pragma fast_fptosi on
+
 extern FOG_WORK fwork; // size: 0x15E90, address: 0x56B6D0
 extern FOG_PACK_WORK pwork; // size: 0x19010, address: 0x5526C0
 extern FOG_WORK2 fwork2; // size: 0x58, address: 0x1202E70
@@ -133,7 +135,135 @@ void fogInitWind(void) {
     shFill(&fwork.GridDense, 0x3f800000 /* 1.0f */, 512);
 }
 
-INCLUDE_ASM("asm/nonmatchings/Fog/fog", fogChangeWind);
+void fogChangeWind(int wind) {
+    float* Wind;      // r2
+    float* Wind2;     // r2
+    float WindSpeed;  // r29+0x40
+    float WindRandom; // r29+0x40
+    float a1;         // r20
+    float a2;         // r29+0x40
+
+    Wind = ((ScratchpadFog*) SCRATCHPAD_START)->Wind; // scratchapd+0x3ff0
+    Wind2 = ((ScratchpadFog*) SCRATCHPAD_START)->Wind2;
+    WindSpeed = 0.4f;
+    WindRandom = 0.1f;
+
+    switch (wind) {
+        case 1:
+        case 3:
+            Wind[0] = (shRandF() - 0.5f);
+            Wind[1] = 0.0f;
+            Wind[2] = (shRandF() - 0.5f);
+            break;
+        case 2:
+            vec_zero(Wind);
+            WindRandom = 0.0f;
+            break;
+        case 17:
+            Wind[0] = (shRandF() - 0.5f);
+            Wind[1] = 0.0f;
+            Wind[2] = (shRandF() - 0.5f);
+            WindSpeed = 0.2f;
+            WindRandom = 0.0f;
+            break;
+        case 5:
+            shSinCosV(Wind, PI + ((PI * (shRandF() - 0.5f)) / 4.0f));
+            Wind[1] = (0.1f * shRandF());
+            break;
+        case 6:
+            shSinCosV(Wind, (PI * (shRandF() - 0.5f)) / 4.0f);
+            Wind[1] = (0.1f * shRandF());
+            break;
+        case 7:
+            shSinCosV(Wind, ((PI * (shRandF() - 0.5f)) / 4.0f) - QUARTER_TURN);
+            Wind[1] = (0.1f * shRandF());
+            break;
+        case 8:
+            shSinCosV(Wind, QUARTER_TURN + ((PI * (shRandF() - 0.5f)) / 4.0f));
+            Wind[1] = (0.1f * shRandF());
+            break;
+        case 9:
+            shSinCosV(Wind, (PI * 0.75f) + ((PI * (shRandF() - 0.5f)) / 4.0f));
+            Wind[1] = (0.1f * shRandF());
+            break;
+        case 10:
+            shSinCosV(Wind, (PI / 4) + ((PI * (shRandF() - 0.5f)) / 4.0f));
+            Wind[1] = (0.1f * shRandF());
+            break;
+        case 11:
+            shSinCosV(Wind, ((PI * (shRandF() - 0.5f)) / 4.0f) - (PI / 4));
+            Wind[1] = (0.1f * shRandF());
+            break;
+        case 12:
+            shSinCosV(Wind, ((PI * (shRandF() - 0.5f)) / 4.0f) - (PI * 0.75f));
+            Wind[1] = (0.1f * shRandF());
+            break;
+        case 4:
+            Wind[0] = (shRandF() - (WindSpeed = 0.5f)) * 0.1f;
+            Wind[1] = 0.0f;
+            Wind[2] = 1.0f;
+            WindRandom = 0.0f;
+            break;
+        case 13:
+            Wind[0] = 0.5f;
+            Wind[1] = 0.1f;
+            Wind[2] = 0.0f;
+            WindSpeed = 0.2f;
+            break;
+        case 14:
+            Wind[0] = (-(0.2f * shRandF()) - 0.2f);
+            Wind[1] = (0.1f + (0.2f * shRandF()));
+            Wind[2] = (0.8f + (0.5f * shRandF()));
+            WindSpeed = 1.5f;
+            break;
+        case 15:
+            shSinCosV(Wind, 2.6179938f + (0.08726646f * (shRandF() - 0.5f)));
+            Wind[1] = -0.1f;
+            WindSpeed = 0.3f;
+            WindRandom = 0.0f;
+            break;
+        case 16:
+            Wind[0] = (shRandF() - 0.5f);
+            Wind[1] = 0.0f;
+            Wind[2] = (shRandF() - 0.5f);
+            WindSpeed = 0.1f;
+            WindRandom = 0.0f;
+            break;
+        case 18:
+            Wind[0] = (1.0f + shRandF());
+            Wind[1] = (0.1f * shRandF());
+            Wind[2] = (0.1f + (0.1f * shRandF()));
+            WindSpeed = 0.7f;
+            break;
+        default:
+            Wind[0] = (shRandF() - 0.5f);
+            Wind[1] = (0.1f * shRandF());
+            Wind[2] = (shRandF() - 0.5f);
+            break;
+    }
+    Wind[3] = 0;
+    vec_normalize(Wind, Wind);
+    vec_scale(WindSpeed, Wind, Wind);
+    shRandV_Scale(Wind2, 0.5f);
+    vec_normalize(Wind2, Wind2);
+    vec_scale(WindRandom, Wind2, Wind2);
+    vec_add(Wind, Wind2, Wind);
+    if ((fwork.WindV[0] != 0.0f) || (fwork.WindV[1] != 0.0f) || (fwork.WindV[2] != 0.0f)) {
+        a1 = shAtanV(&fwork.WindV);
+        a2 = shAngleRegulate(a1 - shAtanV(Wind));
+        if (float_abs(a2) > (PI / 3)) {
+            a1 += ((PI / 3) * float_sign(a2));
+            shSinCosV_Scale(Wind2, a1, vec2_length(&Wind[0], &Wind[2]));
+            Wind[0] = Wind2[0];
+            Wind[2] = Wind2[2];
+        }
+    }
+    volatile_vec_copy(fwork.WindV, Wind);
+    fwork.WindTimer += (int) shSway1f(-300.0f, 0.1f);
+    if (fwork.WindTimer < 300.0f || fwork.WindTimer > 900.0f) {
+        fwork.WindTimer = 600;
+    }
+}
 
 void fogInitParticle(void) {
     int i;
