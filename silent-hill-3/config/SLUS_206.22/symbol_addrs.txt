@@ -335,6 +335,7 @@ fogSetCollision = 0x001eb090;
 
 // spack.c
 spkInit = 0x00138C90;
+spkDmaKick = 0x001398e0;
 
 // shadow
 shadow_micro_init = 0x00177300;
@@ -379,10 +380,20 @@ lower_flg_on = 0x00150a50;
 PlayerCheckHuggedPos = 0x001483e0;
 
 // vc
+vcInitCamera = 0x001c0d20;
 vcInitVCSystem = 0x001b71d0;
 vcGetNowWatchPos = 0x001b7440;
 vcGetNowCamPos = 0x001b7540;
 vcRetCurCamMvType = 0x001b79a0;
+
+// chizu
+ChizuDisplay = 0x002d0980;
+ChizuMarkerDraw = 0x002d0fd0;
+Chizu_0x002d0db0 = 0x002d0db0;
+Chizu_0x002a95a0 = 0x002a95a0; // draws the connect arrows
+Chizu_0x002d1180 = 0x002d1180;
+Chizu_0x002d1650 = 0x002d1650;
+ChizuMain = 0x002d0520;
 
 // ...
 sh3_CharacterDrawOne = 0x001d13d0;
@@ -399,6 +410,7 @@ close_to_angle_target = 0x00150c80;
 Effect_Object_Initialize = 0x001c1de0;
 InstanceTable_All_Initialize = 0x00141db0;
 ImpactDescriptor_Post = 0x00141e50;
+Object_Group_Manager = 0x00141ee0;
 QueueObject_enQueue = 0x00141550;
 shCharacterAnimeSet = 0x001dd490;
 SubCharacter_ObjectFunction = 0x00143120;
