@@ -61,7 +61,7 @@ Model3UpdateMatrices = 0x1D3B20;
 sh3_Model3UpdateTextures = 0x1D39C0;
 Model3UpdateEnvelopeMatrices = 0x1D3C90;
 Model3Init = 0x001D3860;
-initialized = 0x01EE3080; // type:s32
+initialized = 0x01EE3080; // type:s32 allow_duplicated:True
 xyz_min_wide$16 = 0x00366910; // size:0x10 visibility:local
 xyz_max_wide$17 = 0x00366920; // size:0x10 visibility:local
 xyz_min$18 = 0x00366930; // size:0x10 visibility:local
@@ -270,6 +270,17 @@ CharacterOt_KtVif1Ot2 = 0x001d0fe0;
 LightNValidParallelMatrices = 0x001C4DB0;
 LightNValidExtras = 0x001C4DA0;
 LightReflectionBrightness = 0x001C4EB0;
+
+// model3_cluster_n
+LoadProgram = 0x001d1fd0; // visibility:local
+MakeTransferDefaultClusterNodesPacket = 0x001d2060; // visibility:local
+TransferDefaultClusterNodes = 0x001d2110; // visibility:local
+MakeApplyClusterPacket = 0x001d2280; // visibility:local
+ApplyCluster = 0x001d2360; // visibility:local
+Model3UpdateClusters = 0x001d2570;
+initialized_0x01EE2F98 = 0x01EE2F98; // size:4 allow_duplicated:True
+packet_buffer = 0x01EE2FC0; // size:32
+model3_mpg0_cluster_load = 0x003BA180;
 
 // utilheap.c
 utilHeapFree                                                                     = 0x1c1d00;

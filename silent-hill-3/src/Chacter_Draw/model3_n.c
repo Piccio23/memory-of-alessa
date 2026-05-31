@@ -1,8 +1,9 @@
 #include "common.h"
+#include "eeregs.h"
 #include "Chacter/character.h"
 #include "Chacter_Draw/model3_n.h"
 #include "Chacter_Draw/model3_sub_n.h"
-#include "eeregs.h"
+#include "Chacter_Draw/model3_cluster_n.h"
 
 int Model3NSkeletons(void* model_) {
     sh_Model* model = (sh_Model*)model_;
@@ -103,7 +104,7 @@ void Model3Draw_n(void* scp_d_, void* model_, void* work_, float (*mwm)[4]) {
             }
             func_001D2C60(model, mwork);
             if (func_001D0F00() != 0) {
-                func_001D2570(model, mwork);
+                Model3UpdateClusters(model, mwork);
             }
         }
         func_001D8B00(model, mwork);

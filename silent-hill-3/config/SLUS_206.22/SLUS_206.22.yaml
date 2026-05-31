@@ -301,6 +301,8 @@ segments:
       - [0x0c1f10, asm,     Heap/sh3_ch_malloc]
       - [0x0c2130, c,       Heap/utilheap]
       - [0x0c2360, asm,     text_0x0c2360]
+      - [0x0d2550, c,       Chacter_Draw/model3_cluster_n]
+      - [0x0d2cb0, asm,     Chacter_Draw/chacter_draw_0x0d2cb0]
       - [0x0d33f0, c,       Chacter_Draw/model3_n]
       - [0x0d3d00, c,       Chacter_Draw/model3_sub_n]
       - [0x0d42d0, c,       Chacter_Draw/model3_vu0_n]
