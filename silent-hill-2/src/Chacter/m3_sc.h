@@ -11,6 +11,9 @@
 #define AGL_CHARA_ID 0x107 // angela
 #define EN_PAP_CHARA_ID 0x204 // abstract daddy
 
+#define IS_PLAYER_KIND(_kind) ((_kind) >= 0x100 && (_kind) <= 0x103)
+#define IS_ENEMY_KIND(_kind) ((_kind) >= 0x200 && (_kind) < 0x300)
+
 // E:\work\sh2(CVS全取得)\src\Chacter\m3_sc.c
 extern struct shCharacterAll sh2chara; // size: 0x6810, address: 0x3C84D0
 

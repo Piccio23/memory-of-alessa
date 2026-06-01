@@ -3,6 +3,19 @@
 
 #include "sh2_common.h"
 
+#define LIGHT_KIND_NONE -1
+#define LIGHT_KIND_0 0x0
+#define LIGHT_KIND_1 0x1
+#define LIGHT_KIND_2 0x2
+#define LIGHT_KIND_3 0x3
+#define LIGHT_KIND_4 0x4
+#define LIGHT_KIND_5 0x5
+#define LIGHT_KIND_6 0x6
+#define LIGHT_KIND_7 0x7
+#define LIGHT_KIND_8 0x8
+#define LIGHT_KIND_9 0x9
+#define LIGHT_KIND_A 0xA
+
 typedef struct SHADOW_PACKET_BUF {
     // total size: 0x8
     Q_WORDDATA * head; // offset 0x0, size 0x4
@@ -28,9 +41,9 @@ typedef struct SHADOW_CHAR_MAN {
     u_char obj_num; // offset 0x8, size 0x1
     float spot_cam_angle; // offset 0xC, size 0x4
     short light_kind; // offset 0x10, size 0x2
-    float light_pos[4]; // offset 0x20, size 0x10
-    float light_dir[4]; // offset 0x30, size 0x10
-    float light_param[4]; // offset 0x40, size 0x10
+    sceVu0FVECTOR light_pos; // offset 0x20, size 0x10
+    sceVu0FVECTOR light_dir; // offset 0x30, size 0x10
+    sceVu0FVECTOR light_param; // offset 0x40, size 0x10
     float drop_shadow_matrix[4][4]; // offset 0x50, size 0x40
     Q_WORDDATA* raw_data; // offset 0x90, size 0x4
     struct SHADOW_SHAPE_FRAME* shape; // offset 0x94, size 0x4
@@ -110,5 +123,27 @@ typedef struct SHADOW_OFF_WORK_CHAR {
     short id; // offset 0x2, size 0x2
     short obj_id[22]; // offset 0x4, size 0x2C
 } SHADOW_OFF_WORK_CHAR; 
+
+typedef struct JMS_SHADOW_ENV {
+    // total size: 0x10
+    short light_kind; // offset 0x0, size 0x2
+    float bias; // offset 0x4, size 0x4
+    float height_revision; // offset 0x8, size 0x4
+    float scale; // offset 0xC, size 0x4
+} JMS_SHADOW_ENV;
+
+extern struct JMS_SHADOW_ENV jms_shadow_env;
+
+typedef struct SHADOW_CHAR_HEAD {
+    // total size: 0x10
+    short char_id; // offset 0x0, size 0x2
+    u_short kind; // offset 0x2, size 0x2
+    short obj_num; // offset 0x4, size 0x2
+    short reserve1; // offset 0x6, size 0x2
+    short reserve2; // offset 0x8, size 0x2
+    short reserve3; // offset 0xA, size 0x2
+    short reserve4; // offset 0xC, size 0x2
+    short reserve5; // offset 0xE, size 0x2
+} SHADOW_CHAR_HEAD;
 
 #endif // SH2SHD_STRUCTS_H

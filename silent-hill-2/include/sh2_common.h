@@ -13,4 +13,6 @@ inline int clamp_max(int b, int i) {
     asm("slt $t7, %0, %1; movn %0, %1, $t7" : "=r"(b) : "r"(i) : ); return b;
 }
 
+extern float sqrtf(float);
+
 #endif

@@ -3,6 +3,12 @@
 #include "sh2shd/sh2shd_structs.h"
 #include "Heap/utilheap.h"
 #include "sh2shd/sh2shd_shadow_model.h"
+#include "sh2shd/sh2shd_char_jms.h"
+#include "Event/demoview.h"
+#include "Chacter/m3_sc.h"
+#include "Enemy/en_list.h"
+#include "SH2_common/map_ids.h"
+#include "vec.h"
 
 static void sh2shd_renew_shadow_man(CAMERA_DAT* cam, int glb_coord, int map_id);
 static void make_chara_reftag_pool_and_kick_packet_for_spot(void);
@@ -15,6 +21,9 @@ static float get_spot_camera_angle(float* cam_pos, float* light_pos, float* ligh
 
 extern u_int Shadow_micro_code[];
 extern u_int Shadow_micro_code_parallel[];
+extern sceVu0FVECTOR light_dir_for_jms; // size: 0x10, address: 0x1125310
+extern sceVu0FVECTOR light_pos_for_jms; // size: 0x10, address: 0x1125320
+extern sceVu0FVECTOR light_param_for_jms; // size: 0x10, address: 0x1125300
 
 void sh2shd_init_shadow(void) {
     int i;
@@ -89,7 +98,141 @@ void sh2shd_init_shadow(void) {
 
 INCLUDE_ASM("asm/nonmatchings/sh2shd/sh2shd_shadow_model", sh2shd_reset_shadow);
 
-INCLUDE_ASM("asm/nonmatchings/sh2shd/sh2shd_shadow_model", sh2shd_add_char);
+int sh2shd_add_char(SubCharacter* scp, Q_WORDDATA* raw_data, short light_kind, float* light_pos, float* light_dir, float* light_param) { 
+    Q_WORDDATA* cur; // r2
+    SHADOW_CHAR_HEAD char_head; // r29+0x90
+    int i; // r16
+    int demo_no = DramaDemoNumber(); // r16
+    int glb_coord; // r29+0xD8…
+    int map_id; // r29+0xDC
+    sceVu0FVECTOR chr_pos; // r29+0xA0
+    sceVu0FVECTOR cam_pos; // r29+0xB0
+    sceVu0FVECTOR light_vec; // r29+0xC0
+
+    get_map_id(&glb_coord, &map_id);
+    if (demo_no == DRAMA_DEMO_4E) {
+        if (scp->kind == LAU_CHARA_ID) {
+            light_kind = 4;
+            light_dir[0] = -0.00404023f;
+            light_dir[1] = 0.6262416f;
+            light_dir[2] = 0.7796187f;
+            light_dir[3] = 0.0f;
+        }
+    } else if ((glb_coord == 9) && map_id == MAP_ID_0x1E && scp->kind == EN_MKN_CHARA_ID && light_kind == LIGHT_KIND_5) {
+        return 1;
+    }
+
+    if ((light_kind == LIGHT_KIND_9) && ((glb_coord != 9) || (map_id != MAP_ID_0x48))) {
+        return 1;
+    }
+
+    if (IS_PLAYER_KIND(scp->kind)) {
+        if (demo_no != 0) {
+            sh2shd_get_demo_jms_shadow_env(&jms_shadow_env, demo_no);
+        } else {
+            sh2shd_get_jms_shadow_env(&jms_shadow_env, light_kind, light_dir);
+        }
+        if (jms_shadow_env.light_kind == LIGHT_KIND_NONE) {
+            jms_shadow_env.light_kind = light_kind;
+        }
+        if ((jms_shadow_env.light_kind == LIGHT_KIND_5) && (demo_no == 0)) {
+            vwGetViewPosition(cam_pos);
+            cam_pos[1] = 0;
+            vec_copy_reverse(&scp->pos, chr_pos);
+            chr_pos[1] = 0;
+            vec_sub_reverse(chr_pos, cam_pos, cam_pos);
+            vec_normalize(cam_pos, cam_pos);
+            vec_copy_reverse(light_pos, light_vec);
+            light_vec[1] = 0;
+            vec_sub_reverse(chr_pos, light_vec, light_vec);
+            vec_normalize(light_vec, light_vec);
+            if (vec3_dot_product(cam_pos, light_vec) < -0.707f) {
+                vwGetViewPosition(cam_pos);
+                vec_sub_reverse(cam_pos, &scp->pos, cam_pos);
+                if (sqrtf(vec3_dot_product(cam_pos, cam_pos)) < 1800.0f) {
+                    sh2shd_del_jms_upper_body(scp->kind, scp->id);
+                }
+            }
+        }
+        if (jms_shadow_env.light_kind == LIGHT_KIND_9) {
+            return 1;
+        }
+        jms_added_flag = 1;
+    } else if ((scp->kind >= 0x800) && (scp->kind < 0x809)) {
+        if (jms_added_flag == 0) {
+            return 1;
+        }
+        light_kind = jms_shadow_env.light_kind;
+    } else if (IS_ENEMY_KIND(scp->kind) && (GET_BIT(scp->battle.status, 1) || GET_BIT(scp->battle.status, 2))) {
+        return 1;
+    }
+    if (shadow_man.char_man_num >= SHADOW_CHAR_MAN_SIZE) return 0;
+    
+    cur = &char_head;
+    hword_struct_copy(cur->ss16, raw_data->ss16);
+    for (i = 0; i <= SHADOW_CHAR_MAN_SIZE; i++) {
+        if (shadow_man.char_man[i] == NULL) break;
+    }
+    if (i == SHADOW_CHAR_MAN_SIZE) {
+        return 0;
+    }
+    shadow_man.char_man[i] = utilHeapMalloc(shadow_calcheap, SHADOW_CALC_HEAP_SIZE);
+    if (shadow_man.char_man[i] == 0)
+       ASSERT(shadow_man.char_man[i] != 0);
+
+    shadow_man.char_man[i]->shape = utilHeapMalloc(shadow_calcheap, char_head.obj_num * 0x70);
+    ASSERT(shadow_man.char_man[i]->shape != 0);
+    shadow_man.char_man_num++;
+
+    if (IS_PLAYER_KIND(scp->kind) && (jms_shadow_env.light_kind >= 0)) {
+        sh2shd_init_char_man(shadow_man.char_man[i], scp, raw_data, scp->kind, scp->id, jms_shadow_env. light_kind, light_pos, light_dir, light_param);
+        light_kind = jms_shadow_env.light_kind;
+        vec_copy_reverse(light_pos, light_pos_for_jms);
+        vec_copy_reverse(light_dir, light_dir_for_jms);
+        vec_copy_reverse(light_param, light_param_for_jms);
+    } else {
+        if ((scp->kind >= 0x800) && (scp->kind < 0x809)) {
+            sh2shd_init_char_man(shadow_man.char_man[i], scp, raw_data, scp->kind, scp->id, light_kind, light_pos_for_jms, light_dir_for_jms, light_param_for_jms);
+        } else {
+            sh2shd_init_char_man(shadow_man.char_man[i], scp, raw_data, scp->kind, scp->id, light_kind, light_pos, light_dir, light_param);
+        }
+    }
+    switch (light_kind) {
+        case LIGHT_KIND_0:
+            shadow_man.spot_char_num++;
+            break;
+        case LIGHT_KIND_6:
+            shadow_man.spot_char_num++;
+            break;
+        case LIGHT_KIND_7:
+            shadow_man.spot_char_num++;
+            break;
+        case LIGHT_KIND_8:
+            shadow_man.spot_char_num++;
+            break;
+        case LIGHT_KIND_1:
+            shadow_man.self_num++;
+            break;
+        case LIGHT_KIND_2:
+            shadow_man.self_num++;
+            break;
+        case LIGHT_KIND_3:
+            shadow_man.self_num++;
+            break;
+        case LIGHT_KIND_4:
+            shadow_man.parallel_char_num++;
+            break;
+        case LIGHT_KIND_5:
+            shadow_man.point_char_num++;
+            break;
+    }
+
+    if (IS_ENEMY_KIND(scp->kind)) {
+        shadow_man.enemy_num++;
+    }
+    shadow_man.change_flag = 1;
+    return 1;
+}
 
 INCLUDE_ASM("asm/nonmatchings/sh2shd/sh2shd_shadow_model", sh2shd_Draw_ShadowChar);
 

@@ -15,6 +15,8 @@
 #define SHADOW_OFF_WORK_BG_SIZE 4
 #define SHADOW_OFF_WORK_BG_OBJ_COUNT 32
 
+#define SHADOW_CALC_HEAP_SIZE 0xA0
+
 typedef struct /* @anon6 */ {
     // total size: 0x220
     float pos[4]; // offset 0x0, size 0x10
@@ -92,5 +94,23 @@ extern Q_WORDDATA Shadow_Kick_Packet[640]; // size: 0x2800, address: 0x1109AF0
 extern utilHeapCtrl* shadow_calcheap; // size: 0x4, address: 0x10F0AE0
 extern Q_WORDDATA Shadow_Calcwork[6400]; // size: 0x19000, address: 0x110C2F0
 
+
+static inline void hword_struct_copy(short* _dst, short* _src) {
+    // @todo: specific var order needed for match
+    short* src;
+    short* dst;
+    int i;
+    dst = _dst;
+    i = sizeof(_src);
+    src = _src;
+    do {
+        short w0 = src[0];
+        short w1 = src[1];
+        src += 2, i--;
+        dst[0] = w0;
+        dst[1] = w1;
+        dst += 2;
+    } while (i > 0);
+}
 
 #endif // SH2SHD_SHADOW_MODEL_H
