@@ -253,9 +253,9 @@ extern int model3_mpg0_clipv_size; // size: 0x4, address: 0x37FF20
 extern int model3_mpg0_clip1_size; // size: 0x4, address: 0x37FD90
 extern int model3_mpg0_clip0v_size; // size: 0x4, address: 0x37FB70
 
-extern u_int _vu_0_0x0037F980;
-extern u_int _vu_0_0x0037FB80;
-extern u_int _vu_0_0x0037FDC0;
+extern u_int model3_mpg0_clip0v;
+extern u_int model3_mpg0_clip1;
+extern u_int model3_mpg0_clipv;
 
 extern u_int model3_mpg0_skel_load[];
 extern int initialized; // @ 0x00419FA0

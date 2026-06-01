@@ -43,9 +43,9 @@ typedef struct SHADOW_OUTDOOR_MAN {
     u_char lighting_mode; // offset 0x4, size 0x1
     u_char obj_num; // offset 0x5, size 0x1
     short light_kind; // offset 0x6, size 0x2
-    float light_pos[4]; // offset 0x10, size 0x10
-    float light_dir[4]; // offset 0x20, size 0x10
-    float light_param[4]; // offset 0x30, size 0x10
+    sceVu0FVECTOR light_pos; // offset 0x10, size 0x10
+    sceVu0FVECTOR light_dir; // offset 0x20, size 0x10
+    sceVu0FVECTOR light_param; // offset 0x30, size 0x10
     Q_WORDDATA* raw_data; // offset 0x40, size 0x4
     struct SHADOW_SHAPE_FRAME* shape; // offset 0x44, size 0x4
 } SHADOW_OUTDOOR_MAN;

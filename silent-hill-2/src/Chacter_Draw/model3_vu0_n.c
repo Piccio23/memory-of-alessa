@@ -357,18 +357,18 @@ void MakeClipPacket(Part* part, sceVif0Packet* pk) {
         if (part->backclip == 0) {
             if (model3_junk.view_clip_or != 0) {
                 FlipXMTOP();
-                sceVif0PkRefMpg(pk, xmtop, &_vu_0_0x0037F980, model3_mpg0_clip0v_size, 0);
+                sceVif0PkRefMpg(pk, xmtop, &model3_mpg0_clip0v, model3_mpg0_clip0v_size, 0);
                 sceVif0PkCnt(pk, 0U);
                 sceVif0PkAddCode(pk, xmtop | 0x14000000);
             }
         } else {
             FlipXMTOP();
-            sceVif0PkRefMpg(pk, xmtop, &_vu_0_0x0037FB80, model3_mpg0_clip1_size, 0);
+            sceVif0PkRefMpg(pk, xmtop, &model3_mpg0_clip1, model3_mpg0_clip1_size, 0);
             sceVif0PkCnt(pk, 0U);
             sceVif0PkAddCode(pk, xmtop | 0x14000000);
             if (model3_junk.view_clip_or != 0) {
                 FlipXMTOP();
-                sceVif0PkRefMpg(pk, xmtop, &_vu_0_0x0037FDC0, model3_mpg0_clipv_size, 0);
+                sceVif0PkRefMpg(pk, xmtop, &model3_mpg0_clipv, model3_mpg0_clipv_size, 0);
                 sceVif0PkCnt(pk, 0U);
                 sceVif0PkAddCode(pk, xmtop | 0x14000000);
             }
