@@ -3,17 +3,22 @@
 #include "Chacter/character.h"
 #include "Chacter/sh3_character_manage.h"
 
-static SubCharacter* shCharacterGetFreeList() {
-    struct SubCharacter * scp = (SubCharacter*) D_003DAD50;
-    if (D_003DAD50 != NULL) {
-        D_003DAD50 = scp->next;
+extern shCharacterAll sh3chara;
+
+/* not from here */
+extern int shCharacterGetSkeltonNum(short kind);
+
+static SubCharacter* shCharacterGetFreeList(void) {
+    struct SubCharacter * scp = sh3chara.free;
+    if (sh3chara.free != NULL) {
+        sh3chara.free = scp->next;
     }
     return scp;
 }
 
 static void AddFreeList(SubCharacter* scp) {
-    scp->next = D_003DAD50;
-    D_003DAD50 = (SubCharacterDisp*) scp;
+    scp->next = sh3chara.free;
+    sh3chara.free = scp;
 }
 
 
@@ -21,8 +26,8 @@ void shCharacterSortList(SubCharacter* scp) {
     SubCharacter* pre;
     SubCharacter* next;
 
-    if (!(next = D_003DAD54)) {
-        D_003DAD54 = scp;
+    if (!(next = sh3chara.head)) {
+        sh3chara.head = scp;
         scp->next = NULL;
         scp->pre = NULL;
         return;
@@ -30,7 +35,7 @@ void shCharacterSortList(SubCharacter* scp) {
 
 
 
-    if (D_003DAD58 != NULL) {
+    if (sh3chara.player != NULL) {
         pre = next;
         next = next->next;
     } else {
@@ -44,7 +49,7 @@ void shCharacterSortList(SubCharacter* scp) {
         if (pre != NULL) {
             pre->next = scp;
         } else {
-            D_003DAD54 = scp;
+            sh3chara.head = scp;
         }
         next->pre = scp;
 
@@ -61,12 +66,12 @@ void shCharacterSortList(SubCharacter* scp) {
 
 
 static void shCharacterTopOfList(SubCharacter* scp) {
-    if (D_003DAD54 != NULL) {
-        ((SubCharacter*)D_003DAD54)->pre = scp;
+    if (sh3chara.head != NULL) {
+        ((SubCharacter*)sh3chara.head)->pre = scp;
     }
-    scp->next = D_003DAD54;
+    scp->next = sh3chara.head;
     scp->pre = NULL;
-    D_003DAD54 = scp;
+    sh3chara.head = scp;
 }
 
 static void shCharacterCutList(SubCharacter* scp) {
@@ -77,7 +82,7 @@ static void shCharacterCutList(SubCharacter* scp) {
         pre->next = next;
         scp->pre = NULL;
     } else {
-        D_003DAD54 = next;
+        sh3chara.head = next;
     }
     if (next != NULL) {
         next->pre = pre;
@@ -91,12 +96,12 @@ static void shCharacterSetPlayer(SubCharacter *scp)
 
 {
     if (scp == NULL) {
-        D_003DAD58 = scp;
-        D_003DAD54 = scp;
+        sh3chara.player = scp;
+        sh3chara.head = scp;
         return;
     }
 
-    D_003DAD58 = scp;
+    sh3chara.player = scp;
 
     shCharacterCutList(scp);
     shCharacterTopOfList(scp);    
@@ -210,13 +215,45 @@ int shCharacter_Manage_Init() {
     return 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Chacter/m3_sc", shCharacter_Manage_Create);
+int shCharacter_Manage_Create(CharaOptions* options) {
+    SubCharacter* scp = shCharacterCreate(options);
+    u_short id;
+
+    if (scp != NULL) { 
+        func_00140D40(shCharacterGetSkeltonNum(scp->kind));
+
+        vec_copy(&scp->pos, &options->pos_10);
+        vec_copy(&scp->unkF0, &options->pos_10);
+        vec_copy(&scp->unkD0, &options->pos_10);
+        vec_copy(&scp->rot, &options->rot_20);
+        vec_copy(&scp->unkE0, &options->rot_20);
+        scp->battle.status |= 0x2000;
+
+        if (options->id != 0xffff) {
+            scp->id = options->id;
+        } else {
+            scp->id = id_counter;
+            printf("id %d\n", id_counter);
+            id_counter++;
+            if (id_counter == 0x7FFF) {
+                id_counter = 0x1000;
+            }
+        }
+
+        func_001DC9E0(scp, 1);
+        func_0025BE90(scp->kind, scp->id);
+
+        return scp->id;
+    }
+
+    return -1;
+}
 
 int shCharacter_Manage_Delete(u_short kind, u_short id) { 
     SubCharacter * del_scp;
     int delete_on = 0;
 
-    del_scp = D_003DAD54;
+    del_scp = sh3chara.head;
     while (del_scp != NULL) {
         if (del_scp->kind == kind && del_scp->id == id) {
             delete_on = 1;
@@ -239,12 +276,12 @@ int shCharacter_Manage_Delete(u_short kind, u_short id) {
     return 1;
 }
 
-void func_0012F4E0(void) {
+void shCharacter_0x0012f4e0(void) {
     SubCharacter* del_scp;
     int delete_on = 1;
 
     do {
-        del_scp = D_003DAD54;
+        del_scp = sh3chara.head;
 
         while (del_scp) {
             if (del_scp->kind >> 8 == 2) {
@@ -266,12 +303,12 @@ void func_0012F4E0(void) {
     func_0022E9D0();
 }
 
-SubCharacter* func_0012F570() {
-    return D_003DAD54;
+SubCharacter* shCharacter_Manage_GetCharacterList() {
+    return sh3chara.head;
 }
 
-SubCharacter* func_0012F580() {
-    return D_003DAD58;
+SubCharacter* shCharacterGetPlayer() {
+    return sh3chara.player;
 }
 
 int shCharacter_Manage_SetDataAdresss(SubCharacter* scp) {
@@ -289,7 +326,7 @@ int shCharacter_Manage_SetDataAdresss(SubCharacter* scp) {
     }
 
     if (scp_d->model_adr == NULL) {
-        func_00140D60(func_001DCAD0((short) scp->kind));
+        func_00140D60(shCharacterGetSkeltonNum((short) scp->kind));
         SCSetModel(scp_d, (u_long) pMD->sh_Model, (u_long) pMD->pAnime);
         scp_d->model_adr = (u_long) pMD->sh_Model;
         scp_d->anime_adr = (u_long) pMD->pAnime;
@@ -299,9 +336,9 @@ int shCharacter_Manage_SetDataAdresss(SubCharacter* scp) {
         scp_d->models[2] = pMD;
         scp->function(scp);
         if (scp_d->anime_adr != 0) {
-            if (scp_d->sc.unk1C0 & 0x2000) {
+            if (scp_d->sc.battle.status & 0x2000) {
                 func_001DC700(&scp_d->sc, &scp_d->sc.rot, &scp_d->sc.pos);
-                func_001DCF10(&scp_d->sc);
+                shCharacterExecAnimeOne(&scp_d->sc);
             }
         }
     } else {
@@ -327,12 +364,12 @@ static void shCharacterDelete(SubCharacter* scp) {
         return;
     }
 
-    if (scp == D_003DAD58) {
+    if (scp == sh3chara.player) {
         shCharacterSetPlayer(NULL);
     }
 
     if (scp_d->model_adr == 0) {
-        func_00140D60(func_001DCAD0((short) scp->kind));
+        func_00140D60(shCharacterGetSkeltonNum(scp->kind));
     } else {
         func_00140CD0(scp->unk80);
     }
@@ -362,8 +399,54 @@ static void shCharacterDelete(SubCharacter* scp) {
     scp->unkC0[2] = 0;
 
     AddFreeList(scp);
-    D_003DAD5C--;
+    sh3chara.total--;
 }
 
 
-INCLUDE_ASM("asm/nonmatchings/Chacter/m3_sc", func_0012FB00);
+void shCharacterInitSubCharacter(void) {
+    int i; // r5
+    SubCharacterDisp* scp_d; // r4
+
+    
+    memset(&sh3chara, 0, sizeof(shCharacterAll));
+    
+    scp_d = &sh3chara.work[0];
+    sh3chara.free = sh3chara.work;
+
+
+
+    
+    for (i = 0; i < 31; i++, scp_d++) {
+        scp_d->sc.next = (SubCharacter *)(scp_d + 1);
+    }
+    scp_d->sc.next = NULL;
+
+
+
+    
+    for (i = 0; i < 32; i++) {
+        sh3chara.work[i].sc.index = i;
+    }
+}
+
+
+INCLUDE_ASM("asm/nonmatchings/Chacter/m3_sc", SCSetModel);
+
+INCLUDE_ASM("asm/nonmatchings/Chacter/m3_sc", func_0012FC80);
+
+INCLUDE_ASM("asm/nonmatchings/Chacter/m3_sc", shBattleAroundTargetEnemy);
+
+INCLUDE_ASM("asm/nonmatchings/Chacter/m3_sc", shCharacterGetRemainingFreeSlots);
+
+INCLUDE_ASM("asm/nonmatchings/Chacter/m3_sc", shCharacterGetSubCharacter);
+
+INCLUDE_ASM("asm/nonmatchings/Chacter/m3_sc", func_0012FE20);
+
+INCLUDE_ASM("asm/nonmatchings/Chacter/m3_sc", func_0012FE30);
+
+INCLUDE_ASM("asm/nonmatchings/Chacter/m3_sc", func_001300C0);
+
+INCLUDE_ASM("asm/nonmatchings/Chacter/m3_sc", func_001300F0);
+
+INCLUDE_ASM("asm/nonmatchings/Chacter/m3_sc", func_001301B0);
+
