@@ -1,22 +1,80 @@
 #include "pss_videodec.h"
 
-INCLUDE_ASM("asm/nonmatchings/movie/pss_videodec", videoDecCreate);
+int videoDecCreate(VideoDec *vd, u_char *mpegWork, int mpegWorkSize, u_long128 *data, u_long128 *tag, int tagSize, TimeStamp *pts, int n_pts)
+{
+    sceMpegCreate(&sys_mpeg, mpegWork, mpegWorkSize);
+    sceMpegAddCallback(&sys_mpeg, sceMpegCbError, (sceMpegCallback)mpegError, NULL);
+    sceMpegAddCallback(&sys_mpeg, sceMpegCbNodata, mpegNodata, NULL);
+    sceMpegAddCallback(&sys_mpeg, sceMpegCbStopDMA, mpegStopDMA, NULL);
+    sceMpegAddCallback(&sys_mpeg, sceMpegCbRestartDMA, mpegRestartDMA, NULL);
+    sceMpegAddCallback(&sys_mpeg, sceMpegCbTimeStamp, (sceMpegCallback)mpegTS, NULL);
 
-INCLUDE_ASM("asm/nonmatchings/movie/pss_videodec", videoDecSetStream);
+    vd->state = 0;
 
-INCLUDE_ASM("asm/nonmatchings/movie/pss_videodec", videoDecBeginPut);
+    viBufCreate(&vd->vibuf, data, tag, tagSize, pts, n_pts);
+    cscVu1Init(&vd->cscvu1);
 
-INCLUDE_ASM("asm/nonmatchings/movie/pss_videodec", videoDecEndPut);
+    return 1;
+}
 
-INCLUDE_ASM("asm/nonmatchings/movie/pss_videodec", videoDecDelete);
+int videoDecSetStream(VideoDec *vd, int strType, int ch, sceMpegCallback cb, void *data)
+{
+    sceMpegAddStrCallback(&sys_mpeg, strType, ch, cb, data);
 
-INCLUDE_ASM("asm/nonmatchings/movie/pss_videodec", videoDecAbort);
+    return 1;
+}
 
-INCLUDE_ASM("asm/nonmatchings/movie/pss_videodec", videoDecGetState);
+void videoDecBeginPut(VideoDec *vd, u_char **ptr0, int *len0, u_char **ptr1, int *len1)
+{
+    viBufBeginPut(&vd->vibuf, ptr0, len0, ptr1, len1);
+}
 
-INCLUDE_ASM("asm/nonmatchings/movie/pss_videodec", videoDecSetState);
+void videoDecEndPut(VideoDec *vd, int size)
+{
+    viBufEndPut(&vd->vibuf, size);
+}
 
-INCLUDE_ASM("asm/nonmatchings/movie/pss_videodec", videoDecPutTs);
+int videoDecDelete(VideoDec *vd)
+{
+    viBufDelete(&vd->vibuf);
+
+    sceMpegDelete(&sys_mpeg);
+
+    return 1;
+}
+
+void videoDecAbort(VideoDec *vd)
+{
+    vd->state = 1;
+}
+
+u_int videoDecGetState(VideoDec *vd)
+{
+    return vd->state;
+}
+
+u_int videoDecSetState(VideoDec *vd, u_int state)
+{
+    u_int old;
+
+    old = vd->state;
+
+    vd->state = state;
+
+    return old;
+}
+
+int videoDecPutTs(VideoDec *vd, long int pts_val, long int dts_val, u_char *start, int len)
+{
+    TimeStamp ts;
+
+    ts.pts = pts_val;
+    ts.dts = dts_val;
+    ts.pos = start - (u_char *)vd->vibuf.data;
+    ts.len = len;
+
+    return viBufPutTs(&videoDec.vibuf, &ts);
+}
 
 int videoDecFlush(VideoDec *vd) {
     u_char *pd0;
@@ -123,14 +181,73 @@ int decBs0(VideoDec *vd) {
     return status;
 }
 
-INCLUDE_ASM("asm/nonmatchings/movie/pss_videodec", mpegError);
+int mpegError(sceMpeg *mp, sceMpegCbDataError *cberror, void *anyData)
+{
+    printf("%s\n", cberror->errMessage);
+    return 1;
+}
 
-INCLUDE_ASM("asm/nonmatchings/movie/pss_videodec", mpegNodata);
+int mpegNodata(sceMpeg *mp, sceMpegCbData *cbdata, void *anyData)
+{
+    SignalSemaPss();
+    switchThread();
+    WaitSemaPss();
 
-INCLUDE_ASM("asm/nonmatchings/movie/pss_videodec", mpegStopDMA);
+    viBufAddDMA(&videoDec.vibuf);
 
-INCLUDE_ASM("asm/nonmatchings/movie/pss_videodec", mpegRestartDMA);
+    return 1;
+}
 
-INCLUDE_ASM("asm/nonmatchings/movie/pss_videodec", mpegTS);
+int mpegStopDMA(sceMpeg *mp, sceMpegCbData *cbdata, void *anyData)
+{
+    viBufStopDMA(&videoDec.vibuf);
 
-INCLUDE_ASM("asm/nonmatchings/movie/pss_videodec", cpy2area);
+    return 1;
+}
+
+int mpegRestartDMA(sceMpeg *mp, sceMpegCbData *cbdata, void *anyData)
+{
+    viBufRestartDMA(&videoDec.vibuf);
+
+    return 1;
+}
+
+int mpegTS(sceMpeg *mp, sceMpegCbDataTimeStamp *cbts, void *anyData)
+{
+    TimeStamp ts;
+
+    viBufGetTs(&videoDec.vibuf, &ts);
+
+    cbts->pts = ts.pts;
+    cbts->dts = ts.dts;
+
+    return 1;
+}
+
+static int cpy2area(u_char *pd0, int d0, u_char *pd1, int d1, u_char *ps0, int s0, u_char *ps1, int s1)
+{
+    if (d0 + d1 < s0 + s1)
+    {
+        return 0;
+    }
+
+    if (s0 >= d0)
+    {
+        memcpy(pd0, ps0, d0);
+        memcpy(pd1, ps0 + d0, s0 - d0);
+        memcpy(pd1 + s0 - d0, ps1, s1);
+    }
+    else if (s1 >= d0 - s0)
+    {
+        memcpy(pd0, ps0, s0);
+        memcpy(pd0 + s0, ps1, d0 - s0);
+        memcpy(pd1, ps1 + d0 - s0, s1 - (d0 - s0));
+    }
+    else
+    {
+        memcpy(pd0, ps0, s0);
+        memcpy(pd0 + s0, ps1, s1);
+    }
+
+    return s0 + s1;
+}
