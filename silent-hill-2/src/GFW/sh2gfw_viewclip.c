@@ -5,6 +5,7 @@
 #include "Event/stg_name.h"
 #include "GFW/sh2gfw_blockman.h"
 #include "GFW/sh2gfw_viewclip.h"
+#include "vec.h"
 
 static void sh2gfw_ClipDraw_BG(sh2gfw_BLOCK_MAN* pB_man, sceVu0FMATRIX bbox, sceVu0FMATRIX view_triangle,  Q_WORDDATA** qwd_data);
 static void sh2gfw_get_blockORIGIN(sceVu0FMATRIX bbox, float* origin);
@@ -294,7 +295,7 @@ void sh2gfw_set_objclip_matrix(void) {
     sh2gde_Get_EyeDir(tmp); tmp[1] = 0.0f;
     vec_normalize(tmp, wvm[2]);
     vec_cross_product(wvm[2], y_dirvec, wvm[0]);
-    vec_copy(y_dirvec, wvm[1]);
+    vec_copy_reverse(y_dirvec, wvm[1]); // fixed?
     vwGetViewPosition(tmp);
     
     tmp[1] = -1125.0;
