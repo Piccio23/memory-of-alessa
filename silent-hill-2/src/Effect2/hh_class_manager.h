@@ -1,7 +1,7 @@
 #ifndef HH_CLASS_MANAGER_H
 #define HH_CLASS_MANAGER_H
 
-#include "common.h"
+#include "sh2_common.h"
 
 #define CLASS_DESCRIPTOR_MAX 0x30
 
