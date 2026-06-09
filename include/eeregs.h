@@ -24,6 +24,13 @@
 #define D0_ASR0  		  ((volatile u_int *)(0x10008040))
 #define D0_ASR1  		  ((volatile u_int *)(0x10008050))
 
+#define D1_CHCR         ((volatile u_int *)(0x10009000))
+#define D1_MADR         ((volatile u_int *)(0x10009010))
+#define D1_QWC          ((volatile u_int *)(0x10009020))
+#define D1_TADR         ((volatile u_int *)(0x10009030))
+#define D1_ASR0         ((volatile u_int *)(0x10009040))
+#define D1_ASR1         ((volatile u_int *)(0x10009050))
+
 #define D_ENABLER         ((volatile u_int *)(0x1000f520))
 #define D_ENABLEW         ((volatile u_int *)(0x1000f590))
 #define D3_CHCR           ((volatile u_int *)(0x1000b000))
