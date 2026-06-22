@@ -1,3 +1,18 @@
+'''
+alessatool/annotate
+
+mark up assembly with line numbers.
+can also be used to create full-tu scratches in decomp.me.
+
+example:
+
+alessatool annotate \
+    --asm-path silent-hill-2/config/SLUS_202.28/asm/Effect2/hh_class_water_03.s \
+    --tu
+
+run `alessatool annotate --help` for more information.
+'''
+
 from sys import stdout
 from pathlib import Path
 from subprocess import run

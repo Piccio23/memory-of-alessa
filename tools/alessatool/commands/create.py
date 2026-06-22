@@ -1,3 +1,25 @@
+'''
+alessatool/create
+
+generate initial yamls, symbol_addrs, and checksum files. can be used to
+kickstart a decomp project.
+
+this was used to create project files for sh2, and an earlier, messier 
+version was used for sh3 as well.
+
+example invocation for sh2:
+
+alessatool create \
+    --input-path rom/SLUS_202.28/overlay \
+    --output-path silent-hill-2/config/SLUS_202.28/overlay \
+    --executable-path rom/SLUS_202.28/SLUS_202.28.rom \
+    --template-yaml-path silent-hill-2/include/template.yaml \
+    --filename-mapping-path silent-hill-2/include/stages_by_overlay.json \
+    --template-symbol-addrs-path silent-hill-2/config/SLUS_202.28/stage_symbol_addrs.txt
+
+run `alessatool create --help` for more information.
+'''
+
 
 from re import sub
 from json import load
@@ -9,18 +31,6 @@ from collections.abc import Callable
 from utils import ensure_path_and_write, hex_format
 from mw_overlay_header import MwOverlayHeader
 from mw_overlay import parse_overlay_header, pretty_print_overlay_header
-
-'''
-example invocation for sh2:
-
-alessatool create \
-    --input-path rom/SLUS_202.28/overlay \
-    --output-path silent-hill-2/config/SLUS_202.28/overlay \
-    --executable-path rom/SLUS_202.28/SLUS_202.28.rom \
-    --template-yaml-path silent-hill-2/include/template.yaml \
-    --filename-mapping-path silent-hill-2/include/stages_by_overlay.json \
-    --template-symbol-addrs-path silent-hill-2/config/SLUS_202.28/stage_symbol_addrs.txt
-'''
 
 @dataclass
 class CreationArgs:

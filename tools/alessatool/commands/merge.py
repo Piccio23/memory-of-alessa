@@ -1,3 +1,12 @@
+'''
+alessatool/merge:
+
+merge objdiff units. this is helper script that takes a list of objdiff.json
+files from `alessatool generate` and combines them into one.
+
+see `alessatool merge --help` for more information.
+'''
+
 from pathlib import Path
 from dataclasses import dataclass
 from json import load, dumps

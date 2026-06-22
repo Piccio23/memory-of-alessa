@@ -1,3 +1,17 @@
+'''
+alessatool/generate:
+
+split yamls, generate mwld linker script and dependencies (.d files), and
+objdiff.json.
+
+it makes use of the `splat` library (in particular, `split.linker_writer`) to
+handle all of this, so we get it for free as a result of disassembling. (this
+can also be seen as a cost, but in most cases we already need to run splat.)
+
+see `Makefile` for example usage, or run `alessatool generate --help` for more
+information.
+'''
+
 import os
 import json
 from pathlib import Path
@@ -6,7 +20,7 @@ from utils import ensure_path_and_write, normalize_object_path, to_expected_path
 
 import splat.scripts.split as split
 import splat.util.options as splat_options
-from splat.segtypes.linker_entry import LinkerEntry, write_file_if_different, clean_up_path
+from splat.segtypes.linker_entry import LinkerEntry, clean_up_path
 from spimdisasm.common.CompilerConfig import compilerOptions
 
 SECTION_ALIGNMENT_PAIRS: list[tuple[str, int]] = [

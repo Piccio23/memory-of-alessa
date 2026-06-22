@@ -1,3 +1,15 @@
+'''
+extract files from a sh3 mfa archive.
+
+example:
+
+alessatool extract \
+    --archive-path /Volumes/DENGEKIPS2_D60/DIR65257/B0.MFA \
+    --output-dir overlay
+
+run `alessatool extract --help` for more information.
+'''
+
 from mfa import Mfa
 from utils import get_file_size
 from mw_overlay import parse_overlay_header, pretty_print_overlay_header

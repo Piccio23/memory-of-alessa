@@ -1,3 +1,21 @@
+'''
+alessatool/patch:
+
+patch out off-by-one issues using `reloc_addrs`. see the `patch_relocations` doc
+comment for more information.
+
+this script is no longer needed as the decompals binutils flavor now has an
+option called `-mno-branch-relocs` which addresses the problem at its source,
+but it is left in for historical purposes.
+
+example:
+
+alessatool patch \
+    --base-elf-path rom/SLUS_206.22/SLUS_206.22 \
+    --target-elf-path build/SLUS_206.22/SLUS_206.22 \
+    --reloc-addrs-path silent-hill-3/config/SLUS_206.22/reloc_addrs.txt
+'''
+
 from pathlib import Path
 from dataclasses import dataclass
 

@@ -1,12 +1,12 @@
 import argparse
 from pathlib import Path
 from constants import *
-from generate import GenerationArgs, split_yaml
-from extract import ExtractionArgs, extract_mfa
-from annotate import AnnotationArgs, annotate_asm
-from patch import PatchArgs, patch_relocations
-from merge import MergeArgs, merge_objdiff_units
-from create import CreationArgs, create_overlay_yamls
+from commands.generate import GenerationArgs, split_yaml
+from commands.extract import ExtractionArgs, extract_mfa
+from commands.annotate import AnnotationArgs, annotate_asm
+from commands.patch import PatchArgs, patch_relocations
+from commands.merge import MergeArgs, merge_objdiff_units
+from commands.create import CreationArgs, create_overlay_yamls
 
 def extract(args: ExtractionArgs):
     extract_mfa(args)
