@@ -53,7 +53,12 @@ make
 
 #### windows
 
-Untested, but WSL or similar is required.
+[WSL](https://learn.microsoft.com/en-us/windows/wsl/install) or similar is
+required. It has been tested by several of our contributors.
+
+If you encounter problems feel free to [leave an
+issue](https://github.com/dreamingmoths/memory-of-alessa/issues), or submit a
+pull request to improve these instructions.
 
 ### more on development
 
