@@ -22,6 +22,6 @@ segments:
     start: 0x0
     subsegments:
       - [0x0, databin, aot_overlay_header]
-      - [0x80, asm, Event/stage/stg_apart_out]
+      - [0x80, c, Event/stage/stg_apart_out]
       - [0xA00, data, Event/stage/stg_apart_out_data]
   - [0xF80]

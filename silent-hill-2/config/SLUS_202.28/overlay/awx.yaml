@@ -23,7 +23,8 @@ segments:
     bss_size: 0x80
     subsegments:
       - [0x0, databin, awx_overlay_header]
-      - [0x80, asm, Event/stage/stg_apart_w1f]
+      - [0x80, c, Event/stage/stg_apart_w1f]
       - [0x1E00, data, Event/stage/stg_apart_w1f_data]
+      - [0x2B80, .rodata, Event/stage/stg_apart_w1f]
       - { vram: 0x1F04A00, type: bss, name: Event/stage/stg_apart_w1f_bss }
   - [0x2C00]

@@ -22,6 +22,6 @@ segments:
     start: 0x0
     subsegments:
       - [0x0, databin, awy_overlay_header]
-      - [0x80, asm, Event/stage/stg_apart_w2f]
+      - [0x80, c, Event/stage/stg_apart_w2f]
       - [0x1980, data, Event/stage/stg_apart_w2f_data]
   - [0x2100]

@@ -23,7 +23,7 @@ segments:
     bss_size: 0x80
     subsegments:
       - [0x0, databin, fst_overlay_header]
-      - [0x80, asm, Event/stage/stg_forest]
+      - [0x80, c, Event/stage/stg_forest]
       - [0x1580, data, Event/stage/stg_forest_data]
       - { vram: 0x1F03E00, type: bss, name: Event/stage/stg_forest_bss }
   - [0x2000]

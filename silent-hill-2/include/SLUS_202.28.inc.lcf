@@ -90,7 +90,7 @@ SECTIONS
 
 		. = ALIGN(0x80);
 		aot_overlay_header.s.o (.data)
-		stg_apart_out.s.o (.text)
+		stg_apart_out.c.o (.text)
 
 		. = ALIGN(0x80);
 		ALIGNALL(0x4);
@@ -105,7 +105,7 @@ SECTIONS
 
 		. = ALIGN(0x80);
 		toi_overlay_header.s.o (.data)
-		stg_toilet.s.o (.text)
+		stg_toilet.c.o (.text)
 
 		. = ALIGN(0x80);
 		ALIGNALL(0x4);
@@ -140,7 +140,7 @@ SECTIONS
 
 		. = ALIGN(0x80);
 		aew_overlay_header.s.o (.data)
-		stg_apart_e3fw.s.o (.text)
+		stg_apart_e3fw.c.o (.text)
 
 		. = ALIGN(0x80);
 		ALIGNALL(0x4);
@@ -155,7 +155,7 @@ SECTIONS
 
 		. = ALIGN(0x80);
 		aee_overlay_header.s.o (.data)
-		stg_apart_e3fe.s.o (.text)
+		stg_apart_e3fe.c.o (.text)
 
 		. = ALIGN(0x80);
 		ALIGNALL(0x4);
@@ -175,7 +175,7 @@ SECTIONS
 
 		. = ALIGN(0x80);
 		ast_overlay_header.s.o (.data)
-		stg_apart_stair.s.o (.text)
+		stg_apart_stair.c.o (.text)
 
 		. = ALIGN(0x80);
 		ALIGNALL(0x4);
@@ -195,7 +195,7 @@ SECTIONS
 
 		. = ALIGN(0x80);
 		aey_overlay_header.s.o (.data)
-		stg_apart_e2f.s.o (.text)
+		stg_apart_e2f.c.o (.text)
 
 		. = ALIGN(0x80);
 		ALIGNALL(0x4);
@@ -215,7 +215,7 @@ SECTIONS
 
 		. = ALIGN(0x80);
 		aex_overlay_header.s.o (.data)
-		stg_apart_e1f.s.o (.text)
+		stg_apart_e1f.c.o (.text)
 
 		. = ALIGN(0x80);
 		ALIGNALL(0x4);
@@ -235,7 +235,7 @@ SECTIONS
 
 		. = ALIGN(0x80);
 		awy_overlay_header.s.o (.data)
-		stg_apart_w2f.s.o (.text)
+		stg_apart_w2f.c.o (.text)
 
 		. = ALIGN(0x80);
 		ALIGNALL(0x4);
@@ -250,12 +250,14 @@ SECTIONS
 
 		. = ALIGN(0x80);
 		awx_overlay_header.s.o (.data)
-		stg_apart_w1f.s.o (.text)
+		stg_apart_w1f.c.o (.text)
 
 		. = ALIGN(0x80);
 		ALIGNALL(0x4);
 
 		stg_apart_w1f_data.data.s.o (.data)
+		ALIGNALL(0x8);
+		stg_apart_w1f.c.o (.rodata)
 
 		. = ALIGN(0x80);
 		ALIGNALL(0x8);
@@ -270,7 +272,7 @@ SECTIONS
 
 		. = ALIGN(0x80);
 		fst_overlay_header.s.o (.data)
-		stg_forest.s.o (.text)
+		stg_forest.c.o (.text)
 
 		. = ALIGN(0x80);
 		ALIGNALL(0x4);
@@ -290,7 +292,7 @@ SECTIONS
 
 		. = ALIGN(0x80);
 		twe_overlay_header.s.o (.data)
-		stg_town_east.s.o (.text)
+		stg_town_east.c.o (.text)
 
 		. = ALIGN(0x80);
 		ALIGNALL(0x4);
@@ -310,7 +312,7 @@ SECTIONS
 
 		. = ALIGN(0x80);
 		obs_overlay_header.s.o (.data)
-		stg_ovservation.s.o (.text)
+		stg_ovservation.c.o (.text)
 
 		. = ALIGN(0x80);
 		ALIGNALL(0x4);
