@@ -52,9 +52,10 @@ full of interesting secrets.
 If you own a copy of this prototype disc, you may do the following:
 
 1. Place `SLUS_202.28` in the `rom/SLUS_202.28` folder.
-2. Copy the contents of the `gx` folder into `rom/overlay`. Note that all `.bin`
-   files must be lowercase (e.g. `fst.bin`).
-3. Finally, run the command below.
+2. Copy the contents of the `gx` folder into `rom/overlay`.
+3. Make sure all `.bin` files are lowercase. To do this automatically, run `make
+   PROJECT=silent-hill-2 overlays-lowercase`.
+4. Finally, run the command below.
 
 ```sh
 make sh2
