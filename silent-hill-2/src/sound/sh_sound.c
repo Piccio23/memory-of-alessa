@@ -4,6 +4,15 @@
 #include "SH2_common/sh_vu0.h"
 #include "SH2_common/playing_info.h"
 #include "debug.h"
+#include "SH2_common/sh2sys.h"
+#include "Chacter/character.h"
+#include "Event/event.h"
+#include "Chacter/sh2_character_manage.h"
+#include "Chacter/sh_character_battle.h"
+#include "FilesList/fileslist_bg.h"
+#include "SH2_common/sh2dt.h"
+#include "Multi_thr/filesys/fcread.h"
+#include "Chacter/chara_list.h"
 
 #pragma fast_fptosi on
 
@@ -172,9 +181,261 @@ INCLUDE_RODATA("asm/nonmatchings/sound/sh_sound", @1052_0x003901F0);
 
 INCLUDE_RODATA("asm/nonmatchings/sound/sh_sound", @1053_0x00390210);
 
-INCLUDE_ASM("asm/nonmatchings/sound/sh_sound", SeSoundEffectLoad);
+void SeSoundEffectLoad(int data) {
+    int room;
 
-INCLUDE_ASM("asm/nonmatchings/sound/sh_sound", SeSoundEffect3dLoad);
+    if (!dbFlag(1)) {
+        room = RoomNameJms();
+        if (data == 0) {
+            switch (playing.stage) { // Is this StgName?
+                case 0x0:
+                    data = 5023;
+                    break;
+                case 0x5:
+                    if (GET_GAME_FLAG(GAME_FLAG_251)) {
+                        data = 5025;
+                    } else {
+                        data = 5024;
+                    }
+                    break;
+                case 0xE:
+                    if (GET_GAME_FLAG(GAME_FLAG_251)) {
+                        data = 5027;
+                    } else {
+                        data = 5026;
+                    }
+                    break;
+                case 0x4:
+                    data = 5007;
+                    break;
+                case 0x6:
+                case 0x7:
+                case 0x8:
+                case 0x9:
+                case 0xD:
+                    data = 5000;
+                    break;
+                case 0xA:
+                case 0xB:
+                    data = 5002;
+                    break;
+                case 0xC:
+                    data = 5001;
+                    break;
+                case 0x12:
+                case 0x13:
+                case 0x14:
+                case 0x15:
+                    data = 5009;
+                    break;
+                case 0x17:
+                case 0x18:
+                case 0x19:
+                case 0x1A:
+                case 0x1B:
+                    data = 5008;
+                    break;
+                case 0x16:
+                    if (room == 0x30) {
+                        data = 5015;
+                    } else {
+                        data = 5008;
+                    }
+                    break;
+                case 0x1D:
+                case 0x1E:
+                    data = 5004;
+                    break;
+                case 0x1F:
+                    data = 5020;
+                    break;
+                case 0x20:
+                    data = 5021;
+                    break;
+                case 0x22:
+                    data = 5018;
+                    break;
+                case 0x23:
+                case 0x24:
+                    data = 5016;
+                    break;
+                case 0x25:
+                    data = 5005;
+                    break;
+                case 0x26:
+                    data = 5019;
+                    break;
+                case 0x27:
+                case 0x2B:
+                case 0x2F:
+                    data = 5014;
+                    break;
+                case 0x28:
+                    data = 5011;
+                    break;
+                case 0x2C:
+                    data = 5010;
+                    break;
+                case 0x29:
+                case 0x2D:
+                    data = 5012;
+                    break;
+                case 0x2A:
+                case 0x2E:
+                    data = 5013;
+                    break;
+                case 0x30:
+                case 0x31:
+                case 0x32:
+                case 0x33:
+                    data = 5006;
+                    break;
+            }
+        }
+        if ((data) && (data != se_load_data)) {
+            se_load_data = data;
+            shSdCall(0x3F2, 0, 0, 0);
+            shSdCall(data, 0, 0, 0);
+        }
+    }
+}
+
+extern fsFileIndex* se_file_list_1329[35]; // @todo: Move this inside as a local variable https://github.com/dreamingmoths/memory-of-alessa/pull/212#discussion_r3482739416
+void SeSoundEffect3dLoad(int data) {
+    int room;
+    int i;
+
+    if (dbFlag(1U) == 0) {
+        room = RoomNameJms();
+        if (data == 0) {
+            switch (playing.stage) {
+                case 0x5:
+                    if (GET_GAME_FLAG(GAME_FLAG_251)) {
+                        data = 2;
+                    } else {
+                        data = 1;
+                    }
+                    break;
+                case 0xE:
+                    if (GET_GAME_FLAG(GAME_FLAG_251)) {
+                        data = 4;
+                    } else {
+                        data = 3;
+                    }
+                    break;
+                case 0x6:
+                    data = 5;
+                    break;
+                case 0x7:
+                    data = 6;
+                    break;
+                case 0x9:
+                    data = 7;
+                    break;
+                case 0x8:
+                    data = 7;
+                    break;
+                case 0xA:
+                    data = 8;
+                    break;
+                case 0xB:
+                    data = 9;
+                    break;
+                case 0xC:
+                    data = 10;
+                    break;
+                case 0x12:
+                    data = 11;
+                    break;
+                case 0x13:
+                    data = 12;
+                    break;
+                case 0x14:
+                    data = 13;
+                    break;
+                case 0x15:
+                    data = 14;
+                    break;
+                case 0x16:
+                    if (room == 0x30) {
+                        data = 15;
+                    } else {
+                        data = 16;
+                    }
+                    break;
+                case 0x17:
+                    data = 16;
+                    break;
+                case 0x18:
+                    data = 17;
+                    break;
+                case 0x19:
+                    data = 18;
+                    break;
+                case 0x1A:
+                    data = 19;
+                    break;
+                case 0x1B:
+                    data = 20;
+                    break;
+                case 0x1D:
+                    data = 21;
+                    break;
+                case 0x1E:
+                    data = 22;
+                    break;
+                case 0x1F:
+                case 0x20:
+                    data = 23;
+                    break;
+                case 0x22:
+                    data = 26;
+                    break;
+                case 0x23:
+                    data = 26;
+                    break;
+                case 0x24:
+                    data = 26;
+                    break;
+                case 0x25:
+                    data = 27;
+                    break;
+                case 0x27:
+                    data = 28;
+                    break;
+                case 0x28:
+                    data = 29;
+                    break;
+                case 0x29:
+                    data = 30;
+                    break;
+                case 0x2B:
+                    data = 31;
+                    break;
+                case 0x2C:
+                    data = 32;
+                    break;
+                case 0x2D:
+                    data = 33;
+                    break;
+                case 0x30:
+                case 0x31:
+                case 0x32:
+                case 0x33:
+                    data = 34;
+                    break;
+            }
+        }
+        if (data && (data != se_3d_load_data)) {
+            se_3d_load_data = data;
+            shSd3dAllStop();
+            for (i = 0; i < 8; i++) {
+                se_3d_channel_data[i].sd = 0;
+            }
+            FcRead(se_file_list_1329[data], shSd3dAdrs());
+        }
+    }
+}
 
 void SeSoundManager(void) {
     Se2dManager();
@@ -182,7 +443,55 @@ void SeSoundManager(void) {
     SeBgmManager();
 }
 
-INCLUDE_ASM("asm/nonmatchings/sound/sh_sound", Se2dManager);
+void Se2dManager(void) {
+    int room;
+    int i;
+    float volume;
+
+    if (sh2jms.player != NULL) {
+        room = RoomNameJms();
+    } else {
+        room = 0;
+    }
+    for (i = 0; i < 4; i++) {
+        if (se_2d_manage_data[i].sd != 0) {
+            if ((room != 0) && (room != se_2d_manage_data[i].room)) {
+                SeStop(se_2d_manage_data[i].sd);
+            } else {
+                switch (Sh2sys.step[2]) {
+                    case 5:
+                    case 6:
+                    case 7:
+                    case 8:
+                    case 9:
+                        volume = 0.5f;
+                        break;
+                    case 0xE:
+                    default: {
+                        int demo = DramaDemoNumber();
+                        if ((demo != 2) && (demo != 0xE) && (demo != 1) && (demo != 0)) {
+                            volume = 0.7f;
+                        } else {
+                            volume = 1.0f;
+                        }
+                        break;
+                    }
+                }
+                if (!(se_2d_manage_data[i].base <= volume)) {
+                    se_2d_manage_data[i].base = float_max(se_2d_manage_data[i].base - shGetDT(), volume);
+                } else if (se_2d_manage_data[i].base < volume) {
+                    se_2d_manage_data[i].base = float_min(se_2d_manage_data[i].base + shGetDT(), volume);
+                }
+                if (se_2d_manage_data[i].pos_on != 0) {
+                    SeCallPosChange(se_2d_manage_data[i].sd, se_2d_manage_data[i].vol * se_2d_manage_data[i].base, se_2d_manage_data[i].pos, se_2d_manage_data[i].status);
+                } else {
+                    SeCallPosChange(se_2d_manage_data[i].sd, se_2d_manage_data[i].vol * se_2d_manage_data[i].base, 0, se_2d_manage_data[i].status);
+                }
+                se_2d_manage_data[i].timer += shGetDT();
+            }
+        }
+    }
+}
 
 void Se2dManageDataVolumeChange(int sd /* r2 */, float vol /* r29+0x10 */) {
     int i; // r6
@@ -287,7 +596,201 @@ void SeStop(int sd_no /* r18 */) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/sound/sh_sound", SeBgmChange);
+extern fsFileIndex* sdb_list[53];
+extern u_char snd_data_buffer[20480];
+void SeBgmChange(void) {
+    int next;
+    int room;
+
+    if (dbFlag(1) == 0) {
+        if (Sh2sys.step[0] == 2) {
+            shQzero(&snd_data_buffer, 0x5000);
+            FcRead(sdb_list[0], &snd_data_buffer);
+            fsSync(0, -1);
+            bgm.sdb_no = 0;
+        } else {
+            next = playing.stage;
+            if (bgm.sdb_no != next) {
+                shQzero(&snd_data_buffer, 0x5000);
+                FcRead(sdb_list[next], &snd_data_buffer);
+                bgm.sdb_no = next;
+            }
+        }
+        room = RoomNameJms();
+        switch (playing.stage) {
+            case 0x2:
+            case 0x3:
+            case 0x4:
+                if (GET_GAME_FLAG(GAME_FLAG_39)) {
+                    SeBgmCall(0);
+                    return;
+                }
+                if (GET_GAME_FLAG(GAME_FLAG_36)) {
+                    SeBgmCall(3);
+                    return;
+                }
+                SeBgmCall(1);
+                return;
+            case 0x5:
+                SeBgmCall(3);
+                return;
+            case 0x6:
+                if (!GET_GAME_FLAG(GAME_FLAG_85) && (room == 0x1E)) {
+                    SeBgmCall(7);
+                    return;
+                }
+                if (GET_GAME_FLAG(GAME_FLAG_91)) {
+                    SeBgmCall(9);
+                    return;
+                }
+                SeBgmCall(4);
+                return;
+            case 0x7:
+            case 0x8:
+                if (GET_GAME_FLAG(GAME_FLAG_91)) {
+                    SeBgmCall(9);
+                    return;
+                }
+                SeBgmCall(5);
+                return;
+            case 0x9:
+                if (GET_GAME_FLAG(GAME_FLAG_91)) {
+                    SeBgmCall(9);
+                    return;
+                }
+                SeBgmCall(6);
+                return;
+            case 0xA:
+                if (!GET_GAME_FLAG(GAME_FLAG_109) && (room == 0x24)) {
+                    SeBgmCall(8);
+                    return;
+                }
+                SeBgmCall(0xA);
+                return;
+            case 0xB:
+                SeBgmCall(0xA);
+                return;
+            case 0xC:
+                SeBgmCall(0xC);
+                return;
+            case 0xE:
+                if (GET_GAME_FLAG(GAME_FLAG_162)) {
+                    SeBgmCall(0xE);
+                    return;
+                }
+                SeBgmCall(0xB);
+                return;
+            case 0xF:
+            case 0x10:
+                SeBgmCall(0xE);
+                return;
+            case 0x11:
+                SeBgmCall(0xF);
+                return;
+            case 0x12:
+                SeBgmCall(0x10);
+                return;
+            case 0x13:
+            case 0x15:
+                SeBgmCall(0x10);
+                return;
+            case 0x14:
+                SeBgmCall(0x11);
+                return;
+            case 0x16:
+                if (room == 0x34) {
+                    SeBgmCall(0x12);
+                    return;
+                }
+                if (room == 0x30) {
+                    SeBgmCall(0x13);
+                    return;
+                }
+                SeBgmCall(0x14);
+                return;
+            case 0x17:
+                SeBgmCall(0x17);
+                return;
+            case 0x18:
+                SeBgmCall(0x14);
+                return;
+            case 0x19:
+                SeBgmCall(0x15);
+                return;
+            case 0x1B:
+                SeBgmCall(0x16);
+                return;
+            case 0x1D:
+            case 0x1E:
+                SeBgmCall(0x18);
+                return;
+            case 0x1F:
+            case 0x20:
+                SeBgmCall(0x19);
+                return;
+            case 0x21:
+                SeBgmCall(0x1A);
+                return;
+            case 0x22:
+            case 0x23:
+                SeBgmCall(0x1B);
+                return;
+            case 0x24:
+                if (GET_GAME_FLAG(GAME_FLAG_368) || (room == 0x89)) {
+                    SeBgmCall(0x1E);
+                    return;
+                }
+                SeBgmCall(0x1B);
+                return;
+            case 0x25:
+                SeBgmCall(0x1F);
+                return;
+            case 0x26:
+                SeBgmCall(0x20);
+                return;
+            case 0x27:
+                SeBgmCall(0x23);
+                return;
+            case 0x28:
+                if (!GET_GAME_FLAG(GAME_FLAG_472)) {
+                    SeBgmCall(0x23);
+                    return;
+                }
+                SeBgmCall(0x22);
+                return;
+            case 0x29:
+            case 0x2A:
+                SeBgmCall(0x24);
+                return;
+            case 0x2B:
+                SeBgmCall(0x26);
+                /* fallthrough */
+            case 0x2C:
+                if (room == 0xAC) {
+                    SeBgmCall(0x27);
+                    return;
+                }
+                SeBgmCall(0x26);
+                return;
+            case 0x2D:
+            case 0x2E:
+                SeBgmCall(0x28);
+                return;
+            case 0x2F:
+                SeBgmCall(0x29);
+                return;
+            case 0x30:
+            case 0x31:
+            case 0x32:
+            case 0x33:
+                SeBgmCall(0x28);
+                return;
+            default:
+                SeBgmCall(0);
+                break;
+        }
+    }
+}
 
 void SeBgmCall(int bgm_no /* r2 */) {
     int i; // r5
@@ -315,7 +818,49 @@ void SeBgmCall(int bgm_no /* r2 */) {
 
 INCLUDE_ASM("asm/nonmatchings/sound/sh_sound", SeBgmManager);
 
-INCLUDE_ASM("asm/nonmatchings/sound/sh_sound", BgmPageSet);
+int BgmPageSet(void) {
+    int ret;
+    SubCharacter* scp;
+    float temp_f0;
+    float temp_f2;
+
+    if ((Sh2sys.step[2] >= 4) && (stage != NULL) && (stage->bgm_control != NULL)) {
+        ret = stage->bgm_control();
+    } else {
+        ret = 0;
+    }
+    if (ret >= 6) {
+        return ret;
+    }
+    if (ret > 3) {
+        return ret;
+    }
+
+    scp = shCharacter_Manage_GetCharacterList();
+    while (scp != NULL) {
+        if (IS_SCP_ENEMY(scp) &&
+            ((scp->battle.status >> 0xA) & 1) &&
+            !((scp->battle.status >> 1) & 1)) {
+            temp_f2 = scp->pos.x - sh2jms.player->pos.x;
+            temp_f2 = temp_f2 * temp_f2; // Do we have square macros?
+            temp_f0 = scp->pos.z - sh2jms.player->pos.z;
+            temp_f0 = temp_f0 * temp_f0;
+            if (temp_f2 + temp_f0 < 3.6e7f) {
+                break;
+            }
+        }
+        scp = scp->next;
+    }
+    if (scp != NULL) {
+        return 3;
+    }
+
+    if ((sh2jms.player != NULL) && (shBattleGetJamesHP_Rate() < 0.2f)) {
+        return 2;
+    }
+
+    return ret;
+}
 
 void SeMasterVolumeChange(void) {
     if (!dbFlag(1)) {
