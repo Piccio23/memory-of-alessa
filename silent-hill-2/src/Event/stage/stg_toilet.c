@@ -105,4 +105,4 @@ int stg_toilet_Kari_hisyakai(int KeyAlpha) {
     return Yst + (((Yen - Yst) * (Parm - Xst)) / (Xen - Xst));
 }
 
-INCLUDE_ASM("asm/nonmatchings/Event/stage/stg_toilet", stg_toilet_Toilet_Dof_Filter); // https://decomp.me/scratch/dHOre (float memes)
+INCLUDE_ASM("asm/nonmatchings/Event/stage/stg_toilet", stg_toilet_Toilet_Dof_Filter); // https://decomp.me/scratch/dHOre
