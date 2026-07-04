@@ -165,6 +165,187 @@ static inline void get_inverse_rotation_matrix(sceVu0FMATRIX m0, sceVu0FMATRIX m
     sceVu0TransposeMatrix(m0, mat);
 }
 
+static void* shExec(void* anime /* r2 */, shSkelton* stp /* r21 */, int inter_type /* r20 */, int* ret /* r19 */) {
+    u_int flag;
+    int bits;
+    short* sp;
+    int type;
+    Vector4 rot;
+    Vector4 axis;
+    shSkelton dummy_st;
+
+    if (anime == NULL)
+        return NULL;
+
+    sp = anime;
+    flag = read_int_align2(sp);
+    sp += 2;
+    bits = 8;
+
+    for (; stp != NULL; stp = stp->next) {
+        if (bits-- == 0) {
+            flag = read_int_align2(sp);
+            sp += 2;
+            bits = 7;
+        }
+        type = flag & 0xF;
+        flag = flag >> 4;
+
+        stp->is_key = type & 8;
+        type &= ~8;
+
+        if (type == ANIMATION_TYPE_NONE) {
+            stp->change = 0;
+        } else {
+
+            *ret = stp->change = 1;
+
+            if (stp->untouchable != NULL) {
+                dummy_st.next = stp->next;
+                dummy_st.parent = stp->parent;
+
+                stp = &dummy_st;
+            }
+
+            switch (type) {
+                case ANIMATION_TYPE_ISOMETRY:
+                    if (inter_type == ANIMATION_INTERPOLATION_0) {
+                        if (stp->parent != NULL) {
+                            stp->src_t.x = GetSF(sp);
+                            stp->src_t.y = GetSF(sp + 1);
+                            stp->src_t.z = GetSF(sp + 2);
+                            stp->src_t.w = 0.0f;
+                            sp += 3;
+                        } else {
+                            stp->src_t.x = read_float_align2(sp);
+                            stp->src_t.y = read_float_align2(sp + 2);
+                            stp->src_t.z = read_float_align2(sp + 4);
+                            stp->src_t.w = 0.0f;
+                            sp += 6;
+                        }
+                    } else {
+                        if (stp->parent != NULL) {
+                            stp->des_t.x = GetSF(sp);
+                            stp->des_t.y = GetSF(sp + 1);
+                            stp->des_t.z = GetSF(sp + 2);
+                            stp->des_t.w = 0.0f;
+                            sp += 3;
+                        } else {
+                            stp->des_t.x = read_float_align2(sp);
+                            stp->des_t.y = read_float_align2(sp + 2);
+                            stp->des_t.z = read_float_align2(sp + 4);
+                            stp->des_t.w = 0.0f;
+                            sp += 6;
+                        }
+                    }
+                    /* fallthrough */
+                case ANIMATION_TYPE_ROTATION:
+                    rot.x = reinterpret_short_as_float(sp);
+                    rot.y = reinterpret_short_as_float(sp + 1);
+                    rot.z = reinterpret_short_as_float(sp + 2);
+                    sp += 3;
+
+                    from_q12(&rot);
+
+                    if (inter_type == ANIMATION_INTERPOLATION_0) {
+                        get_inverse_rotation_matrix(stp->src_m.d, kt_unit_matrix.d, &rot);
+                    } else {
+                        get_inverse_rotation_matrix(stp->des_m.d, kt_unit_matrix.d, &rot);
+                    }
+                    break;
+
+                case ANIMATION_TYPE_INTERPOLATED_ISOMETRY:
+                    if (stp->parent != NULL) {
+                        stp->src_t.x = GetSF(sp);
+                        stp->src_t.y = GetSF(sp + 1);
+                        stp->src_t.z = GetSF(sp + 2);
+                        sp += 3;
+                    } else {
+                        stp->src_t.x = read_float_align2(sp);
+                        stp->src_t.y = read_float_align2(sp + 2);
+                        stp->src_t.z = read_float_align2(sp + 4);
+                        sp += 6;
+                    }
+                    goto label_set_destination_translation;
+
+                case ANIMATION_TYPE_ISOMETRY_ABOUT_AXIS:
+                    stp->src_t = stp->des_t;
+
+                label_set_destination_translation:
+
+                    if (stp->parent != NULL) {
+                        stp->des_t.x = GetSF(sp);
+                        stp->des_t.y = GetSF(sp + 1);
+                        stp->des_t.z = GetSF(sp + 2);
+                        stp->des_t.w = 0.0f;
+                        sp += 3;
+                    } else {
+                        stp->des_t.x = GetSF(sp);
+                        stp->des_t.y = GetSF(sp + 2);
+                        stp->des_t.z = GetSF(sp + 4);
+                        stp->des_t.w = 0.0f;
+                        sp += 6;
+                    }
+
+                label_rotate_about_axis:
+                    rot.x = reinterpret_short_as_float(sp);
+                    rot.y = reinterpret_short_as_float(sp + 1);
+                    rot.z = reinterpret_short_as_float(sp + 2);
+                    sp = sp + 3;
+
+                    from_q12(&rot);
+
+                    if (inter_type == ANIMATION_INTERPOLATION_0) {
+                        get_inverse_rotation_matrix(stp->src_m.d, kt_unit_matrix.d, &rot);
+                    } else {
+                        get_inverse_rotation_matrix(stp->des_m.d, kt_unit_matrix.d, &rot);
+                    }
+                    axis.x = reinterpret_short_as_float(sp);
+                    axis.y = reinterpret_short_as_float(sp + 1);
+                    axis.z = reinterpret_short_as_float(sp + 2);
+                    sp += 3;
+
+                    from_q15(&axis);
+                    stp->axis = axis;
+
+                    rot.x = reinterpret_short_as_float(sp);
+
+                    from_q12(&rot);
+                    stp->axis.w = rot.x;
+
+                    sp += 2;
+
+                    break;
+
+                case ANIMATION_TYPE_ROTATION_ABOUT_AXIS:
+                    if (inter_type == ANIMATION_INTERPOLATION_0) {
+                        stp->src_t = stp->des_t;
+                    }
+                    goto label_rotate_about_axis;
+
+                case ANIMATION_TYPE_ISOMETRY_ABOUT_AXIS16:
+                    if (stp->parent != NULL) {
+                        stp->src_t.x = GetSF(sp);
+                        stp->src_t.y = GetSF(sp + 1);
+                        stp->src_t.z = GetSF(sp + 2);
+                        stp->src_t.w = 0.0f;
+                        sp += 3;
+                    } else {
+                        stp->src_t.x = read_float_align2(sp);
+                        stp->src_t.y = read_float_align2(sp + 2);
+                        stp->src_t.z = read_float_align2(sp + 4);
+                        stp->src_t.w = 0.0f;
+                        sp += 6;
+                    }
+                    stp->des_t = stp->src_t;
+                    goto label_rotate_about_axis;
+            }
+        }
+    }
+
+    return sp;
+}
+
 void shCharacterAnimePartsControl(shAnime3d* ap /* r16 */, shSkelton* stp, Vector4* rot /* r2 */) {
     Matrix4 test_mat; // r29+0x30
     Matrix4 sp70;     // @note not present in dwarf
