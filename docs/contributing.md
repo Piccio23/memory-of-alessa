@@ -21,9 +21,9 @@ Otherwise, see [how it works](#how-it-works).
 ## quickstart
 
 To dive right in, use the [setup guide](../README.md) and find an assembly
-function in `silent-hill-3/config/SLUS_206.22/asm`. The functions in the `Event`
-folder are often small and good for a first attempt. Here's an example of what
-we're looking for below.
+function in `silent-hill-3/config/SLUS_206.22/asm`. The functions in the
+`Event/stage` folder are often small and good for a first attempt. Here's an
+example of what we're looking for below.
 
 ```s
 glabel func_01F6D6C0_heaven_00
