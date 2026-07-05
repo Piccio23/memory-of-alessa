@@ -538,7 +538,6 @@ static void _sceVu0ApplyMatrix_1(float* dest /* r2 */, float (*mat)[4] /* r2 */,
         jr ra;\
         nop");
 }
-
 /*
 method:
 compute all three cross products of columns (c0 x c1, c0 x c1, c1 x c2)
