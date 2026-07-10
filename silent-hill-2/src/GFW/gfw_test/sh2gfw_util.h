@@ -3,6 +3,6 @@
 
 #include "sh2_common.h"
 
-void sh2gfw_util_zeroq(union Q_WORDDATA* qwd /* r2 */, int qsize /* r2 */);
+void sh2gfw_util_zeroq(Q_WORDDATA* qwd, int qsize);
 
 #endif // SH2GFW_UTIL_H

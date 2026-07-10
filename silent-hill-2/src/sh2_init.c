@@ -111,7 +111,7 @@ void systemColdInit(void) {
     PlayingInfoColdInit();
     DataLoadMessage(0);
     
-    sh2gfw_util_zeroq(&AllTexSync_Man, 0x1F05); // I tried sizeof(AllTexSync_Man) but it didnt like it
+    sh2gfw_util_zeroq(&AllTexSync_Man, sizeof(AllTexSync_Man) / sizeof(Q_WORDDATA));
     
     sh2gfw_allinit_TexMANlist(&AllTexSync_Man);
     

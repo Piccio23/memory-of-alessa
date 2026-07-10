@@ -31,6 +31,7 @@
 #include "GFW/sh2gfw_read_process.h"
 #include "GFW/sh2gfw_blockman.h"
 #include "GFW/sh2gfw_2d_filters.h"
+#include "GFW/gfw_test/sh2gfw_util.h"
 #include "GFW/gfw_test/sh2gfw_shcamtest.h"
 
 #include "sh2shd/sh2shd_shadow_model.h"
@@ -259,7 +260,7 @@ void map_DATA_LOAD(int arg0) {
     kari_init_colidata();
     
     
-    sh2gfw_util_zeroq((union Q_WORDDATA*)&sh2_TR_MAN, 0x25);
+    sh2gfw_util_zeroq((Q_WORDDATA*)&sh2_TR_MAN, sizeof(sh2gfw_TRANS_MAN) / sizeof(Q_WORDDATA));
     sh2gfw_Init_AllVertCounter();
     
     
