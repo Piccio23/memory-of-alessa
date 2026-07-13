@@ -7,6 +7,29 @@
 
 extern /* static */ EnANIME_DATA EnREDAnime[11]; 
 
+extern /* static */ float hp_roof_pos[4];
+
+/* static */ void enREDCtrlSleep(EnLOCAL_DATA* dp /* r16 */);
+/* static */ void enREDCtrlGoPlayable(EnLOCAL_DATA* dp /* r2 */);
+
+/* static */ void enREDCtrlHand(void);
+
+/* static */ void enREDCtrlAttack(EnLOCAL_DATA* dp);
+
+/* static */ void enREDCtrlOnlyWalk(EnLOCAL_DATA* dp /* r16 */);
+/* static */ void enREDCheckPlayerWeapon(EnLOCAL_DATA* dp);
+/* static */ int enREDSetDamage(EnLOCAL_DATA* dp);
+
+/* static */ void enREDAnimeSet(EnLOCAL_DATA* dp /* r17 */, int anim /* r16 */);
+/* static */ void enREDAnimeReset(EnLOCAL_DATA* dp, int anim);
+
+/* static */ float enREDGetSpeed(EnLOCAL_DATA* dp /* r2 */);
+
+/* static */ float enREDGetRotSpeed(void);
+/* static */ void enREDSetSlowTime(EnLOCAL_DATA * dp /* r16 */);
+/* static */ void enREDSetMoveCount(EnLOCAL_DATA* dp);
+/* static */ void enREDSoundLife(EnLOCAL_DATA* dp /* r16 */);
+
 INCLUDE_ASM("asm/nonmatchings/Enemy/en_red", enREDInitData);
 
 INCLUDE_ASM("asm/nonmatchings/Enemy/en_red", enREDCtrlMain);
@@ -26,7 +49,7 @@ INCLUDE_ASM("asm/nonmatchings/Enemy/en_red", enREDCtrlAutomatic);
     SET_DP_STATE_LV(dp, 1, 0);
 }
 
-INCLUDE_ASM("asm/nonmatchings/Enemy/en_red", enREDCtrlEvent);
+INCLUDE_ASM("asm/nonmatchings/Enemy/en_red", enREDCtrlEvent); // https://decomp.me/scratch/FXm6U help needed
 
 /* static */ void enREDCtrlHand(void) {
     return;
@@ -40,7 +63,58 @@ INCLUDE_ASM("asm/nonmatchings/Enemy/en_red", enREDCtrlBerserk);
 
 INCLUDE_ASM("asm/nonmatchings/Enemy/en_red", enREDCtrlStair);
 
-INCLUDE_ASM("asm/nonmatchings/Enemy/en_red", enREDCtrlAttack);
+/* static */ void enREDCtrlAttack(EnLOCAL_DATA* dp) { // not line matched
+    int t; // r2
+    if (enCheckDamage(dp)) {
+        enREDSetDamage(dp);
+    }
+    switch (dp->sslv) {
+        case 0:
+            t = enREDCanSeePlayer(dp);
+            if (t == 3) {
+                enREDAnimeReset(dp, 4);
+            } else if (t == 4) {
+                enREDAnimeReset(dp, 5);
+            } else {
+                enREDAnimeReset(dp, 3);
+            }
+            enFlagSetCritical(dp);
+            enAttackStart(dp);
+            dp->red.attack_count++;
+            dp->sslv++;
+            break;
+        
+        case 1:
+            if (dp->anim != 4) {
+                enMoveAngleToPlayer(dp, enREDGetRotSpeed());
+            }
+
+            enAttackCheck(dp, dp->anim + 0x29);
+            if (dp->anim_n == -1) {
+                enFlagResetCritical(dp);
+                if ((dp->type == 2) && enCheckDeath(dp)) {
+                    SET_DP_STATE_LV(dp, 7, 0);
+                } else if (enREDCanSeePlayer(dp) >= 2) {
+                    dp->sslv = 0;
+                } else {
+                    if (dp->type == 2) {
+                        SET_DP_STATE_LV(dp, 1, 0);
+                    } else if (dp->type == 1) {
+                        if ((dp->anim == 4) && (enREDCanSeePlayer(dp) < 2)) {
+                            dp->type = 0;
+                            SET_DP_STATE_LV(dp, 0, 0);
+                        } else {
+                            SET_DP_STATE_LV(dp, 2, 0);
+                        }
+                    } else {
+                        SET_DP_STATE_LV(dp, 0, 0);
+                    }
+                }
+            }
+            break;
+    }
+    enREDGetAttackSpeed(dp);
+}
 
 INCLUDE_ASM("asm/nonmatchings/Enemy/en_red", enREDCtrlSeize);
 
@@ -70,15 +144,48 @@ INCLUDE_ASM("asm/nonmatchings/Enemy/en_red", enREDCtrlBattleEnd);
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Enemy/en_red", enREDSetDamage);
+/* static */ int enREDSetDamage(EnLOCAL_DATA* dp) {
+    enREDSetSlowTime(dp);
+    if (dp->type != 2) {
+        if ((dp->endurance -= dp->scp->battle.damage, dp->endurance < 0.0f)) dp->endurance = 0.0f;
+        dp->scp->battle.damage = 0.0f;        
+    } else {
+        enReduceHP(dp);
+        if (enCheckDeath(dp))
+            return 1;
+        
+    }
+    return 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Enemy/en_red", enREDCanSeePlayer);
 
 INCLUDE_ASM("asm/nonmatchings/Enemy/en_red", enREDCanSeeCharacter);
 
-INCLUDE_ASM("asm/nonmatchings/Enemy/en_red", enREDAnimeSet); // https://decomp.me/scratch/EJU91 I guess I need to add enREDAnimeReset too to make it work
+/* static */ void enREDAnimeSet(EnLOCAL_DATA* dp /* r17 */, int anim /* r16 */) {
+    if (anim == dp->anim) {
+        enAnimeRestart(dp);
+        if (anim == 2) {
+            enREDSetMoveCount(dp);
+        }
+        return;
+    } 
+    
+    (anim >= 0 && anim < 11U) ? 0 : fjAssert_("en_red.c", 0x3EB, "anim >= 0 && anim < sizeof(EnREDAnime) / sizeof(EnANIME_DATA)");              
+    enAnimeSet(dp, anim, EnREDAnime[anim].Anime);
+    if (anim == 2) {
+        enREDSetMoveCount(dp);
+    }
+}
 
-INCLUDE_ASM("asm/nonmatchings/Enemy/en_red", enREDAnimeReset);
+/* static */ void enREDAnimeReset(EnLOCAL_DATA* dp, int anim) {
+
+    (anim >= 0 && anim < 11U) ? 0 : fjAssert_("en_red.c", 0x3F6, "anim >= 0 && anim < sizeof(EnREDAnime) / sizeof(EnANIME_DATA)");
+    enAnimeSet(dp, anim, EnREDAnime[anim].Anime);
+    if (anim == 2) {
+        enREDSetMoveCount(dp);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Enemy/en_red", enREDAnimeExec);
 
@@ -94,11 +201,28 @@ INCLUDE_ASM("asm/nonmatchings/Enemy/en_red", enREDGetFeelRange);
 
 INCLUDE_ASM("asm/nonmatchings/Enemy/en_red", enREDGetRotSpeed);
 
-INCLUDE_ASM("asm/nonmatchings/Enemy/en_red", enREDSetSlowTime); // https://decomp.me/scratch/x7D12 migrate data first?
+#ifdef NON_MATCHING
+/* static */ void enREDSetSlowTime(EnLOCAL_DATA* dp /* r16 */) {
+    int timer[5] = { 180, 90, 60, 30, 1 }; // r29+0x20
 
-INCLUDE_ASM("asm/nonmatchings/Enemy/en_red", enREDSetMoveCount);
+
+
+
+
+    
+    enSetTimer(dp, timer[enGetMode()] * 2);
+}
+#else
+INCLUDE_ASM("asm/nonmatchings/Enemy/en_red", enREDSetSlowTime)  // @note: data migration needed I guess
+#endif
 
 #pragma fast_fptosi on
+
+/* static */ void enREDSetMoveCount(EnLOCAL_DATA* dp) {
+    int n;
+    n = 6.0f - (enGetMode() * 0.2f) + shSway1f(-2.0f, 0.5f);    
+    enSetAnimeCount(dp, n << 11);
+}
 
 /* static */ void enREDSoundLife(EnLOCAL_DATA* dp /* r16 */) {
     if (dp->sound_wait < 0x12C) {
@@ -112,7 +236,3 @@ INCLUDE_ASM("asm/nonmatchings/Enemy/en_red", enREDSetMoveCount);
 }
 
 #pragma fast_fptosi off
-
-INCLUDE_RODATA("asm/nonmatchings/Enemy/en_red", @1620);
-
-INCLUDE_RODATA("asm/nonmatchings/Enemy/en_red", @1621);
