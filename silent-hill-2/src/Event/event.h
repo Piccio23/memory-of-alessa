@@ -40,6 +40,7 @@
 #define GAME_FLAG_71   71
 #define GAME_FLAG_72   72
 #define GAME_FLAG_82   82
+#define GAME_FLAG_84   84
 #define GAME_FLAG_85   85
 #define GAME_FLAG_87   87
 #define GAME_FLAG_88   88
