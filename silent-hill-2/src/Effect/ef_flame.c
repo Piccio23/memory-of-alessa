@@ -124,19 +124,6 @@ static void SetFlameStartPos(u_char kind /* r2 */, float width /* r20 */, float 
 static void SetFlameVertex(u_char kind /* r2 */, float width /* r23 */, float height /* r22 */, float* trans /* r18 */, float* start_pos /* r17 */, float cycle /* r21 */, float w_right_ratio /* r20 */, EFCTVertexData* VertexData /* r16 */) {
     float adjustment[4][4]; // r29+0x60
     float ratio;            // r29+0xA0
-    f32 temp_f0;
-    f32 temp_f0_2;
-    f32 temp_f0_3;
-    f32 s_index;
-    f32 s_index_2;
-    f32 t_index;
-    f32 temp_f3;
-    s32 temp_s3;
-    s32 temp_s3_2;
-    s32 temp_s3_3;
-    s32 temp_s3_4;
-    s32 temp_s3_5;
-    s32 temp_s3_6;
 
     vec_zero(adjustment[0]);
     vec_zero(adjustment[1]);
@@ -152,12 +139,12 @@ static void SetFlameVertex(u_char kind /* r2 */, float width /* r23 */, float he
             if (!(kind & 0xFF)) {
                 width *= 0.8f;
             }
-            temp_f0          = shSinF(PI * cycle);
-            adjustment[0][0] = 0.4f * -width * temp_f0;
-            adjustment[0][1] = 0.5f * -height * temp_f0;
-            temp_f0_2        = shSinF(PI * (0.5f + cycle));
-            adjustment[2][0] = 0.25f * -width * temp_f0_2;
-            adjustment[3][0] = 0.35f * -width * temp_f0_2;
+            ratio            = shSinF(PI * cycle);
+            adjustment[0][0] = 0.4f * -width * ratio;
+            adjustment[0][1] = 0.5f * -height * ratio;
+            ratio            = shSinF(PI * (0.5f + cycle));
+            adjustment[2][0] = 0.25f * -width * ratio;
+            adjustment[3][0] = 0.35f * -width * ratio;
         } else if (camera_cut == 3) {
             height *= 0.5f;
             width *= 0.5f;
@@ -388,8 +375,7 @@ static void RenewFlameSize(EFCTObject* pObj /* r18 */, EFCTFlameObject* flame /*
     float ratio, ratio2;          // r21, r29+0x70
     float width, height;          // r29+0x68, r29+0x6C
     sceVu0FVECTOR trans = {0.0f}; // r29+0x50
-    u8 temp_v1;
-    u8 temp_v1_2;
+
     for (i = 0; i < flame->plane_num; i++) {
 
         cycle = flame->plane[i].timer / flame->plane[i].cycle;
@@ -498,10 +484,6 @@ static void SetFlameSTValue(EFCTObject* pObj /* r2 */, EFCTFlameObject* flame /*
     int i;         // r3
     float s_index; // r1
     float t_index; // r2
-    f32 temp_f0;
-    f32 temp_f4;
-    f32 temp_f5;
-    s32 temp_t0;
 
     for (i = 0; i < flame->plane_num; i++) {
 
