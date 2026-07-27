@@ -60,11 +60,11 @@ static void shBattleAddAttackQueue(SubCharacter* scp /* r2 */, u_char wep_no /* 
 
 // bss
 
-float sh2_battle_wall_hit;
-int sh2_battle_attack_check;
+float sh2_battle_wall_hit = 0.0f;
+int sh2_battle_attack_check = 0;
+shAttackQueue sh2_attack_queue;
 static float max_range_1171;
 static float min_range_1172;
-shAttackQueue sh2_attack_queue;
 
 static void shBattleDamageRevise(float* damage, float* shock, SubCharacter* scp, CL_BATTLE_RESULT* result) {
     if (scp->battle.status & 0x40) {
@@ -205,7 +205,7 @@ static void shBattleAttackByHumanGunshotTypeB(SubCharacter* attacker, u_short at
         for (i = 0; i < 10; i++) { 
             
             
-            rot_spread = 0.5235988f * shRandF(); // I am not 100% sure if I put these variables in the correct way
+            rot_spread = 0.5235988f * shRandF();
             rot_direction = PI * ((2.0f * shRandF()) - 1.0f);
             
             
