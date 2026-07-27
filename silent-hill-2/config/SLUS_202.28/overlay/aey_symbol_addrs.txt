@@ -73,5 +73,7 @@ stg_apart_e2f_se_check                                           = 0x01F07790; /
 stg_apart_e2f_anim_adr_01F07798                                  = 0x01F07798; // size:0x4
 stg_apart_e2f_kao_dds                                            = 0x01F077A0; // size:0x4
 
+stg_apart_e2f_corpse_on                                          = 0x01F07750; // size:0x10 type:u8
+stg_apart_e2f_corpse_off                                         = 0x01F07760; // size:0xA type:u8
 
 
