@@ -1,5 +1,17 @@
 #include "sh2_common.h"
 
+#include "Chacter/chara_list.h"
+#include "Chacter/m3_sc.h"
+
+#include "Collision/cl_main.h"
+
+#include "GFW/sh2_DrawEnvData.h"
+
+#include "Effect/screen_effect.h"
+
+#include "Enemy/en_common.h"
+#include "Enemy/en_insect.h"
+
 #include "Event/event.h"
 #include "Event/event_sub.h"
 #include "Event/item.h"
@@ -8,16 +20,6 @@
 #include "Event/chara_admin.h"
 #include "Event/demoview.h"
 #include "Event/picture.h"
-
-#include "Chacter/chara_list.h"
-#include "Chacter/m3_sc.h"
-
-#include "GFW/sh2_DrawEnvData.h"
-
-#include "Effect/screen_effect.h"
-
-#include "Enemy/en_common.h"
-#include "Enemy/en_insect.h"
 
 #include "sound/sh_sound.h"
 
@@ -50,6 +52,10 @@
 #include "data/daily.thu/data_pic_apt.h"
 
 // @todo: migrate data
+
+extern /* static */ CL_HITPOLY_PLANE stg_apart_e2f_clActWallList_ap42[24]; // size: 0x780, address: 0x1F064A0
+
+extern /* static */ CL_HITPOLY_PLANE stg_apart_e2f_clActFloorList_ap42[8]; // size: 0x280, address: 0x1F06C20
 
 extern /* static */ float stg_apart_e2f_tv_pos[4]; // = { -58082.375f, -356.5f , 19011.39062, 0.0f }; // @ 0x01F07240
 
@@ -304,6 +310,10 @@ static CharaData_DemoList stg_apart_e2f_chara_data_01F07710[2] = {
 
 extern /* static */ float stg_apart_e2f_pos_01F07740[4]; // = { -22800.0f, -700.0f, 59200.0f, 1.0f };
 
+extern /* static */ u_char stg_apart_e2f_corpse_on[8][2]; // @ 0x01F07750
+
+extern /* static */ u_char stg_apart_e2f_corpse_off[5][2]; // @ 0x01F07760
+
 // @todo: migrate bss
 
 extern /* static */ int stg_apart_e2f_mv_se; // @ 0x01F07780
@@ -315,6 +325,8 @@ extern /* static */ int stg_apart_e2f_se_check; // @ 0x01F07790
 extern /* static */ u_long128* stg_apart_e2f_anim_adr_01F07798; // @ 0x01F07798
 
 extern /* static */ u_long128* stg_apart_e2f_kao_dds; // @ 0x01F077A0
+
+
 
 /* static */ int stg_apart_e2f_EvProgThreeNameOnWall(void) {
     switch (ev_p_step) {
