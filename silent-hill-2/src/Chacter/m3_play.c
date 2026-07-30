@@ -7,6 +7,8 @@
 
 #include "Multi_thr/pad/keydata.h"
 
+#include "sce/libvu0.h"
+
 #include "SH2_common/pad.h"
 #include "SH2_common/playing_info.h"
 #include "SH2_common/sh_vu0.h"
@@ -3127,7 +3129,20 @@ INCLUDE_ASM("asm/nonmatchings/Chacter/m3_play", shGetJamesLightPos_Calc_Hand);
 
 INCLUDE_ASM("asm/nonmatchings/Chacter/m3_play", shGetJamesLightPos_Calc);
 
-INCLUDE_ASM("asm/nonmatchings/Chacter/m3_play", GetPlayerPartsMatrixForCameraCtrl);
+void GetPlayerPartsMatrixForCameraCtrl(float (*mat)[4], u_int parts_name) {
+    int i1; // r3
+    shSkelton* sk; // r6
+
+    sk = sh2jms.player->sk_top;
+    for (i1 = 0; i1 < parts_name; i1++) 
+        sk = sk->next;
+            
+    sceVu0MulMatrix(mat, sh2jms.player->mat[0], &sk->src_m);
+
+
+
+
+}
 
 INCLUDE_ASM("asm/nonmatchings/Chacter/m3_play", GetPlayerPartsWorldMatrix);
 
