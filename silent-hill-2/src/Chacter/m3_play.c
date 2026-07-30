@@ -3154,7 +3154,9 @@ shCharaInfo* GetPlayerInfoForCameraCtrl(void) {
     return (shCharaInfo*) &sh2jms.player->pos;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Chacter/m3_play", shCharacterPlayerWorkInitAtPowerOn);
+void shCharacterPlayerWorkInitAtPowerOn(void) {
+    shQzero(&sh2jms, sizeof(sh2jms));
+}
 
 INCLUDE_ASM("asm/nonmatchings/Chacter/m3_play", shCharacterPlayerWorkInitAtGameStart);
 
