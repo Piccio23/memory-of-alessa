@@ -3229,7 +3229,42 @@ void shCharacterPlayerWorkInitAtGameStart(void) {
 
 INCLUDE_ASM("asm/nonmatchings/Chacter/m3_play", shCharacterSetPlayerLow);
 
-INCLUDE_ASM("asm/nonmatchings/Chacter/m3_play", PlayerGetTargetInfo);
+void PlayerGetTargetInfo(void) {
+    
+    
+    
+    sh2jms.enemy_atk_area = shBattleCheckTargetChara(sh2jms.player);
+    
+    
+    sh2jms.enemy_around = shBattleAroundTargetEnemy();
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    sh2jms.look_tgt = (SubCharacter*) shBattleGetTargetChara(sh2jms.player, 0);
+    
+    
+    
+        
+    if (sh2jms.target != NULL)
+        if ((sh2jms.look_tgt == NULL) || (sh2jms.target->battle.status & 2))
+            sh2jms.target = NULL;
+    
+    
+    
+    
+    sh2jms.enemy_liedown = shBattleGetNearDeadlyTargetEnemy(sh2jms.player);
+}
 
 void PlayerGetTarget(void) {
     if (sh2jms.enemy_atk_area != 0) 
@@ -3237,7 +3272,6 @@ void PlayerGetTarget(void) {
             sh2jms.target = shBattleGetTargetEnemy(sh2jms.player);
     
 }
-
 
 INCLUDE_ASM("asm/nonmatchings/Chacter/m3_play", PlayerChangeTarget);
 
