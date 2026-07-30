@@ -3158,7 +3158,73 @@ void shCharacterPlayerWorkInitAtPowerOn(void) {
     shQzero(&sh2jms, sizeof(sh2jms));
 }
 
-INCLUDE_ASM("asm/nonmatchings/Chacter/m3_play", shCharacterPlayerWorkInitAtGameStart);
+void shCharacterPlayerWorkInitAtGameStart(void) {
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    switch (playing.battle_level) { 
+        case 0:
+        case 1:
+            sh2jms.hp = sh2jms.hp_max = 200.0f;
+            
+            break;        
+        case 2:
+        case 3:                       
+            sh2jms.hp = sh2jms.hp_max = 100.0f;
+    }
+    
+    
+    
+    
+    
+    sh2jms.tired_max = 600;
+    sh2jms.light_vec_inner_rate = 0.5f;
+    sh2jms.spray_set = 200;
+    sh2jms.spray_time = 20.0f;
+    
+    
+    
+    
+    sh2jms.hold_type = -1;
+    actwithwep_flg_set(0, &sh2jms);
+    
+    
+    sh2jms.allbody_now = 0;
+    sh2jms.upper_now = 0;
+    sh2jms.lower_now = 0;
+    sh2jms.allbody_prev = 0xFF;
+    sh2jms.upper_prev = 0xFF;
+    sh2jms.lower_prev = 0xFF;
+    sh2jms.event_status_now = 0xFF;
+    sh2jms.event_status_prev = 0xFF;
+    
+    player_flg_on(&sh2jms.lower_st_flg, 1 << JMS_ST_L_STAND);
+    player_flg_on(&sh2jms.upper_st_flg, 1 << JMS_ST_U_STAND);
+    
+    
+    
+    sh2jms.column_mov.kind = sh2jms.column_atk.kind = 1;
+    sh2jms.column_mov.weight = sh2jms.column_atk.weight = 2;
+    
+    sh2jms.column_mov.material = sh2jms.column_atk.material = 6;
+    sh2jms.column_mov.shape = sh2jms.column_atk.shape = 3;
+
+}
 
 INCLUDE_ASM("asm/nonmatchings/Chacter/m3_play", shCharacterSetPlayerLow);
 
