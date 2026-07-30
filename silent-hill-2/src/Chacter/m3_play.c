@@ -784,7 +784,10 @@ void PlayerSetHeight(SubCharacter* this) {
 
 
 }
-INCLUDE_ASM("asm/nonmatchings/Chacter/m3_play", PlayerSetHeightConnectWait);
+
+void PlayerSetHeightConnectWait(void) {
+    PlayerSetHeight(sh2jms.player);
+}
 
 INCLUDE_ASM("asm/nonmatchings/Chacter/m3_play", PlayerSetColumn_SetTarget);
 
@@ -3082,7 +3085,10 @@ void PlayerCheckAnimeLower(void) {
     sh2jms.hold_loop[1] = 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Chacter/m3_play", PlayerCheckAnime);
+static void PlayerCheckAnime(void) {
+    PlayerCheckAnimeLower();
+    PlayerCheckAnimeUpper();
+}
 
 INCLUDE_ASM("asm/nonmatchings/Chacter/m3_play", BoatPlayerCheckAnime);
 
@@ -3152,15 +3158,80 @@ INCLUDE_ASM("asm/nonmatchings/Chacter/m3_play", PlayerGetNeckAngleY);
 
 INCLUDE_ASM("asm/nonmatchings/Chacter/m3_play", PlayerInitOnConnect);
 
-INCLUDE_ASM("asm/nonmatchings/Chacter/m3_play", PlayerStatusClear);
+void PlayerStatusClear(void) {
+    
+    
+    sh2jms.hold_type = -1;
+    sh2jms.lock_on = 0;
+    sh2jms.running = 0;
+    sh2jms.hold_chg[0] = sh2jms.hold_chg[1] = 0;
+    sh2jms.hold_loop[0] = sh2jms.hold_loop[1] = 0;    
+    sh2jms.reload = 0;
+    sh2jms.atk_type = 0;
+    sh2jms.atk_reserve[0] = 0;
+    sh2jms.atk_reserve[1] = 0;
+    sh2jms.csaw_se_vol = 0.0f;
+    sh2jms.player->battle.atk_result = 0;
+    sh2jms.cam_chg_flg = 0;
+    sh2jms.shotgun_prev = sh2jms.shotgun_dir;
+    sh2jms.anime_pause = 0;
+    
+    
+    
+    shQzero(sh2jms.pad, sizeof(sh2jms.pad[0]));
 
-INCLUDE_ASM("asm/nonmatchings/Chacter/m3_play", close_to_angle_target);
+}
 
-INCLUDE_ASM("asm/nonmatchings/Chacter/m3_play", close_to_value);
+void close_to_angle_target(float* now, float tgt, float min, float max, float spd) {
+    float rot_tmp; float mov_angle; float tgt_tmp; 
+    tgt_tmp = tgt;
+    
+    if (tgt > max) tgt_tmp = max;
+    if (tgt_tmp < min) tgt_tmp = min;
+    
+    rot_tmp = shAngleRegulate(*now - tgt_tmp);
+    mov_angle = (rot_tmp / 3.0915927410125734) * (spd * shGetDT()); // forgor a f?
 
-INCLUDE_ASM("asm/nonmatchings/Chacter/m3_play", PlayerReverseLightCalcIsOn);
+    if (rot_tmp >= 0.0f) {
+        if ((rot_tmp - mov_angle) <= 0.0f) 
+            *now = tgt_tmp;
+        else 
+            *now = *now - mov_angle;        
+    } else {
+        if ((rot_tmp - mov_angle) >= 0.0f) 
+            *now = tgt_tmp;
+        else 
+            *now = *now - mov_angle;        
+    }
+    *now = shAngleRegulate(*now);
 
-INCLUDE_ASM("asm/nonmatchings/Chacter/m3_play", PlayerWaterRoadIsOn);
+}
+
+void close_to_value(float* now, float tgt, float mov) {
+
+    
+
+    
+    if (*now != tgt) {
+        if (*now > tgt) {
+            *now = *now - mov;
+            if (*now < tgt) 
+                *now = tgt;            
+        } else {
+            *now = *now + mov;
+            if (*now > tgt)
+                *now = tgt;           
+        }
+    }
+}
+
+int PlayerReverseLightCalcIsOn(void) {
+    return sh2jms.light_reverse;
+}
+
+int PlayerWaterRoadIsOn(void) {
+    return sh2jms.water_road;
+}
 
 INCLUDE_RODATA("asm/nonmatchings/Chacter/m3_play", @905_0x0038C2D0);
 
