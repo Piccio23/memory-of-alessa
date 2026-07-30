@@ -3248,7 +3248,25 @@ INCLUDE_RODATA("asm/nonmatchings/Chacter/m3_play", @3495);
 
 INCLUDE_ASM("asm/nonmatchings/Chacter/m3_play", PlayerRequestAttack);
 
-INCLUDE_ASM("asm/nonmatchings/Chacter/m3_play", PlayerRequestAttackFinish);
+void PlayerRequestAttackFinish(shPlayerWork* w) {
+    u_char attack; // r2
+    u_char atk2; // r5
+    u_char atk1; // r2
+
+    atk2 = w->pad[0].attack2;
+    atk1 = w->pad[0].attack1;   
+    attack = (atk2 != 0) ? atk2 : atk1;
+
+    if (attack != 0) {
+        if (w->atk_reserve[0] == 0) {
+            if ((attack & 0xFF) == 3) {
+                w->atk_reserve[0] = 7;
+                return;
+            } else w->atk_reserve[0] = 6;
+                                 
+        }
+    } 
+}
 
 INCLUDE_ASM("asm/nonmatchings/Chacter/m3_play", PlayerCheckStraightLine);
 
