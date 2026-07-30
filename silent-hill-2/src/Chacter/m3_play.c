@@ -3149,7 +3149,33 @@ void GetPlayerPartsWorldMatrix(float (*mat)[4], u_int parts_name) {
     GetPlayerPartsMatrixForCameraCtrl(mat, parts_name);
 }
 
-INCLUDE_ASM("asm/nonmatchings/Chacter/m3_play", GetPlayerPartsLocalMatrix);
+void GetPlayerPartsLocalMatrix(float (*dest)[4], int parts_name) {
+    int i1; // r4
+    SubCharacter* p; // r2
+    shSkelton* sk; // r5
+
+
+    if (p = sh2jms.player, p->status & 0x2000) {
+        p = shCharacterGetSubCharacter(HHH_JMS_CHARA_KIND, -1);
+        if (p == NULL) p = shCharacterGetSubCharacter(HHL_JMS_CHARA_KIND, -1);        
+        if (p == NULL) p = sh2jms.player;        
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    if (p == NULL) return;
+       
+    sk = p->sk_top;
+    for (i1 = 0; i1 < parts_name; i1++) 
+        sk = sk->next;
+    
+    *(Matrix4*)dest = sk->src_m;        
+}
 
 shCharaInfo* GetPlayerInfoForCameraCtrl(void) {
     return (shCharaInfo*) &sh2jms.player->pos;
