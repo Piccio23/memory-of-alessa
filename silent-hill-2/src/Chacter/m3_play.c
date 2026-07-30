@@ -3144,11 +3144,15 @@ void GetPlayerPartsMatrixForCameraCtrl(float (*mat)[4], u_int parts_name) {
 
 }
 
-INCLUDE_ASM("asm/nonmatchings/Chacter/m3_play", GetPlayerPartsWorldMatrix);
+void GetPlayerPartsWorldMatrix(float (*mat)[4], u_int parts_name) {
+    GetPlayerPartsMatrixForCameraCtrl(mat, parts_name);
+}
 
 INCLUDE_ASM("asm/nonmatchings/Chacter/m3_play", GetPlayerPartsLocalMatrix);
 
-INCLUDE_ASM("asm/nonmatchings/Chacter/m3_play", GetPlayerInfoForCameraCtrl);
+shCharaInfo* GetPlayerInfoForCameraCtrl(void) {
+    return (shCharaInfo*) &sh2jms.player->pos;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Chacter/m3_play", shCharacterPlayerWorkInitAtPowerOn);
 
