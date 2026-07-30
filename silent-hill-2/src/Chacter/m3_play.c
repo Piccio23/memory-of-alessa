@@ -3260,7 +3260,21 @@ INCLUDE_ASM("asm/nonmatchings/Chacter/m3_play", shGetJamesTrampStartPos);
 
 INCLUDE_ASM("asm/nonmatchings/Chacter/m3_play", PlayerNowItemName);
 
-INCLUDE_ASM("asm/nonmatchings/Chacter/m3_play", PlayerSearchVIewButtonCheck);
+int PlayerSearchVIewButtonCheck(void) {
+
+    if (!(sh2jms.player->status & 0x2000) && !(sh2jms.player->status & 0x4000)) {
+        
+        switch (playing.view_control) {
+            case 0:
+                return sh2jms.pad[0].search;
+            
+            case 1:
+                return !sh2jms.pad[0].search;
+        }
+    } 
+    
+    return 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/Chacter/m3_play", PlayerGetNeckAngleX);
 
