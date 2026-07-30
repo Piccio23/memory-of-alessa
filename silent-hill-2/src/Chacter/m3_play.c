@@ -791,7 +791,30 @@ void PlayerSetHeightConnectWait(void) {
 
 INCLUDE_ASM("asm/nonmatchings/Chacter/m3_play", PlayerSetColumn_SetTarget);
 
-INCLUDE_ASM("asm/nonmatchings/Chacter/m3_play", PlayerSetColumn_CloseToTarget);
+static void PlayerSetColumn_CloseToTarget(CL_HITPOLY_COLUMN* mov, CL_HITPOLY_COLUMN* atk, float* mov_z, float* atk_z) {
+
+
+    
+    sh2jms.column_mov.p[0][0] = sh2jms.column_atk.p[0][0] = sh2jms.player->pos.x;
+    sh2jms.column_mov.p[0][1] = sh2jms.column_atk.p[0][1] = -50.0f + sh2jms.player->pos.y;
+    sh2jms.column_mov.p[0][2] = sh2jms.column_atk.p[0][2] = sh2jms.player->pos.z;    
+    sh2jms.column_mov.p[0][3] = sh2jms.column_atk.p[0][3] = 1.0f;    
+    sh2jms.column_mov.p[1][0] = sh2jms.column_atk.p[1][0] = 0.0f;    
+    sh2jms.column_mov.p[1][1] = sh2jms.column_atk.p[1][1] = -850.0f + sh2jms.player->pos.y;;    
+    sh2jms.column_mov.p[1][2] = sh2jms.column_atk.p[1][2] = 0.0f;
+    
+    close_to_value(&sh2jms.column_mov.p[1][3], mov->p[1][3], 5.0f);
+    close_to_value(&sh2jms.column_atk.p[1][3], atk->p[1][3], 5.0f);
+    close_to_value(&sh2jms.col_mov_z_hosei, *mov_z, 5.0f);
+    close_to_value(&sh2jms.col_atk_z_hosei, *atk_z, 5.0f);
+    
+    
+    sh2jms.column_mov.p[0][0] += sh2jms.col_mov_z_hosei * shSinF(sh2jms.player->rot.y);
+    sh2jms.column_mov.p[0][2] += sh2jms.col_mov_z_hosei * shCosF(sh2jms.player->rot.y);
+    sh2jms.column_atk.p[0][0] += sh2jms.col_atk_z_hosei * shSinF(sh2jms.player->rot.y);
+    sh2jms.column_atk.p[0][2] += sh2jms.col_atk_z_hosei * shCosF(sh2jms.player->rot.y);
+
+}
 
 INCLUDE_ASM("asm/nonmatchings/Chacter/m3_play", PlayerSetHitColumn);
 
