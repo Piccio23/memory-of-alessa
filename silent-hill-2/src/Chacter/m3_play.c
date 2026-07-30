@@ -1,5 +1,6 @@
 #include "Chacter/m3_play.h"
 #include "Chacter/m3_sc.h"
+#include "Chacter/sh_character_status.h"
 
 #include "Collision/cl_main.h"
 
@@ -3230,7 +3231,13 @@ INCLUDE_ASM("asm/nonmatchings/Chacter/m3_play", shCharacterSetPlayerLow);
 
 INCLUDE_ASM("asm/nonmatchings/Chacter/m3_play", PlayerGetTargetInfo);
 
-INCLUDE_ASM("asm/nonmatchings/Chacter/m3_play", PlayerGetTarget);
+void PlayerGetTarget(void) {
+    if (sh2jms.enemy_atk_area != 0) 
+        if (sh2jms.target == NULL) 
+            sh2jms.target = shBattleGetTargetEnemy(sh2jms.player);
+    
+}
+
 
 INCLUDE_ASM("asm/nonmatchings/Chacter/m3_play", PlayerChangeTarget);
 
