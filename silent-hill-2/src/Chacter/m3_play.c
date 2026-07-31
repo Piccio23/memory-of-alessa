@@ -3358,7 +3358,7 @@ INCLUDE_ASM("asm/nonmatchings/Chacter/m3_play", PlayerNowItemName);
 
 int PlayerSearchVIewButtonCheck(void) {
 
-    if (!(sh2jms.player->status & 0x2000) && !(sh2jms.player->status & 0x4000)) {
+    if (!(sh2jms.player->status & (1 << SCP_STATUS_BIT_NOW_DEMO_EVENT)) && !(sh2jms.player->status & (1 << SCP_STATUS_BIT_NOW_PLAYABLE_EVENT))) {
         
         switch (playing.view_control) {
             case 0:
