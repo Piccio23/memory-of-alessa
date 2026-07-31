@@ -845,8 +845,19 @@ INCLUDE_ASM("asm/nonmatchings/Chacter/m3_play", james_anim_set_all);
 
 INCLUDE_ASM("asm/nonmatchings/Chacter/m3_play", james_anim_set);
 
-INCLUDE_ASM("asm/nonmatchings/Chacter/m3_play", PlayerGetStageAnime);
-
+static AnimeInfo* PlayerGetStageAnime(int anime) {
+    int i; // r5
+    
+    i = 0;
+    
+    while (jms_stage_anim[i].name != 0LL) {
+        if (anime == jms_stage_anim[i].name) {
+            return &jms_stage_anim[i];
+        }
+        i++;
+    }
+    return 0;
+}
 
 const char rodata_2356_0x0038BEB0[] = "m3_play.c:3888> assert:(%s)\n";
 const char rodata_assertion[] = "0";
