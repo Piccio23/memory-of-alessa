@@ -5,8 +5,6 @@
 #include "sce/libvu0.h"
 #include "vec.h"
 
-// extern /* static */ AnimeInfo arm_anim[14];
-
 static const AnimeInfo arm_anim[14] = {
     { // [0]
         /* .name  = */ 0x0000,
