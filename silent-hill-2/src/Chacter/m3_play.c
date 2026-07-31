@@ -3166,7 +3166,7 @@ void GetPlayerPartsLocalMatrix(float (*dest)[4], int parts_name) {
     shSkelton* sk; // r5
 
 
-    if (p = sh2jms.player, p->status & 0x2000) {
+    if (p = sh2jms.player, p->status & (1 << SCP_STATUS_BIT_NOW_DEMO_EVENT)) {
         p = shCharacterGetSubCharacter(HHH_JMS_CHARA_KIND, -1);
         if (p == NULL) p = shCharacterGetSubCharacter(HHL_JMS_CHARA_KIND, -1);        
         if (p == NULL) p = sh2jms.player;        
