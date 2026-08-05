@@ -5,35 +5,41 @@
 #include "sce/libvu0.h"
 #include "vec.h"
 
+// @todo: migrate rodata (previously had issues -Piccio 05/08/2026 )
+
+extern /* static */ AnimeInfo tyu_anim[3];
+
+/*
 static const AnimeInfo tyu_anim[3] = {
     { // [0]
-        /* .name  = */ 0x0000,
-        /* .frame = */ 0x0000,
-        /* .speed = */ 0x0000,
-        /* .start = */ 0x0000,
-        /* .end   = */ 0x0000,
-        /* .loop  = */ 0x00,
-        /* .pad   = */ 0x00
+         .name  =  0x0000,
+         .frame =  0x0000,
+         .speed =  0x0000,
+         .start =  0x0000,
+         .end   =  0x0000,
+         .loop  =  0x00,
+         .pad   =  0x00
     },
     { // [1]
-        /* .name  = */ 0x1451,
-        /* .frame = */ 0x0001,
-        /* .speed = */ 0x0800,
-        /* .start = */ 0x0000,
-        /* .end   = */ 0x0001,
-        /* .loop  = */ 0x01,
-        /* .pad   = */ 0x00
+         .name  =  0x1451,
+         .frame =  0x0001,
+         .speed =  0x0800,
+         .start =  0x0000,
+         .end   =  0x0001,
+         .loop  =  0x01,
+         .pad   =  0x00
     },
     { // [2]
-        /* .name  = */ 0x1452,
-        /* .frame = */ 0x0008,
-        /* .speed = */ 0x0800,
-        /* .start = */ 0x0000,
-        /* .end   = */ 0x0007,
-        /* .loop  = */ 0x01,
-        /* .pad   = */ 0x00
+         .name  =  0x1452,
+         .frame =  0x0008,
+         .speed =  0x0800,
+         .start =  0x0000,
+         .end   =  0x0007,
+         .loop  =  0x01,
+         .pad   =  0x00
     }
 }; // @ 0x00396CF0
+*/
 
 // static struct _AnimeInfo d_tyu_anim[1]; // size: 0xC, address: 0x0
 // static int dtyu_anime_adr_list[1]; // size: 0x4, address: 0x0
