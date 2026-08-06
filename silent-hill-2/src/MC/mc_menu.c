@@ -1,10 +1,22 @@
 #include "sh2_common.h"
 #include "SH2_common/sh2sys.h"
+#include "SH2_common/data_load.h"
+#include "SH2_common/mem_share.h"
 #include "MC/mc.h"
 #include "MC/mc_menu.h"
 #include "Font/fj_man.h"
 #include "Effect/screen_effect.h"
+#include "sound/sh_sound.h"
+#include "Multi_thr/filesys/fcread.h"
+#include "data/daily.thu/data_menu_mc.h"
 
+static void mcLoadMenuData(void);
+static void mcSoundCursor(void);
+static void mcSoundDecide(void);
+static void mcSoundSelect(void);
+static void mcSoundCancel(void);
+static void mcSoundError(void);
+static void mcSoundStart(void);
 
 int mcSaveMenu(void) {
     int i;
@@ -436,19 +448,38 @@ INCLUDE_ASM("asm/nonmatchings/MC/mc_menu", mcDrawBGWord);
 
 INCLUDE_ASM("asm/nonmatchings/MC/mc_menu", mcDmaKick);
 
-INCLUDE_ASM("asm/nonmatchings/MC/mc_menu", mcLoadMenuData);
+static void mcLoadMenuData(void) {
+    mc.status &= 0xFF9F;  
+    if ((mcw->fid[0] = DataLoadMessage(SH2_MES_FILE_M_CARD)) == -2) {
+        
+        mc.status |= 0x20;
+    }
+    mcw->fid[1] = FcRead(data_menu_mc_savebg_raw, MemShare_gp_data_buf);
+}
 
-INCLUDE_ASM("asm/nonmatchings/MC/mc_menu", mcSoundCursor);
+static void mcSoundCursor(void) {
+    SeCall(10000, 1.0f, 0);
+}
 
-INCLUDE_ASM("asm/nonmatchings/MC/mc_menu", mcSoundDecide);
+static void mcSoundDecide(void) {
+    SeCall(10002, 1.0f, 0);
+}
 
-INCLUDE_ASM("asm/nonmatchings/MC/mc_menu", mcSoundSelect);
+static void mcSoundSelect(void) {
+    SeCall(10004, 1.0f, 0);
+}
 
-INCLUDE_ASM("asm/nonmatchings/MC/mc_menu", mcSoundCancel);
+static void mcSoundCancel(void) {
+    SeCall(10003, 1.0f, 0);
+}
 
-INCLUDE_ASM("asm/nonmatchings/MC/mc_menu", mcSoundError);
+static void mcSoundError(void) {
+    SeCall(10005, 1.0f, 0);
+}
 
-INCLUDE_ASM("asm/nonmatchings/MC/mc_menu", mcSoundStart);
+static void mcSoundStart(void) {
+    SeCall(15002, 1.0f, 0);
+}
 
 INCLUDE_RODATA("asm/nonmatchings/MC/mc_menu", @1933);
 
