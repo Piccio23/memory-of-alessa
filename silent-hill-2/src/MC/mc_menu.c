@@ -6,12 +6,15 @@
 #include "SH2_common/sh2dt.h"
 #include "MC/mc.h"
 #include "MC/mc_menu.h"
+#include "Fog/spack.h"
 #include "Font/font.h"
 #include "Font/fj_man.h"
 #include "Effect/screen_effect.h"
 #include "sound/sh_sound.h"
 #include "Multi_thr/filesys/fcread.h"
+#include "Multi_thr/dma/dma1cmd.h"
 #include "data/daily.thu/data_menu_mc.h"
+#include "shGs/sh2gfw_GS_NewLoopEnv.h"
 
 static int mcCheckTimer(void);
 
@@ -21,6 +24,7 @@ static int mcPutMes(short n, short x, short y, short align, short align2);
 static void mcPutMes2(short n, short x, short y);
 static void mcPutBigFont(short n, short y);
 
+static void mcDmaKick(void);
 static void mcLoadMenuData(void);
 static void mcSoundCursor(void);
 static void mcSoundDecide(void);
@@ -511,7 +515,13 @@ INCLUDE_ASM("asm/nonmatchings/MC/mc_menu", mcDrawBG);
 
 INCLUDE_ASM("asm/nonmatchings/MC/mc_menu", mcDrawBGWord);
 
-INCLUDE_ASM("asm/nonmatchings/MC/mc_menu", mcDmaKick);
+static void mcDmaKick(void) {
+    d1cSend(spkDmaKick());
+    d1cSend(fontTexLoad(sh2gfw_Get_BaseTBP0for2D(), FONT_TEX_CLUT_ADR));
+    d1cSend(fontFlush());
+    spkResetOT2();
+    fontClear();
+}
 
 static void mcLoadMenuData(void) {
     mc.status &= 0xFF9F;  
