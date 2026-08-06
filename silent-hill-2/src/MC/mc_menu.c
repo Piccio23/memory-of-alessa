@@ -18,6 +18,8 @@ static int mcCheckTimer(void);
 static int mcTellYesNo(void);
 
 static int mcPutMes(short n, short x, short y, short align, short align2);
+static void mcPutMes2(short n, short x, short y);
+static void mcPutBigFont(short n, short y);
 
 static void mcLoadMenuData(void);
 static void mcSoundCursor(void);
@@ -470,9 +472,26 @@ static int mcPutMes(short n, short x, short y, short align, short align2) {
     return 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/MC/mc_menu", mcPutMes2);
+static void mcPutMes2(short n, short x, short y) {
+    if (mc.status & (1 << MC_STATUS_FLAG_5)) {
+        fontAllCenterOn();
+        fontAllCenter2On();
+        fontPrintStr(fontGetMesAdr(msg_buffer, n), x, y);
+        fontAllCenterOff();
+        fontAllCenter2Off();
+    }
+}
 
-INCLUDE_ASM("asm/nonmatchings/MC/mc_menu", mcPutBigFont);
+static void mcPutBigFont(short n, short y) {
+    u_int bak; // r17    
+    if (mc.status & (1 << MC_STATUS_FLAG_5)) {
+        bak = font.flag;
+        font.flag = 0x100;
+        fontPrintStrWide(fontGetMesAdr(msg_buffer, n), 0x100, y, 0xB4, 0xB4);
+        
+        font.flag = bak;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/MC/mc_menu", mcDrawMenu);
 
