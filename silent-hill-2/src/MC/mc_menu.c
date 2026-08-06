@@ -2,6 +2,8 @@
 #include "SH2_common/sh2sys.h"
 #include "SH2_common/data_load.h"
 #include "SH2_common/mem_share.h"
+#include "SH2_common/pad.h"
+#include "SH2_common/sh2dt.h"
 #include "MC/mc.h"
 #include "MC/mc_menu.h"
 #include "Font/fj_man.h"
@@ -9,6 +11,8 @@
 #include "sound/sh_sound.h"
 #include "Multi_thr/filesys/fcread.h"
 #include "data/daily.thu/data_menu_mc.h"
+
+static int mcCheckTimer(void);
 
 static void mcLoadMenuData(void);
 static void mcSoundCursor(void);
@@ -412,7 +416,15 @@ INCLUDE_ASM("asm/nonmatchings/MC/mc_menu", mcLoadMenu);
 
 INCLUDE_ASM("asm/nonmatchings/MC/mc_menu", mcAfterLoadMenu);
 
-INCLUDE_ASM("asm/nonmatchings/MC/mc_menu", mcCheckTimer);
+static int mcCheckTimer(void) {
+    if (((mcw->menu_timer -= shGetDF()) <= 0) ||
+        (shPadPress(0, key_config.enter | key_config.cancel | 0xF00) != 0) ||
+        (shPadPress(0, PAD_KEY_7) < 0x20) ||
+        (0xA0 < shPadPress(0, PAD_KEY_7))) {
+        return 1;
+    }
+    return 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/MC/mc_menu", mcMenuControl);
 
