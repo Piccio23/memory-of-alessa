@@ -6,6 +6,7 @@
 #include "SH2_common/sh2dt.h"
 #include "MC/mc.h"
 #include "MC/mc_menu.h"
+#include "Font/font.h"
 #include "Font/fj_man.h"
 #include "Effect/screen_effect.h"
 #include "sound/sh_sound.h"
@@ -13,6 +14,10 @@
 #include "data/daily.thu/data_menu_mc.h"
 
 static int mcCheckTimer(void);
+
+static int mcTellYesNo(void);
+
+static int mcPutMes(short n, short x, short y, short align, short align2);
 
 static void mcLoadMenuData(void);
 static void mcSoundCursor(void);
@@ -428,13 +433,42 @@ static int mcCheckTimer(void) {
 
 INCLUDE_ASM("asm/nonmatchings/MC/mc_menu", mcMenuControl);
 
-INCLUDE_ASM("asm/nonmatchings/MC/mc_menu", mcTellYesNo);
+static int mcTellYesNo(void) {
+    int n; // r16        
+    if (shPadRepeat(0, PAD_KEY_DPAD_LEFT) || shPadRepeat(0, PAD_KEY_DPAD_RIGHT)) {
+        mcSoundCursor();
+        if (mcw->menu_yesno == 1) {
+            mcw->menu_yesno = 2;
+        } else {
+            mcw->menu_yesno = 1;
+        }
+    }
+    if (shPadTrigger(0, key_config.enter)) {
+        n = mcw->menu_yesno;
+        mcSoundDecide();
+        mcw->menu_yesno = 0;
+        return n;
+    }
+    if (shPadTrigger(0, key_config.cancel)) {
+        mcSoundCancel();
+        mcw->menu_yesno = 0;
+        return 2;
+    }
+    return 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/MC/mc_menu", mcSelectData);
 
 INCLUDE_ASM("asm/nonmatchings/MC/mc_menu", mcGetBlinkAlpha);
 
-INCLUDE_ASM("asm/nonmatchings/MC/mc_menu", mcPutMes);
+static int mcPutMes(short n, short x, short y, short align, short align2) {
+    if (mc.status & (1 << MC_STATUS_FLAG_5)) {
+        return fontPrintWord(fontGetMesAdr(msg_buffer, n), x, y, align, align2);
+    }
+    
+
+    return 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/MC/mc_menu", mcPutMes2);
 
