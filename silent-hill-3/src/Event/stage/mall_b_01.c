@@ -245,7 +245,63 @@ int func_01F6E900_mall_b_01(void) {
     return 1;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Event/stage/mall_b_01", func_01F6E960_mall_b_01);
+void func_01F6E960_mall_b_01(void) {
+    int room;
+
+    room = RoomName();
+    D_01F72890_mall_b_01 = 0;
+    switch (room) {
+        case 34:
+            SET_BIT(D_1D31704, 0x1D);
+            break;
+            
+        case 29:
+            if (func_0016D5B0() == 0) {
+                D_01F72918_mall_b_01 = 0;
+                SET_BIT(D_1D31704, 0x11);
+                UNSET_BIT(D_1D31658, 0x19); 
+                UNSET_BIT(D_1D31658, 0x1B);
+                if (GET_BIT(D_1D31658, 0x11)) {
+                    func_00190A20(0);
+                    UNSET_BIT(D_1D31658, 0x11); 
+                }
+            }
+            break;
+            
+        case 36:
+            D_01F728E0_mall_b_01[0] = 19200.0f;
+            D_01F728E0_mall_b_01[1] = -1200.0f;
+            D_01F728E0_mall_b_01[2] = 56140.0f;
+            D_01F728E0_mall_b_01[3] = 1.0f;
+            if (!GET_BIT(D_1D31654, 0x1A)) {
+                D_01F728A8_mall_b_01 = 0;
+            }
+            if (!GET_BIT(D_1D31654, 0x1B)) {
+                D_01F728B8_mall_b_01 = 0;
+                break;
+            }
+            D_01F728B8_mall_b_01 = 1;
+            break;
+            
+        case 37:
+            D_01F728D8_mall_b_01 = 0;
+            D_01F72880_mall_b_01 = 0.0f;
+            D_01F728E0_mall_b_01[0] = 51600.0f;
+            D_01F728E0_mall_b_01[1] = -1199.75f;
+            D_01F728E0_mall_b_01[2] = 57339.0f;
+            D_01F728E0_mall_b_01[3] = 1.0f;
+            D_01F72888_mall_b_01 = 0.4f;
+            if (!GET_BIT(D_1D31654, 0x1B)) {
+                D_01F728B8_mall_b_01 = 0;
+                break;
+            }
+            D_01F728B8_mall_b_01 = 1;
+            break;
+            
+        case 41:
+            SET_BIT(D_1D31704, 0x12);
+    }
+}
 
 void func_01F6EB90_mall_b_01(void) {
     sceVu0FMATRIX* sp20[4];
