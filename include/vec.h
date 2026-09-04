@@ -1,10 +1,142 @@
-#ifndef SILENT_VEC_H
-#define SILENT_VEC_H
+#ifndef ALESSA_VEC_H
+#define ALESSA_VEC_H
+
+#include "sce/libvu0.h"
 
 /**
- * miscellaneous vector functions. all of the vector functions in common.h may
- * eventually be moved here
+ * miscellaneous vector + matrix helpers used in sh2+3.
  */
+
+/* @note(dreamingmoths, july 20th, 2026): try to use these `vu0_` inlines where possible. */
+
+static inline void vu0_add_vector(sceVu0FVECTOR v0, sceVu0FVECTOR v1, sceVu0FVECTOR v2) {
+    asm volatile("\
+	lqc2      vf4,0x0(%1)\n\
+	lqc2      vf5,0x0(%2)\n\
+	vadd.xyzw vf4,vf4,vf5\n\
+	sqc2      vf4,0x0(%0)\n\
+	": : "r" (v0) , "r" (v1), "r" (v2) : "memory");
+}
+
+static inline void vu0_sub_vector(sceVu0FVECTOR v0, sceVu0FVECTOR v1, sceVu0FVECTOR v2) {
+    asm volatile("\
+	lqc2      vf4,0x0(%1)\n\
+	lqc2      vf5,0x0(%2)\n\
+	vsub.xyzw vf4,vf4,vf5\n\
+	sqc2      vf4,0x0(%0)\n\
+	": : "r" (v0) , "r" (v1), "r" (v2) : "memory");
+}
+
+static inline void vu0_scale_vector(sceVu0FVECTOR v0, sceVu0FVECTOR v1, float t) {
+    asm volatile("\
+        mfc1        t7,  %2;\
+	    lqc2        vf4, 0x0(%1)\n\
+	    qmtc2       t7,  vf5;\
+	    vmulx.xyzw	vf4, vf4,vf5;\
+	    sqc2        vf4, 0x0(%0)\n\
+	": : "r" (v0) , "r" (v1), "f" (t):"t7", "memory");
+}
+
+static inline void vu0_transform_vector_perspective(sceVu0FVECTOR vec, sceVu0FMATRIX mat) {
+    asm ("\
+         lqc2         vf4, 0x0(%0)\n\
+         lqc2         vf5, 0x0(%1)\n\
+         lqc2         vf6, 0x10(%1)\n\
+         vmulax.xyzw  ACC, vf5, vf4x\n\
+         vmadday.xyzw ACC, vf6, vf4y\n\
+         lqc2         vf5, 0x20(%1)\n\
+         lqc2         vf6, 0x30(%1)\n\
+         vmaddaz.xyzw ACC, vf5, vf4z\n\
+         vmaddw.xyzw  vf4, vf6, vf4w\n\
+         vdiv         Q, vf0w, vf4w\n\
+         vwaitq\n\
+         vmulq.xyz    vf4, vf4, Q\n\
+         cfc2         t7, $vi22\n\
+         sqc2         vf4, 0x0(%0)\n\
+         mtc1         t7, $f0"
+        : "+r"(vec) : "r"(mat) : "t7", "f0");
+}
+
+/* all inlines below may be used, but they may not exist forever. */
+static inline void vec_copy(void* dst, void* src) {
+    asm("\
+         lq t7, 0(%1)\n\
+         sq t7, 0(%0)"
+        : "+r"(dst), "+r"(src)::"t7");
+}
+
+static inline void volatile_vec_copy(void* dst, void* src) {
+    asm volatile("\
+         lq t7, 0(%1)\n\
+         sq t7, 0(%0)"
+                 : "=r"(dst) : "r"(src) : "t7");
+}
+
+static inline void vec_add(void* x, void* y, void* out) {
+    asm("\
+        lqc2 vf4, 0(%0)\n\
+        lqc2 vf5, 0(%1)\n\
+        vadd.xyzw vf4, vf4, vf5\n\
+        sqc2 vf4, 0(%2)"
+        : "+r"(x), "+r"(y), "+r"(out));
+}
+
+static inline void vec_add_xyz(void* x, void* y, void* out) {
+    asm("\
+        lqc2 vf4, 0(%0)\n\
+        lqc2 vf5, 0(%1)\n\
+        vadd.xyz vf4, vf4, vf5\n\
+        sqc2 vf4, 0(%2)"
+        : "+r"(x), "+r"(y), "+r"(out));
+}
+
+static inline void vec_add_alt(void* x, void* y, void* out) {
+    asm("\
+        lqc2 vf4, 0(%1)\n\
+        lqc2 vf5, 0(%0)\n\
+        vadd.xyzw vf4, vf4, vf5\n\
+        sqc2 vf4, 0(%2)"
+        : "+r"(x), "+r"(y), "+r"(out));
+}
+
+static inline void vec_sub(void* x, void* y, void* out) {
+    asm("\
+        lqc2 vf4, 0(%0)\n\
+        lqc2 vf5, 0(%1)\n\
+        vsub.xyzw vf4, vf4, vf5\n\
+        sqc2 vf4, 0(%2)"
+        : "+r"(x), "+r"(y), "+r"(out));
+}
+
+static inline void vec_sub_xyz_reverse(void* x, void* y, void* out) {
+    asm("\
+        lqc2 vf4, 0(%1)\n\
+        lqc2 vf5, 0(%0)\n\
+        vsub.xyz vf4, vf4, vf5\n\
+        sqc2 vf4, 0(%2)"
+        : "+r"(x), "+r"(y), "+r"(out));
+}
+
+static inline void vec_scale(float s, void* v, void* out) {
+    asm("mfc1 t7, %1;\
+          lqc2 vf4, 0(%0)\n\
+          qmtc2 t7, vf5\n\
+          vmulx.xyzw vf4, vf4, vf5x\n\
+          sqc2 vf4, 0(%2)"
+        : "+r"(v), "+f"(s), "+r"(out)::"t7");
+}
+
+static inline void vec_scale_xyz(float s, void* v, void* out) {
+    asm("mfc1 t7, %1;\
+          lqc2 vf4, 0(%0)\n\
+          qmtc2 t7, vf5\n\
+          vmulx.xyz vf4, vf4, vf5x\n\
+          sqc2 vf4, 0(%2)"
+        : "+r"(v), "+f"(s), "+r"(out)::"t7");
+}
+
+static inline void vec_zero(void* x) { asm("sq zero, 0(%0)" : "+r"(x)); }
+static inline void vec_zero_xyz(void* x) { asm("sqc2 vf0, 0(%0)" : "+r"(x)); }
 
 static inline float vec_normalize(float* out, float* in) {
     asm("lqc2 vf4, 0(%0)\n\
@@ -28,6 +160,16 @@ static inline float vec_cross_product(float* v, float* w, float* out) {
         : "+r"(v), "+r"(w), "=r"(out));
 }
 
+static inline float vec_cross_product_reverse(float* w, float* v, float* out) {
+    asm("lqc2 vf5, 0(%1)\n\
+        lqc2 vf6, 0(%2)\n\
+        vsub.w vf4, vf0, vf0\n\
+        vopmula.xyz ACC, vf5, vf6\n\
+        vopmsub.xyz vf4, vf6, vf5\n\
+        sqc2 vf4, 0(%0)"
+        : "=r"(out) : "r"(v), "r"(w));
+}
+
 static inline void vec_copy_reverse(void* src, void* dst) {
     asm("\
          lq t7, 0(%1)\n\
@@ -43,6 +185,15 @@ static inline void vec_copy_vu0(void* dst, void* src) {
         : "+r"(dst), "+r"(src));
 }
 
+static inline void vec_copy_xyz(void* dst, void* src) {
+    asm("\
+         lq t7, 0(%1)\n\
+         sd t7, 0(%0)\n\
+         pcpyud t7, t7, zero\n\
+         sw t7, 8(%0)"
+        : "+r"(dst), "+r"(src)::"t7");
+}
+
 static inline float vec3_length(void* v) {
     float d;
     asm("lwc1    %1,0(%0)\n\
@@ -53,6 +204,22 @@ static inline float vec3_length(void* v) {
         madd.s   %1,f9,f9\n\
         sqrt.s   %1, %1"
         : "+r"(v), "+f"(d)::"f8", "f9");
+    return d;
+}
+
+static inline float vec3_lenght_alt(void* v) {
+    float d;
+    asm("lwc1    %1, 0(%0)\n\
+        lwc1     f8, 0(%0)\n\
+        lwc1     f9, 4(%0)\n\
+        mov.s    f10, f9\n\
+        mula.s   %1, f8\n\
+        lwc1     %1, 8(%0)\n\
+        lwc1     f8, 8(%0)\n\
+        madda.s  f9, f10\n\
+        madd.s   %1, %1, f8\n\
+        sqrt.s   %1, %1"
+        : "+r"(v), "=&f"(d) :: "f8", "f9", "f10");
     return d;
 }
 
@@ -77,11 +244,42 @@ inline void vec_sub_reverse(void* y, void* x, void* out) {
         : "+r"(x), "+r"(y), "+r"(out));
 }
 
+static inline void vec_sub_xyz(void* x, void* y, void* out) {
+    asm("\
+        lqc2 vf4, 0(%0)\n\
+        lqc2 vf5, 0(%1)\n\
+        vsub.xyz vf4, vf4, vf5\n\
+        sqc2 vf4, 0(%2)"
+        : "+r"(x), "+r"(y), "+r"(out));
+}
+
+static inline vec_lerp(float* out, float* v, float* w, float t) {
+    asm("mfc1 t7, %3;\
+         qmtc2 t7, vf6x;\
+         vsubx.w vf6w, vf0, vf6x;\
+         lqc2 vf4, 0(%1);\
+         lqc2 vf5, 0(%2);\
+         vmulax ACC, vf4, vf6;\
+         vmaddw vf4, vf5, vf6;\
+         sqc2 vf4, 0(%0)" : "=r"(out) : "r"(v), "r"(w), "f"(t) : "t7");
+}
+
+static inline float vec_length(float* a) {
+    float result;
+    asm volatile("lwc1   %0,0(%1);\
+        lwc1   $f8,8(%1);\
+        mula.s %0, %0;\
+        madd.s %0, $f8, $f8;\
+        sqrt.s %0, %0"
+                 : "=f"(result) : "m"(a) : "f20", "f8", "f13");
+    return result;
+}
+
 /* @todo deduplicate with sh3 version in subway overlay (vec3_dot_product) */
 static inline float vec3_dot_product(void* v, void* w) {
     float d;
 
-    asm("\
+    asm ("\
         lwc1 %0, 0(%1)\n\
         lwc1 f8, 0(%2)\n\
         lwc1 f9, 4(%1)\n\
@@ -93,6 +291,62 @@ static inline float vec3_dot_product(void* v, void* w) {
         madd.s %0, %0, f8"
         : "+f"(d) : "r"(v), "r"(w) : "f8", "f9", "f10");
 
+    return d;
+}
+
+static inline float sh3_vec3_dot_product(void* v, void* w) {
+    float d;
+
+    asm volatile("\
+        lwc1 %0, 0(%1)\n\
+        lwc1 f8, 0(%2)\n\
+        lwc1 f9, 4(%1)\n\
+        lwc1 f10, 4(%2)\n\
+        mula.s %0, f8\n\
+        lwc1 %0, 8(%1)\n\
+        lwc1 f8, 8(%2)\n\
+        madda.s f9, f10\n\
+        madd.s %0, %0, f8"
+        : "+f"(d) : "r"(v), "r"(w) : "f8", "f9", "f10");
+
+    return d;
+}
+
+static inline float vec3_dist(sceVu0FVECTOR v, sceVu0FVECTOR w) {
+    float d;
+    asm("lwc1 %2, 0(%0)\n\
+         lwc1 f8, 0(%1)\n\
+         lwc1 f9, 4(%0)\n\
+         sub.s %2, %2, f8;\
+         lwc1 f10, 4(%1)\n\
+         mula.s %2, %2;\
+         lwc1 %2, 8(%0)\n\
+         lwc1 f8, 8(%1)\n\
+         sub.s f9, f9, f10\n\
+         sub.s %2, %2, f8\n\
+         madda.s f9, f9\n\
+         madd.s %2, %2, %2;\
+         sqrt.s %2, %2"
+        : "+r"(v), "+r"(w), "=&f"(d)::"f8", "f9", "f10");
+    return d;
+}
+
+static inline float vec3_dist_reverse(sceVu0FVECTOR v, sceVu0FVECTOR w) {
+    float d;
+    asm("lwc1 %2, 0(%0)\n\
+         lwc1 f8, 0(%1)\n\
+         lwc1 f9, 4(%0)\n\
+         sub.s %2, %2, f8;\
+         lwc1 f10, 4(%1)\n\
+         mula.s %2, %2;\
+         lwc1 %2, 8(%0)\n\
+         lwc1 f8, 8(%1)\n\
+         sub.s f9, f9, f10\n\
+         sub.s %2, %2, f8\n\
+         madda.s f9, f9\n\
+         madd.s %2, %2, %2;\
+         sqrt.s %2, %2"
+        : "+r"(w), "+r"(v), "=&f"(d)::"f8", "f9", "f10");
     return d;
 }
 
@@ -111,12 +365,65 @@ static inline void vu0_unit_matrix(sceVu0FMATRIX out) {
         : "+r"(out));
 }
 
-/* Poor mans `pragma fastmath` version of sqrtf. */
-static inline float SQRT(float x) {
-    float result = x;
-    asm("sqrt.s  %0, %0"
-        : "=&f"(result));
-    return result;
+static inline void vu0_transform_vector(sceVu0FVECTOR vec, sceVu0FMATRIX mat) {
+    asm("\
+        lqc2         vf4, 0x0(%0)\n\
+        lqc2         vf5, 0x0(%1)\n\
+        lqc2         vf6, 0x10(%1)\n\
+        vmulax.xyzw  ACC, vf5, vf4x\n\
+        lqc2         vf5, 0x20(%1)\n\
+        vmadday.xyzw ACC, vf6, vf4y\n\
+        lqc2         vf6, 0x30(%1)\n\
+        vmaddaz.xyzw ACC, vf5, vf4z\n\
+        vmaddw.xyzw  vf4, vf6, vf4w\n\
+        sqc2         vf4, 0x0(%0)"
+        : "+r"(vec): "r"(mat));
 }
 
-#endif // SILENT_VEC_H
+static inline void vu0_transform_vector_alt(sceVu0FVECTOR dst, sceVu0FVECTOR src, sceVu0FMATRIX mat) {
+    asm("\
+        lqc2         vf4, 0x0(%1)\n\
+        lqc2         vf5, 0x0(%2)\n\
+        lqc2         vf6, 0x10(%2)\n\
+        vmulax.xyzw  ACC, vf5, vf4x\n\
+        lqc2         vf5, 0x20(%2)\n\
+        vmadday.xyzw ACC, vf6, vf4y\n\
+        lqc2         vf6, 0x30(%2)\n\
+        vmaddaz.xyzw ACC, vf5, vf4z\n\
+        vmaddw.xyzw  vf4, vf6, vf4w\n\
+        sqc2         vf4, 0x0(%0)"
+        : "+r"(dst) : "r"(src), "r"(mat));
+}
+
+static inline void mat_copy(void* dst, void* src) {
+    asm volatile("\
+        lq $t6, 0(%1)\n\
+        lq $t7, 0x10(%1)\n\
+        sq $t6, 0(%0)\n\
+        sq $t7, 0x10(%0)\n\
+        lq $t6, 0x20(%1)\n\
+        lq $t7, 0x30(%1)\n\
+        sq $t6, 0x20(%0)\n\
+        sq $t7, 0x30(%0)"
+                 : : "r"(dst), "r"(src) : "t6", "t7");
+}
+
+static inline void mat_copy_3x3(void* dst, void* src) {
+    asm volatile("\
+        lq   $t7,  0(%1)\n\
+        lq   $t6,  0x10(%1)\n\
+        sq   $t7,  0x0(%0)\n\
+        sq   $t6,  0x10(%0)\n\
+        lq   $t7,  0x20(%1)\n\
+        sqc2 $vf0, 0x30(%0)\n\
+        sq   $t7,  0x20(%0)"
+                 : : "r"(dst), "r"(src) : "t6", "t7");
+}
+
+static inline void vu0_unit_vector(sceVu0FVECTOR out) {
+    asm("\
+        sqc2 vf0, 0x0(%0)"
+        : "+r"(out));
+}
+
+#endif // ALESSA_VEC_H

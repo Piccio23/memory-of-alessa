@@ -2,6 +2,7 @@
 #define SH2SHD_SHADOW_MODEL_H
 
 #include "sh2_common.h"
+#include "sce/libvu0.h"
 #include "Chacter/character.h"
 #include "sh2shd/sh2shd_structs.h"
 #include "GFW/sh2_GsAllEnv.h"
@@ -17,6 +18,15 @@
 #define SHADOW_OFF_WORK_BG_OBJ_COUNT 32
 
 #define SHADOW_CALC_HEAP_SIZE 0xA0
+
+// total size: 0x30
+typedef struct SPOT_LIGHT {  // @note: not sure if this is the correct place for this
+    // Members
+    sceVu0FVECTOR c; // offset 0x0, size 0x10
+    sceVu0FVECTOR zdir; // offset 0x10, size 0x10
+    sceVu0FVECTOR range; // offset 0x20, size 0x10
+} SPOT_LIGHT;
+
 
 void sh2shd_init_shadow(void);
 

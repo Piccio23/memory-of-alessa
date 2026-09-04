@@ -1,61 +1,16 @@
 #ifndef COMMON_H
 #define COMMON_H
 
+#ifdef __MWERKS__
 #pragma divbyzerocheck on
 #pragma mpwc_relax     on
 #pragma fast_fptosi    on
+#endif
 
-#include "eetypes.h"
-#include "libvu0.h"
-
-typedef unsigned char u8;
-typedef signed char s8;
-typedef unsigned short u16;
-typedef short s16;
-typedef unsigned int u32;
-typedef int s32;
-typedef unsigned long u64;
-typedef long s64;
-typedef float f32;
-
-typedef signed char s_char;
-
-typedef enum bool {
-    false,
-    true,
-} bool;
-
-#define NULL 0
-#define PI 3.1415927f
-#define TAU 6.2831855f
-#define QUARTER_TURN 1.5707964f
-#define MAX_FLOAT 3.4028235e38f
-#define RADIANS_PER_DEGREE (PI / 180.0f)
-#define TO_RAD(x) RADIANS_PER_DEGREE * (x)
-#define MIN(a, b) ((a) > (b) ? (b) : (a))
-#define MAX(a, b) ((a) > (b) ? (a) : (b))
-
-#define COLOR_RGBA(r, g, b, a) (((a) << 24) | ((((b) << 16) | ((r) | ((g) << 8)))))
-#define COLOR_RGB(r, g, b) ((((b) << 16) | ((r) | ((g) << 8))))
-
-#define UNCACHED(p) ((char*)((u_int)p | 0x20000000))
-#define READ_UNCACHED(addr) ((((u_int)(addr)) & 0x0fffffff) | 0x20000000)
-#define SCRATCHPAD_START 0x70000000
-
-#define GIF_REG(reg, n) ((u_long)(reg) << ((n) * 4))
-
-/* bit helpers */
-#define GET_BIT(x, i) (((x) >> (i)) & 1)
-#define SET_BIT(x, i) ((x) |= (1 << (i)))
-#define UNSET_BIT(x, i) ((x) &= ~(1 << (i)))
-
-/* `game_flag` helpers */
-#define GET_FLAG(x, i) ((((x)[(i) >> 5]) >> ((i) & 0x1F)) & 1)
-#define SET_FLAG(x, i) (((x)[(i) >> 5]) |= (1 << ((i) & 0x1F)))
-#define UNSET_FLAG(x, i) ((x)[(i) >> 5] &= ~(1 << ((i) & 0x1F)))
-
-#define ABORT() asm("breakc 0")
-#define BLOCK_WHILE(_cond) do { /* wait */ } while (_cond)
+#include "types.h"
+#include "math.h"
+#include "sdk.h"
+#include "ee.h"
 
 #ifdef DEBUG
 #define debugPrintf(...) printf(__VA_ARGS__)
@@ -71,31 +26,38 @@ typedef enum bool {
 #define ASSERT_ON_LINE(cond, line)
 #endif
 
+#define BLOCK_WHILE(_cond) do { /* wait */ } while (_cond)
+
+/* bit helpers */
+#define GET_BIT(x, i) (((x) >> (i)) & 1)
+#define SET_BIT(x, i) ((x) |= (1 << (i)))
+#define UNSET_BIT(x, i) ((x) &= ~(1 << (i)))
+
+/* bit array helpers */
+#define GET_FLAG(x, i) ((((x)[(i) >> 5]) >> ((i) & 0x1F)) & 1)
+#define SET_FLAG(x, i) (((x)[(i) >> 5]) |= (1 << ((i) & 0x1F)))
+#define UNSET_FLAG(x, i) ((x)[(i) >> 5] &= ~(1 << ((i) & 0x1F)))
+
+#define STATIC_ASSERT(cond, msg) \
+    typedef char static_assertion_##msg[(cond) ? 1 : -1]
+#define STATIC_ASSERT_SIZEOF(type, size) \
+    typedef char static_assertion_sizeof_##type[(sizeof(type) == (size)) ? 1 : -1]
+
 #define INCLUDE_ASM(FOLDER, NAME)
 #define INCLUDE_RODATA(FOLDER, NAME)
-
-// Convert a reflex angle (> 180deg, or < -180deg) to the range [-PI, PI].
-#define REFLEX_ANGLE(out, value) do { \
-    float ret; \
-    if (value > PI) ret = value-TAU; \
-    else if (value < -PI) ret = value+TAU; \
-    else ret = value; \
-    out = ret; \
-} while (0);
-
 typedef union Q {
-    u_long128 u128;        // offset 0x0, size 0x10
-    unsigned long u64[2];  // offset 0x0, size 0x8
-    unsigned int u32[4];   // offset 0x0, size 0x10
-    unsigned short u16[8]; // offset 0x0, size 0x10
-    unsigned char u8[16];  // offset 0x0, size 0x10
-    signed long s64[2];    // offset 0x0, size 0x8
-    signed int s32[4];     // offset 0x0, size 0x10
-    signed short s16[8];   // offset 0x0, size 0x10
-    signed char s8[16];    // offset 0x0, size 0x10
-    signed int q[4];       // offset 0x0, size 0x10
-    float fv[4];           // offset 0x0, size 0x10
-    signed int iv[4];      // offset 0x0, size 0x10
+    u_long128 u128;  // offset 0x0, size 0x10
+    u_long u64[2];   // offset 0x0, size 0x8
+    u_int u32[4];    // offset 0x0, size 0x10
+    u_short u16[8];  // offset 0x0, size 0x10
+    u_char u8[16];   // offset 0x0, size 0x10
+    long s64[2];     // offset 0x0, size 0x8
+    int s32[4];      // offset 0x0, size 0x10
+    short s16[8];    // offset 0x0, size 0x10
+    s_char s8[16];   // offset 0x0, size 0x10
+    int q[4];        // offset 0x0, size 0x10
+    float fv[4];     // offset 0x0, size 0x10
+    int iv[4];       // offset 0x0, size 0x10
 } Q;
 
 typedef union Q_WORDDATA {
@@ -105,117 +67,45 @@ typedef union Q_WORDDATA {
     u_char uc8[16];  // offset 0x0, size 0x10
     int si32[4];     // offset 0x0, size 0x10
     short ss16[8];   // offset 0x0, size 0x10
-    char sc8[16];    // offset 0x0, size 0x10
+    s_char sc8[16];  // offset 0x0, size 0x10
     u_long ul64[2];  // offset 0x0, size 0x8
-    __int128 ul128;  // offset 0x0, size 0x10
-} Q_WORDDATA;
+    u_long128 ul128; // offset 0x0, size 0x10
+} Q_WORDDATA __attribute__((aligned(16)));
 
-typedef struct
-{
+typedef struct {
     float x;
     float y;
     float z;
     float w;
 } Vector4 __attribute__((aligned(16)));
 
-typedef struct
-{
+typedef struct {
     int x;
     int y;
     int z;
     int w;
 } IVector4 __attribute__((aligned(16)));
 
-static inline void vec_copy(void* dst, void* src) {
-    asm("\
-         lq t7, 0(%1)\n\
-         sq t7, 0(%0)"
-        : "+r"(dst), "+r"(src)::"t7");
+typedef struct {
+    // total size: 0x40
+    float d[4][4]; // offset 0x0, size 0x40
+} Matrix4 __attribute__((aligned(16)));
+
+static inline u_int reinterpret_as_u_int(float v) {
+    return *(u_int*) &v;
 }
 
-static inline void volatile_vec_copy(void* dst, void* src) {
-    asm volatile("\
-         lq t7, 0(%1)\n\
-         sq t7, 0(%0)"
-                 : "=r"(dst) : "r"(src) : "t7");
+static inline int float_floor(float x) {
+    int out;
+    asm("mfc1 %1, %0;\
+          addi t7, zero, 1\n\
+          slt %1, %1, zero\n\
+          cvt.w.s %0, %0;\
+          movz t7, zero, %1;\
+          mfc1 %1, %0;\
+          sub %1, %1, t7"
+        : "+f"(x), "+r"(out)::"t7");
+    return out;
 }
-
-static inline void vec_add(void* x, void* y, void* out) {
-    asm("\
-        lqc2 vf4, 0(%0)\n\
-        lqc2 vf5, 0(%1)\n\
-        vadd.xyzw vf4, vf4, vf5\n\
-        sqc2 vf4, 0(%2)"
-        : "+r"(x), "+r"(y), "+r"(out));
-}
-
-static inline void vec_sub(void* x, void* y, void* out) {
-    asm("\
-        lqc2 vf4, 0(%0)\n\
-        lqc2 vf5, 0(%1)\n\
-        vsub.xyzw vf4, vf4, vf5\n\
-        sqc2 vf4, 0(%2)"
-        : "+r"(x), "+r"(y), "+r"(out));
-}
-
-static inline void vec_scale(float s, void* v, void* out) {
-    asm("mfc1 t7, %1;\
-          lqc2 vf4, 0(%0)\n\
-          qmtc2 t7, vf5\n\
-          vmulx.xyzw vf4, vf4, vf5x\n\
-          sqc2 vf4, 0(%2)"
-        : "+r"(v), "+f"(s), "+r"(out)::"t7");
-}
-
-static inline void vec_zero(void* x) { asm("sq zero, 0(%0)" : "+r"(x)); }
-
-static inline float float_abs(float x) {
-    asm("abs.s %0, %0" : "+f"(x));
-    return x;
-}
-
-static inline float float_clamp(float x, float lower, float upper) {
-    asm("max.s %0, %0, %1; min.s %0, %0, %2" : "+f"(x) : "f"(lower), "f"(upper));
-    return x;
-}
-
-static inline float float_min(float x, float y) {
-    asm("min.s %0, %0, %1" : "+f"(x) : "f"(y) :);
-    return x;
-}
-
-static inline float float_max(float x, float y) {
-    asm("max.s %0, %0, %1" : "+f"(x) : "f"(y) :);
-    return x;
-}
-
-static inline void mat_copy(void* dst, void* src) {
-    asm volatile("\
-        lq $t6, 0(%1)\n\
-        lq $t7, 0x10(%1)\n\
-        sq $t6, 0(%0)\n\
-        sq $t7, 0x10(%0)\n\
-        lq $t6, 0x20(%1)\n\
-        lq $t7, 0x30(%1)\n\
-        sq $t6, 0x20(%0)\n\
-        sq $t7, 0x30(%0)"
-                 : : "r"(dst), "r"(src) : "t6", "t7");
-}
-static inline void mat_copy_3x3(void* dst, void* src) {
-    asm volatile("\
-        lq   $t7,  0(%1)\n\
-        lq   $t6,  0x10(%1)\n\
-        sq   $t7,  0x0(%0)\n\
-        sq   $t6,  0x10(%0)\n\
-        lq   $t7,  0x20(%1)\n\
-        sqc2 $vf0, 0x30(%0)\n\
-        sq   $t7,  0x20(%0)"
-                 : : "r"(dst), "r"(src) : "t6", "t7");
-}
-
-extern void* memcpy(void* __dest, void* __src, u_int __n);
-extern float asinf(float);
-extern float fmodf(float, float);
-extern u_int fptoui(float);
 
 #endif

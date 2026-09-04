@@ -1,4 +1,5 @@
 #include "Chacter/m3_sc.h"
+#include "sce/libvu0.h"
 #include "Chacter/m3_play.h"
 #include "Chacter/skelton.h"
 #include "Heap/sh2_ch_malloc.h"
@@ -9,6 +10,7 @@
 #include "Chacter/m3_wep.h"
 #include "Chacter/m3_play_event.h"
 #include "Chacter/chara_list.h"
+#include "vec.h"
 
 static SubCharacter* shCharacterGetFreeList(void);
 static void AddFreeList(SubCharacter* scp);
@@ -243,7 +245,7 @@ void shCharacterClusterAnimeSet(SubCharacter* scp, int anime) {
     ClusterAnimeSet(scp_d->cluster_anime, (void *)anime);
 }
 
-void SCSetModel(SubCharacter* scp, int model) { // not line matched
+void SCSetModel(SubCharacter* scp, int model, int anime) { // not line matched
     void* model_adr; // r17
     SubCharacterDisp* scp_d = scp; // r2
 
@@ -330,7 +332,7 @@ SubCharacter* shCharacterGetSubCharacter(u_short kind, short id) {
     return NULL;
 }
 
-u_char shCharacterGetSkeltonNum(short kind) {
+int shCharacterGetSkeltonNum(short kind) {
     #define NONE_SKELETON_NUM   0
     #define ITEM_SKELETON_NUM   1
     #define WEAPON_SKELETON_NUM 2
@@ -1196,7 +1198,7 @@ void shCharacterStayObjectNthPartsGet1st(SubCharacter* scp, int n, float* pos, f
 }
 
 
-void shCharacterStayObjectNthPartsSet(SubCharacter* scp, s32 n, f32* pos, f32* rot) {
+void shCharacterStayObjectNthPartsSet(SubCharacter* scp, s32 n, float* pos, float* rot) {
     int i; // r3
     SubCharacterDisp* scp_d = scp; // r2
     shSkelton* sp; // r16
@@ -1602,7 +1604,7 @@ void shCharacterGetPartsMatrixForShadow(float (*mat)[4], u_short kind, u_short i
             
         }
         
-        sceVu0MulMatrix(mat, p->mat[0], sk->src_m[0]);
+        sceVu0MulMatrix(mat, p->mat[0], sk->src_m.d[0]);
     }
 }
 

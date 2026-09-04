@@ -10,14 +10,18 @@ see `alessatool merge --help` for more information.
 from pathlib import Path
 from dataclasses import dataclass
 from json import load, dumps
+
 from utils import ensure_path_and_write
 
 @dataclass
 class MergeArgs:
+    mode: str
     objdiff_fragments: list[Path]
     categories_path: Path
-    output_path: Path
+    objdiff_output_path: Path
+    d_path: Path
     verbose: bool
+    project: Path
 
 def merge_objdiff_units(args: MergeArgs):
     units = []
@@ -39,13 +43,26 @@ def merge_objdiff_units(args: MergeArgs):
 
     result = dumps({
         "$schema": "https://raw.githubusercontent.com/encounter/objdiff/main/config.schema.json",
-        "build_base": False,
+        "build_base": True,
         "build_target": False,
+        "custom_args": [f"PROJECT={args.project}", "NON_MATCHING=1"],
+        "watch_patterns": [
+            "*.c",
+            "*.h"
+        ],
         "progress_categories": progress_categories,
         "units": units,
     })
 
-    ensure_path_and_write(args.output_path, result)
+    ensure_path_and_write(args.objdiff_output_path, result)
 
     if args.verbose:
         print(f"🟣 alessatool/merge: wrote objdiff.json")
+
+def merge_fragments(args: MergeArgs):
+    match args.mode:
+        case "objdiff":
+            merge_objdiff_units(args)
+
+        case _:
+            raise Exception(f"unknown merge mode {args.mode}")

@@ -1,6 +1,8 @@
 #ifndef SH2GFW_STRUCTS_H
 #define SH2GFW_STRUCTS_H
 
+#include "sce/eetypes.h"
+
 typedef struct sh2gfw_AREA_HEAD {
     // total size: 0x10
     u_int area_id;           // offset 0x0, size 0x4
@@ -120,5 +122,83 @@ typedef struct sh2gfw_Effect_Man {
     void* pTop; // offset 0x38, size 0x4
     void* pPad; // offset 0x3C, size 0x4
 } sh2gfw_Effect_Man;
+
+// total size: 0x250
+typedef struct sh2gfw_TRANS_MAN { // @note: idk if this belongs here
+    // Members
+    u_int blockid; // offset 0x0, size 0x4
+    // total size: 0x60
+    struct /* @anon5 */ {
+        // Members
+        u_int areaid; // offset 0x0, size 0x4
+        u_char use_Globalflg[7]; // offset 0x4, size 0x7
+        u_char use_Transflg[7]; // offset 0xB, size 0x7
+        u_short block_id[7]; // offset 0x12, size 0xE
+        u_char* block_man[7]; // offset 0x20, size 0x1C
+        struct sh2gfw_AREA_HEAD* pA_H; // offset 0x3C, size 0x4
+        struct sh2gfw_TEX_HEAD* global_tex; // offset 0x40, size 0x4
+        struct sh2gfw_CLUTS_HEAD* global_clut; // offset 0x44, size 0x4
+        struct sh2gfw_TEX_HEAD* global_transtex; // offset 0x48, size 0x4
+        struct sh2gfw_CLUTS_HEAD* global_transclut; // offset 0x4C, size 0x4
+        struct sh2gfw_TexMAN* gTexMAN; // offset 0x50, size 0x4
+        struct sh2gfw_TexMAN* gTranstexMAN; // offset 0x54, size 0x4
+        u_short gtex_mode; // offset 0x58, size 0x2
+        u_short gtrans_mode; // offset 0x5A, size 0x2
+        u_int pad1; // offset 0x5C, size 0x4
+    }* pA_M; // offset 0x4, size 0x4
+    u_short objnum[4]; // offset 0x8, size 0x8
+    u_int trans_clutnum; // offset 0x10, size 0x4
+    u_int pad2; // offset 0x14, size 0x4
+    u_int pad3; // offset 0x18, size 0x4
+    u_int pad4; // offset 0x1C, size 0x4
+    u_char* trgehead[4]; // offset 0x20, size 0x10
+    struct sh2gfw_GIFTAG_HEAD* pTR_global_GIF_H[4][16]; // offset 0x30, size 0x100
+    struct sh2gfw_TEX_HEAD* p_GTexHead; // offset 0x130, size 0x4
+    struct sh2gfw_CLUTS_HEAD* p_GClutHead; // offset 0x134, size 0x4
+    struct sh2gfw_TexMAN* p_GTexMan; // offset 0x138, size 0x4
+    u_char used_Ggifnum[4]; // offset 0x13C, size 0x4
+    struct sh2gfw_GIFTAG_HEAD* pTR_trans_GIF_H[4][16]; // offset 0x140, size 0x100
+    struct sh2gfw_TEX_HEAD* p_TRTexHead; // offset 0x240, size 0x4
+    struct sh2gfw_CLUTS_HEAD* p_TRClutHead; // offset 0x244, size 0x4
+    struct sh2gfw_TexMAN* p_TRTexMan; // offset 0x248, size 0x4
+    u_char used_TRgifnum[4]; // offset 0x24C, size 0x4
+} sh2gfw_TRANS_MAN;
+
+typedef struct sh2gfw_Model_Header {
+    // total size: 0x40
+    u_char NoTextureID; // offset 0x0, size 0x1
+    u_char padc[3]; // offset 0x1, size 0x3
+    u_int chara_id; // offset 0x4, size 0x4
+    u_int texnum; // offset 0x8, size 0x4
+    u_int toTexHead_offset; // offset 0xC, size 0x4
+    u_int toClutsHead_offset; // offset 0x10, size 0x4
+    u_int toModel_offset; // offset 0x14, size 0x4
+    int toKg1_offset; // offset 0x18, size 0x4
+    int padi; // offset 0x1C, size 0x4
+    void* pTexMAN[8]; // offset 0x20, size 0x20
+} sh2gfw_Model_Header;
+
+
+typedef struct sh2gfw_AllModelData_Man {
+    // total size: 0x308
+    int n_active_character; // offset 0x0, size 0x4
+    int n_load_character; // offset 0x4, size 0x4
+    struct sh2gfw_ModelDraw_MAN* pMDM[32]; // offset 0x8, size 0x80
+    void* file_struct[32]; // offset 0x88, size 0x80
+    int fid_model[32]; // offset 0x108, size 0x80
+    int fid_anim[32]; // offset 0x188, size 0x80
+    int fid_clus[32]; // offset 0x208, size 0x80
+    int fid_kg1[32]; // offset 0x288, size 0x80
+} sh2gfw_AllModelData_Man;
+
+typedef struct sh2gfw_LoadModel_MEMMAN {
+    // total size: 0x18
+    u_int index_model; // offset 0x0, size 0x4
+    u_int index_anime; // offset 0x4, size 0x4
+    u_int index_clus; // offset 0x8, size 0x4
+    u_long128* pLM_head; // offset 0xC, size 0x4
+    u_long128* pLA_head; // offset 0x10, size 0x4
+    u_long128* pCL_head; // offset 0x14, size 0x4
+} sh2gfw_LoadModel_MEMMAN;
 
 #endif // SH2GFW_STRUCTS_H

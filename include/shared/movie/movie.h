@@ -1,8 +1,8 @@
 #ifndef MOVIE_SHARED_H
 #define MOVIE_SHARED_H
 
-#include "libcdvd.h"
-#include "eekernel.h"
+#include "sce/libcdvd.h"
+#include "sce/eekernel.h"
 
 typedef struct {
     int play_event_no;
@@ -29,7 +29,6 @@ extern u_int scene_bg_color;
 extern MOVIE_WRK movie_wrk;
 extern int thread_id;
 extern u_int controller_val;
-extern int videoDecTh;
 extern int frd;
 extern int play_mov_no;
 

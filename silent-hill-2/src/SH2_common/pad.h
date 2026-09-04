@@ -5,6 +5,8 @@
 
 #define PAD_KEY_SELECT     (1 << 2)
 #define PAD_KEY_START      (1 << 3)
+#define PAD_KEY_6          (1 << 6)
+#define PAD_KEY_7          (1 << 7)
 #define PAD_KEY_DPAD_RIGHT (1 << 8)
 #define PAD_KEY_DPAD_LEFT  (1 << 9)
 #define PAD_KEY_DPAD_UP    (1 << 10)
@@ -68,6 +70,10 @@ typedef struct Pad_KeyConfig {
     int map;         // offset 0x44, size 0x4
     int padding[6];  // offset 0x48, size 0x18
 } Pad_KeyConfig;
+
+// @todo: clean up
+
+void shPadInit(void);
 
 void libShPadRead(int a, int b, void* c); // NOT SURE ABOUT THIS
 

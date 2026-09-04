@@ -2,7 +2,13 @@
 #define VC_MAIN_H
 
 #include "sh2_common.h"
+#include "sce/libvu0.h"
 #include "Chacter/character.h"
+
+// SH1-style CLAMP macro, used a lot in SH1 code, but most of SH2 uses `float_clamp`?
+// Maybe only used in `vc` since this was reused from SH1.
+#define CLAMP(x, min, max) \
+    (((x) < (min)) ? (min) : (((x) > (max)) ? (max) : (x)))
 
 typedef enum _VC_ROAD_TYPE { // : u_char
     VC_RD_TYPE_ROAD,
@@ -176,7 +182,7 @@ typedef struct _VC_ROAD_DATA {
     /* 0x44 */ int flags; // `VC_ROAD_FLAGS`
     /* 0x48 */ int area_size_type; // `VC_AREA_SIZE_TYPE`
     /* 0x4c */ int rd_type;
-    /* 0x50 */ VC_CAM_MV_TYPE mv_y_type; // Unsure if correct type, `cam_mv_type` likely uses this enum too, maybe both use it for diff reasons?
+    /* 0x50 */ int mv_y_type; // `VC_CAM_MV_TYPE`? Unsure if correct, `cam_mv_type` likely uses this enum too, maybe both use it for diff reasons?
     /* 0x54 */ float ofs_watch_hy;
     /* 0x58 */ float trace_btm_hy;
     /* 0x5c */ int rd_dir_type; // `VC_ROAD_DIR_TYPE`
@@ -267,8 +273,32 @@ typedef struct _VC_CAMERA_INTINFO {
     /* 0x8 */ float ev_cam_rate;
 } VC_CAMERA_INTINFO;
 
+typedef struct
+{
+	/* 0x0 */ float new;
+	/* 0x4 */ float old;
+	/* 0x8 */ float delta;
+	/* 0xc */ int flg;
+} VC_PROJECTION_PARAMS; // @note: Guessed name, struct is anon in symbols.
+
+typedef enum
+{
+	MAKE_CAM_TGT_BY_ROAD,
+	MAKE_CAM_TGT_BY_CHARA_HEAD
+} MAKE_CAM_TGT; // @note: Guessed name, enum is anon in symbols.
+
 extern VC_WORK vcWork;
 extern VC_CAMERA_INTINFO vcCameraInternalInfo;
+extern VC_ROAD_DATA* vcNullRoadArrayList[2];
+extern VC_NEAR_ROAD_DATA vcNullNearRoad;
+extern float vcSelfViewTimer;
+extern VC_WATCH_MV_PARAM vcWatchMvPrmSt;
+extern VC_CAM_MV_PARAM vcCamMvPrmSt;
+extern const VC_WATCH_MV_PARAM watch_mv_prm_user;
+extern const VC_CAM_MV_PARAM cam_mv_prm_user;
+extern int excl_r_ary[9];
+extern int mv_stl_ang_ary[5];
+extern VC_PROJECTION_PARAMS vcProjectionParam;
 
 // @todo: check float*/float[] types.
 void vcInitVCSystem(VC_ROAD_DATA** vc_road_ary_list);
@@ -286,7 +316,7 @@ int vcRetSmoothCamMvF(float* old_pos, float* now_pos, float* old_ang, float* now
 VC_CAM_MV_TYPE vcRetCurCamMvType(VC_WORK* w_p);
 int vcRetThroughDoorCamEndF(VC_WORK* w_p);
 float vcRetFarWatchRate(int far_watch_button_prs_f, VC_CAM_MV_TYPE cur_cam_mv_type, VC_WORK* w_p);
-float vcRetSelfViewEffectRate(VC_CAM_MV_TYPE cur_cam_mv_type, VC_WORK* w_p);
+float vcRetSelfViewEffectRate(VC_CAM_MV_TYPE cur_cam_mv_type, float far_watch_rate, VC_WORK* w_p);
 void vcSetFlagsByCamMvType(VC_CAM_MV_TYPE cam_mv_type, float far_watch_rate, int all_warp_f);
 void vcPreSetDataInVC_WORK(VC_WORK* w_p, VC_ROAD_DATA** vc_road_ary_list);
 void vcSetTHROUGH_DOOR_CAM_PARAM_in_VC_WORK(VC_WORK* w_p, THROUGH_DOOR_SET_CMD_TYPE set_cmd_type);
@@ -305,9 +335,9 @@ void vcMakeFarWatchTgtPos(float* watch_tgt_pos, VC_WORK* w_p, VC_AREA_SIZE_TYPE 
 void vcSetWatchTgtXzPos(float* watch_pos, float* center_pos, float* cam_pos, float tgt_chara2watch_cir_dist, float tgt_watch_cir_r, float watch_cir_ang_y);
 void vcSetWatchTgtYParam(float* watch_pos, VC_WORK* w_p, VC_CAM_MV_TYPE cam_mv_type, float watch_y);
 void vcAdjustWatchYLimitHighWhenFarView(float* watch_pos, float* cam_pos);
-void vcAutoRenewalCamTgtPos(VC_WORK* w_p, VC_CAM_MV_TYPE cam_mv_type, VC_CAM_MV_PARAM* cam_mv_prm_p, VC_ROAD_FLAGS cur_rd_flags, VC_AREA_SIZE_TYPE cur_rd_area_size);
+void vcAutoRenewalCamTgtPos(VC_WORK* w_p, VC_CAM_MV_TYPE cam_mv_type, VC_CAM_MV_PARAM* cam_mv_prm_p, VC_ROAD_FLAGS cur_rd_flags, VC_AREA_SIZE_TYPE cur_rd_area_size, float far_watch_rate);
 float vcRetMaxTgtMvXzLen(VC_WORK* w_p, VC_CAM_MV_PARAM* cam_mv_prm_p);
-void vcMakeIdealCamPosByHeadPos(float* ideal_pos, VC_WORK* w_p);
+void vcMakeIdealCamPosByHeadPos(float* ideal_pos, VC_WORK* w_p, VC_AREA_SIZE_TYPE cur_rd_area_size);
 void vcMakeIdealCamPosForFixAngCam(float* ideal_pos, VC_WORK* w_p);
 void vcMakeIdealCamPosForThroughDoorCam(float* ideal_pos, VC_WORK* w_p);
 void vcMakeIdealCamPosForLocusCircleCam(float* ideal_pos, VC_WORK* w_p);
@@ -322,11 +352,11 @@ void vcRenewalCamData(VC_WORK* w_p, VC_CAM_MV_PARAM* cam_mv_prm_p);
 void vcRenewalCamMatAng(VC_WORK* w_p, VC_WATCH_MV_PARAM* watch_mv_prm_p, VC_CAM_MV_TYPE cam_mv_type, int visible_chara_f);
 void vcMakeNewBaseCamAng(float* new_base_ang, VC_CAM_MV_TYPE cam_mv_type, VC_WORK* w_p);
 void vcRenewalBaseCamAngAndAdjustOfsCamAng(VC_WORK* w_p, float* new_base_cam_ang);
-void vcMakeOfsCamTgtAng(float* ofs_tgt_ang, float base_matT[4], VC_WORK* w_p);
-void vcMakeOfsCam2CharaBottomAndTopAngByBaseMatT(float* ofs_cam2chara_btm_ang, float* ofs_cam2chara_top_ang, float base_matT[4], float* cam_pos, float* chara_pos, float chara_bottom_y, float chara_top_y);
+void vcMakeOfsCamTgtAng(sceVu0FVECTOR ofs_tgt_ang, sceVu0FMATRIX base_matT, VC_WORK* w_p);
+void vcMakeOfsCam2CharaBottomAndTopAngByBaseMatT(sceVu0FVECTOR ofs_cam2chara_btm_ang, sceVu0FVECTOR ofs_cam2chara_top_ang, sceVu0FMATRIX base_matT, sceVu0FVECTOR cam_pos, sceVu0FVECTOR chara_pos, float chara_bottom_y, float chara_top_y);
 void vcAdjCamOfsAngByCharaInScreen(float* cam_ang, float* ofs_cam2chara_btm_ang, float* ofs_cam2chara_top_ang, VC_WORK* w_p);
 void vcAdjCamOfsAngByOfsAngSpd(float* ofs_ang, float* ofs_ang_spd, float* ofs_tgt_ang, VC_WATCH_MV_PARAM* prm_p);
-void vcMakeCamMatAndCamAngByBaseAngAndOfsAng(float* cam_mat_ang, float cam_mat[4], float* base_cam_ang, float* ofs_cam_ang, float* cam_pos);
+void vcMakeCamMatAndCamAngByBaseAngAndOfsAng(sceVu0FVECTOR cam_mat_ang, sceVu0FMATRIX cam_mat, sceVu0FVECTOR base_cam_ang, sceVu0FVECTOR ofs_cam_ang, sceVu0FVECTOR cam_pos);
 void vcSetDataToVwSystem(VC_WORK* w_p, VC_CAM_MV_TYPE cam_mv_type);
 float vcCamMatNoise(float noise_w, float ang_spd1, float ang_spd2);
 float vcGetXZSumDistFromLimArea(float* out_vec_x_p, float* out_vec_z_p, float chk_wld_x, float chk_wld_z, float lim_min_x, float lim_max_x, float lim_min_z, float lim_max_z, int can_ret_minus_dist_f);

@@ -1,5 +1,6 @@
 #ifndef FOG_SHARED_H
 #define FOG_SHARED_H
+#include "sce/libvu0.h"
 
 #define WALL_MAX 188
 #define PART_MAX 700
@@ -235,19 +236,6 @@ typedef struct ScratchpadFog {
     sceVu0FVECTOR Wind2;
     sceVu0FVECTOR Wind;
 } ScratchpadFog;
-
-static inline int float_floor(float x) {
-    int out;
-    asm("mfc1 %1, %0;\
-          addi t7, zero, 1\n\
-          slt %1, %1, zero\n\
-          cvt.w.s %0, %0;\
-          movz t7, zero, %1;\
-          mfc1 %1, %0;\
-          sub %1, %1, t7"
-        : "+f"(x), "+r"(out)::"t7");
-    return out;
-}
 
 static inline float float_sign(float x) {
     asm (".set noreorder;\

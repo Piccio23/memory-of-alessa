@@ -16,6 +16,7 @@ import os
 import json
 from pathlib import Path
 from dataclasses import dataclass, asdict
+
 from utils import ensure_path_and_write, normalize_object_path, to_expected_path
 
 import splat.scripts.split as split
@@ -41,9 +42,11 @@ class GenerationArgs:
     template_path: Path
     lcf_output_path: Path
     objdiff_output_path: Path
+    main_executable_path: Path
     build_path: Path
     verbose: bool
     no_lcf: bool
+    no_dependencies: bool
     no_objdiff: bool
     use_cache: bool
     yamls: list[str]
@@ -80,7 +83,8 @@ def split_yaml(args: GenerationArgs) -> None:
             use_cache=args.use_cache,
             make_full_disasm_for_code=args.make_full_disasm_for_code
         )
-        generate_linker_dependencies(args)
+        if not args.no_dependencies:
+            generate_linker_dependencies(args)
     finally:
         os.chdir(old_cwd)
 
@@ -103,20 +107,28 @@ def generate_linker_dependencies(args: GenerationArgs):
     build_path = args.build_path
     path_strs = []
 
-    output = f"{(build_path / clean_up_path(splat_options.opts.elf_path)).as_posix()}:"
+    elf_path = splat_options.opts.elf_path
+    ld_script_path = splat_options.opts.ld_script_path
+
+    target_executable = (build_path / clean_up_path(elf_path)).as_posix()
+    main_executable = args.main_executable_path.as_posix()
+    output_lines = [f"{target_executable} {main_executable}:"]
 
     for entry in linker_writer.dependencies_entries:
         if entry.object_path is None:
             continue
         path_str = normalize_object_path(entry.object_path, build_path)
         path_strs.append(path_str)
-        output += f" \\\n    {path_str}"
 
-    output += "\n"
+        output_lines += [f" \\\n    {path_str}"]
+
+    output_lines += ["\n"]
+
     for path_str in path_strs:
-        output += f"{path_str}:\n"
-    
-    ensure_path_and_write(splat_options.opts.ld_script_path.with_suffix(".d"), output)
+        output_lines += [f"{path_str}:\n"]
+
+    output_path = ld_script_path.with_suffix(".d")
+    ensure_path_and_write(output_path, "".join(output_lines))
 
 def generate_lcf(args: GenerationArgs):
     '''
@@ -154,11 +166,29 @@ def generate_lcf(args: GenerationArgs):
         if section_type == ".bss":
             alignment = args.bss_alignment
 
-        block = [
+        block = []
+
+        # assumes that there is a .lit4 section, and that it comes before
+        # .sdata. @todo: take into account the section_order in the yaml?
+        if section_type == ".lit4":
+            block += [
+                "\t\t.    = ALIGN(0x80);",
+                "\t\t_gp  = . + 0x7FF0;",
+                "",
+            ]
+
+        elif section_type == ".sbss":
+            block += [
+                "\t\t_fbss = .;",
+                "",
+            ] + block
+
+        block += [
             f"\t\t# {section_type}",
             f"\t\t__{section_type[1:]}_start = .;",
             f"\t\tALIGNALL(0x{alignment:X});",
         ]
+
         for entry in objects:
             alignment = entry.segment.ld_align_segment_start 
             if alignment is not None:

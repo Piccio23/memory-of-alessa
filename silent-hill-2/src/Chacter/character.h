@@ -2,6 +2,7 @@
 #define CHARACTER_H
 
 #include "sh2_common.h"
+#include "sce/libvu0.h"
 #include "Chacter_Draw/clani.h"
 
 typedef struct shBattleArea {
@@ -30,7 +31,7 @@ typedef struct _CL_VHIT_WALL {
 typedef struct _CL_VHIT_CHARA {
     // total size: 0x20
     struct SubCharacter* sc; // offset 0x0, size 0x4
-    float cp[4];             // offset 0x10, size 0x10
+    sceVu0FVECTOR cp;        // offset 0x10, size 0x10
 } CL_VHIT_CHARA;
 
 typedef struct _CL_VHIT_RESULT {
@@ -41,12 +42,12 @@ typedef struct _CL_VHIT_RESULT {
         struct _CL_VHIT_WALL wall;   // offset 0x0, size 0x30
         struct _CL_VHIT_CHARA chara; // offset 0x0, size 0x20
     } hobj;                          // offset 0x10, size 0x30
-} CL_VHIT_RESULT;
+} __attribute__((aligned(16))) CL_VHIT_RESULT;
 
 typedef struct shBattleInfo {
     // total size: 0x80
-    Vector4 pos;                 // offset 0x0, size 0x10
-    Vector4 vec;                 // offset 0x10, size 0x10
+    sceVu0FVECTOR pos;           // offset 0x0, size 0x10
+    sceVu0FVECTOR vec;           // offset 0x10, size 0x10
     u_short id;                  // offset 0x20, size 0x2
     u_short kind;                // offset 0x22, size 0x2
     float dead_timer;            // offset 0x24, size 0x4
@@ -77,7 +78,7 @@ typedef struct SubCharacter {
     Vector4 rot;
     Vector4 pos_spd;
     Vector4 rot_spd;
-    sceVu0FMATRIX mat;
+    sceVu0FMATRIX mat; // @todo: should be Matrix4
     struct shSkelton* sk_top;
     float eye_y;
     float center_y;
@@ -85,7 +86,7 @@ typedef struct SubCharacter {
     float spd_org;
     float spd_y;
     float spd_roty;
-    Vector4 grnd_normal; // @tood: should be float[4] lol
+    sceVu0FVECTOR grnd_normal;
     float grnd_height;
     Vector4 b_pos;
     Vector4 b_rot;
@@ -448,7 +449,7 @@ typedef enum _JAMES_LOWER_STATUS {
     JMS_ST_L_KICK = 29,
     JMS_ST_L_TO_STAND = 30,
     JMS_ST_L_EVENT = 31,
-} E_JAMES_LOWER_STATUS;
+} JAMES_LOWER_STATUS;
 
 typedef enum _JAMES_UPPER_STATUS {
     JMS_ST_U_STAND = 0,
@@ -483,7 +484,7 @@ typedef enum _JAMES_UPPER_STATUS {
     JMS_ST_U_KICK = 29,
     JMS_ST_U_TO_STAND = 30,
     JMS_ST_U_EVENT = 31,
-} E_JAMES_UPPER_STATUS;
+} JAMES_UPPER_STATUS;
 
 typedef struct _CL_HITPOLY_COLUMN {
     // total size: 0x30
@@ -721,63 +722,68 @@ typedef enum _MARIA_SUB_STATUS {
     MAR_SUB_ST_DAMAGE = 8,
 } MARIA_SUB_STATUS;
 
-// total size: 0x310
 typedef struct shMariaWork {
-    // Members
-    struct SubCharacter* mar_p;               // offset 0x0, size 0x4
-    Vector4 dist_rot;                         // offset 0x10, size 0x10
-    Vector4 dist_pos;                         // offset 0x20, size 0x10
-    Vector4 pos;                              // offset 0x30, size 0x10
-    Vector4 rot;                              // offset 0x40, size 0x10
-    float to_target;                          // offset 0x50, size 0x4
-    sceVu0FVECTOR tgt_pos[5];                 // offset 0x60, size 0x50
-    signed int tgt_pointer;                   // offset 0xB0, size 0x4
-    signed int pushed_dir;                    // offset 0xB4, size 0x4
-    enum _MARIA_MAIN_STATUS main_status_now;  // offset 0xB8, size 0x1
-    enum _MARIA_MAIN_STATUS main_status_prev; // offset 0xB9, size 0x1
-    enum _MARIA_SUB_STATUS sub_status_now;    // offset 0xBA, size 0x1
-    enum _MARIA_SUB_STATUS sub_status_prev;   // offset 0xBB, size 0x1
-    u_int sub_st_flg;                         // offset 0xBC, size 0x4
-    u_int anime_st_flg;                       // offset 0xC0, size 0x4
-    u_int anime_pause;                        // offset 0xC4, size 0x4
-    struct _CL_VHIT_RESULT r_forward;         // offset 0xD0, size 0x40
-    struct _CL_VHIT_RESULT l_forward;         // offset 0x110, size 0x40
-    struct _CL_VHIT_RESULT forward;           // offset 0x150, size 0x40
-    struct _CL_VHIT_RESULT ft_floor;          // offset 0x190, size 0x40
-    struct _CL_VHIT_RESULT r_foot;            // offset 0x1D0, size 0x40
-    struct _CL_VHIT_RESULT l_foot;            // offset 0x210, size 0x40
-    struct _CL_HITPOLY_COLUMN column_mov;     // offset 0x250, size 0x30
-    struct _CL_HITPOLY_COLUMN column_atk;     // offset 0x280, size 0x30
-    float col_mov_z_hosei;                    // offset 0x2B0, size 0x4
-    float col_atk_z_hosei;                    // offset 0x2B4, size 0x4
-    u_char se_upper[4];                       // offset 0x2B8, size 0x4
-    u_char se_foot[4];                        // offset 0x2BC, size 0x4
-    Vector4 tgt_neck_angle;                   // offset 0x2C0, size 0x10
-    struct SubCharacter* look_tgt;            // offset 0x2D0, size 0x4
-    struct SubCharacter* look_obj;            // offset 0x2D4, size 0x4
-    float dist_to_jms;                        // offset 0x2D8, size 0x4
-    float hp_recover;                         // offset 0x2DC, size 0x4
-    float stand_time;                         // offset 0x2E0, size 0x4
-    float move_time;                          // offset 0x2E4, size 0x4
-    float muteki_time;                        // offset 0x2E8, size 0x4
-    float relax_time;                         // offset 0x2EC, size 0x4
-    float afraid_time;                        // offset 0x2F0, size 0x4
-    float hp;                                 // offset 0x2F4, size 0x4
-    float hp_max;                             // offset 0x2F8, size 0x4
-    int tired;                                // offset 0x2FC, size 0x4
-    int tired_max;                            // offset 0x300, size 0x4
-    u_char relax_flag;                        // offset 0x304, size 0x1
-    u_char no_damage;                         // offset 0x305, size 0x1
-    u_char dead;                              // offset 0x306, size 0x1
-    u_short damage_no;                        // offset 0x308, size 0x2
-    u_char enemy_around;                      // offset 0x30A, size 0x1
-    u_char enemy_atk_area;                    // offset 0x30B, size 0x1
-    u_char look_jms;                          // offset 0x30C, size 0x1
-    u_char random_status;                     // offset 0x30D, size 0x1
-    u_char active_type;                       // offset 0x30E, size 0x1
+    // total size: 0x310
+    SubCharacter* mar_p; // offset 0x0, size 0x4
+    Vector4 dist_rot;
+    Vector4 dist_pos;
+    Vector4 pos;
+    Vector4 rot;
+    float to_target; // offset 0x50, size 0x4
+    sceVu0FVECTOR tgt_pos[5]; // offset 0x60, size 0x50
+    int tgt_pointer; // offset 0xB0, size 0x4
+    int pushed_dir; // offset 0xB4, size 0x4
+    MARIA_MAIN_STATUS main_status_now; // offset 0xB8, size 0x1
+    MARIA_MAIN_STATUS main_status_prev; // offset 0xB9, size 0x1
+    MARIA_SUB_STATUS sub_status_now; // offset 0xBA, size 0x1
+    MARIA_SUB_STATUS sub_status_prev; // offset 0xBB, size 0x1
+    u_int sub_st_flg; // offset 0xBC, size 0x4
+    u_int anime_st_flg; // offset 0xC0, size 0x4
+    u_int anime_pause; // offset 0xC4, size 0x4
+    CL_VHIT_RESULT r_forward; // offset 0xD0, size 0x40
+    CL_VHIT_RESULT l_forward; // offset 0x110, size 0x40
+    CL_VHIT_RESULT forward; // offset 0x150, size 0x40
+    CL_VHIT_RESULT ft_floor; // offset 0x190, size 0x40
+    CL_VHIT_RESULT r_foot; // offset 0x1D0, size 0x40
+    CL_VHIT_RESULT l_foot; // offset 0x210, size 0x40
+    CL_HITPOLY_COLUMN column_mov; // offset 0x250, size 0x30
+    CL_HITPOLY_COLUMN column_atk; // offset 0x280, size 0x30
+    float col_mov_z_hosei; // offset 0x2B0, size 0x4
+    float col_atk_z_hosei; // offset 0x2B4, size 0x4
+    u_char se_upper[4]; // offset 0x2B8, size 0x4
+    u_char se_foot[4]; // offset 0x2BC, size 0x4
+    Vector4 tgt_neck_angle;
+    SubCharacter* look_tgt; // offset 0x2D0, size 0x4
+    SubCharacter* look_obj; // offset 0x2D4, size 0x4
+    float dist_to_jms; // offset 0x2D8, size 0x4
+    float hp_recover; // offset 0x2DC, size 0x4
+    float stand_time; // offset 0x2E0, size 0x4
+    float move_time; // offset 0x2E4, size 0x4
+    float muteki_time; // offset 0x2E8, size 0x4
+    float relax_time; // offset 0x2EC, size 0x4
+    float afraid_time; // offset 0x2F0, size 0x4
+    float hp; // offset 0x2F4, size 0x4
+    float hp_max; // offset 0x2F8, size 0x4
+    int tired; // offset 0x2FC, size 0x4
+    int tired_max; // offset 0x300, size 0x4
+    u_char relax_flag; // offset 0x304, size 0x1
+    u_char no_damage; // offset 0x305, size 0x1
+    u_char dead; // offset 0x306, size 0x1
+    u_short damage_no; // offset 0x308, size 0x2
+    u_char enemy_around; // offset 0x30A, size 0x1
+    u_char enemy_atk_area; // offset 0x30B, size 0x1
+    u_char look_jms; // offset 0x30C, size 0x1
+    u_char random_status; // offset 0x30D, size 0x1
+    u_char active_type; // offset 0x30E, size 0x1
 } shMariaWork;
+
+typedef struct TextPos {
+    // total size: 0x8
+    u_int block_index; // offset 0x0, size 0x4
+    u_int texture_no; // offset 0x4, size 0x4
+} TextPos;
 
 extern struct shPlayerWork sh2jms; // size: 0x540, address: 0x3C7EE0
 extern struct shMariaWork sh2mar;
 
-#endif CHARACTER_H
+#endif // CHARACTER_H

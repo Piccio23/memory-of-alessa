@@ -1,7 +1,7 @@
 #ifndef SH_CHARACTER_STATUS_H
 #define SH_CHARACTER_STATUS_H
 
-#include "common.h"
+#include "sh2_common.h"
 #include "Chacter/character.h"
 
 // total size: 0x1
@@ -23,29 +23,53 @@ typedef struct shInAreaTgtInfo {
 } shInAreaTgtInfo;
 
 extern shInAreaTgtInfo sh2_target_info[20];
+extern shInAreaTgtInfo sh2_target_info_buf[20]; 
+extern shCharacterAll sh2chara;
+extern int rest_tgt; // size: 0x4, address: 0x3CEDD0
+extern int rest_tgt_buf; // size: 0x4, address: 0x3CEDC8
 
 void shBattleCheckTargetMyArea(shInArea* in_area, SubCharacter* scp, SubCharacter* tgt, float* look, float* feel);
-int shBattleAroundTargetEnemy(void);
-SubCharacter* shBattleGetTargetEnemy(SubCharacter* scp);
-SubCharacter* shBattleChangeTargetEnemy(SubCharacter* scp, int key);
-u_int shBattleGetTargetChara(SubCharacter* scp, int kind);
-SubCharacter* shCameraGetNearTarget(int i, int type);
-SubCharacter* shBattleGetNearDeadlyTargetEnemy(SubCharacter* scp);
-SubCharacter* shBattleGetTargetHuman(SubCharacter* scp /* r17 */, u_int type /* r2 */);
-int shBattleSeeHumanLight(SubCharacter* scp /* r16 */);
-int shBattleListenHumanSound(SubCharacter* scp, SubCharacter* tgt /* r2 */); // @note DWARF only shows one arg
 
-int shBattleAimedByHuman(SubCharacter* scp /* r2 */);
-int shBattleFinishedByHuman(SubCharacter* scp /* r2 */);
+int shBattleAroundTargetEnemy(void);
+
+int shBattleCheckTargetChara(SubCharacter* scp);
+
+SubCharacter* shBattleGetTargetEnemy(SubCharacter* scp);
+
+SubCharacter* shBattleChangeTargetEnemy(SubCharacter* scp, int key);
+
+u_int shBattleGetTargetChara(SubCharacter* scp, int kind);
+
+SubCharacter* shCameraGetNearTarget(int i, int type);
+
+SubCharacter* shBattleGetNearDeadlyTargetEnemy(SubCharacter* scp);
+
+SubCharacter* shBattleGetTargetHuman(SubCharacter* scp, u_int type);
+
+int shBattleListenHumanSound(SubCharacter* scp, SubCharacter* tgt);
+
+int shBattleSeeHumanLight(SubCharacter* scp);
+
+int shBattleAimedByHuman(SubCharacter* scp);
+
+int shBattleFinishedByHuman(SubCharacter* scp);
+
 int shBattleNoDamageHuman(void);
 
 int shBattleNoDamageHumanJames(void);
+
 int shBattleNoDamageHumanMaria(void);
+
 int shBattleHuggedHuman(void);
+
 void shBattleSetLookArea(SubCharacter* scp, float center, float radius);
+
 void shBattleSetFeelArea(SubCharacter* scp, float center, float radius);
+
 void shBattleInitEnemyCheckWork(void);
+
 void shBattleInit(void);
+
 void shBattleExec(void);
 
 

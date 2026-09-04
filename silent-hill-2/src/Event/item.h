@@ -4,13 +4,30 @@
 #include "sh2_common.h"
 #include "Chacter/character.h"
 
-#define HEALTH_DRINK 1
-#define FIRST_AID_KIT 2
-#define AMPOULE 3
-#define CHAINSAW 14
+#define GET_ITEM_FLAG(index) ((item.flag[(index) >> 5] >> ((index) & 0x1F)) & 1)
+#define SET_ITEM_FLAG(index) ((item.flag[(index) >> 5] |= (1 << ((index) & 0x1F))))
 
-// the meat carcass model in the eddie boss fight
-#define ITEM_B_NIK_CHARA_KIND 0x421
+#define HEALTH_DRINK     1
+#define FIRST_AID_KIT    2
+#define AMPOULE          3
+#define SH2_ITEM_04      4
+#define SH2_ITEM_05      5
+#define SH2_ITEM_06      6
+#define SH2_ITEM_07      7
+#define SH2_ITEM_08      8
+#define SH2_ITEM_09      9
+#define SH2_ITEM_10      10
+#define SH2_ITEM_11      11
+#define SH2_ITEM_12      12
+#define SH2_ITEM_13      13
+#define CHAINSAW         14
+#define SH2_ITEM_15      15
+#define SH2_ITEM_16      16
+#define SH2_ITEM_17      17
+#define SH2_ITEM_18      18
+#define APART_GATE_KEY   23
+#define APART_202_KEY    24
+#define COIN_OF_SNAKE    47
 
 // total size: 0x34
 typedef struct Item {

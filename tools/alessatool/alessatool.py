@@ -6,8 +6,9 @@ from commands.generate import GenerationArgs, split_yaml
 from commands.extract import ExtractionArgs, extract_mfa
 from commands.annotate import AnnotationArgs, annotate_asm
 from commands.patch import PatchArgs, patch_relocations
-from commands.merge import MergeArgs, merge_objdiff_units
+from commands.merge import MergeArgs, merge_fragments
 from commands.create import CreationArgs, create_overlay_yamls
+from commands.debug import DebugArgs, debug_nonmatching
 
 from commands.util import configure_util_parser
 
@@ -24,10 +25,13 @@ def patch(args: PatchArgs):
     patch_relocations(args)
 
 def merge(args: MergeArgs):
-    merge_objdiff_units(args)
+    merge_fragments(args)
 
 def create(args: CreationArgs):
     create_overlay_yamls(args)
+
+def debug(args: DebugArgs):
+    debug_nonmatching(args)
 
 def main():
     parser = argparse.ArgumentParser(  
@@ -104,9 +108,20 @@ def main():
         help="path to build directory"
     )
     generate_parser.add_argument(
+        "--main-executable-path",
+        type=Path,
+        default=Path(BUILD) / SERIAL / SERIAL,
+        help="path to main executable file in build folder"
+    )
+    generate_parser.add_argument(
         "--no-lcf",
         action="store_true",
         help="don't generate a linker command file."
+    )
+    generate_parser.add_argument(
+        "--no-dependencies",
+        action="store_true",
+        help="don't generate linker dependencies."
     )
     generate_parser.add_argument(
         "--no-objdiff",
@@ -164,7 +179,7 @@ def main():
     annotate_parser.add_argument(
         "--asm-path",
         type=Path,
-        default="-",
+        default=None,
         help="path to the asm file to annotate"
     )
     annotate_parser.add_argument(
@@ -233,19 +248,26 @@ def main():
 
     merge_parser = subparsers.add_parser(
         "merge",
-        help="merge objdiff.json fragments"
+        help="merge `.d` or objdiff.json fragments"
     )
-    merge_parser.add_argument(
-        "--output-path",
+    merge_subparsers = merge_parser.add_subparsers(dest="mode")
+    objdiff_merge_parser = merge_subparsers.add_parser(name="objdiff")
+    objdiff_merge_parser.add_argument(
+        "--objdiff-output-path",
         type=Path,
         default="objdiff.json"
     )
-    merge_parser.add_argument(
+    objdiff_merge_parser.add_argument(
         "--categories-path",
         type=Path,
         default=None
     )
-    merge_parser.add_argument(
+    objdiff_merge_parser.add_argument(
+        "--project",
+        type=str,
+        required=True
+    )
+    objdiff_merge_parser.add_argument(
         "objdiff_fragments",
         type=Path,
         nargs="+",
@@ -286,6 +308,23 @@ def main():
         help="a symbol_addrs template (see overlay_symbol_addrs.txt)"
     )
     create_parser.set_defaults(func=create)
+
+    debug_parser = subparsers.add_parser(
+        "debug",
+        help="troubleshoot issues when the build is not matching"
+    )
+    debug_parser.add_argument(
+        "--project",
+        default="silent-hill-3",
+        help="name of the project to debug (e.g., `silent-hill-2`)"
+    )
+    debug_parser.add_argument(
+        "--all",
+        action="store_true",
+        default=False,
+        help="print all mismatches"
+    )
+    debug_parser.set_defaults(func=debug)
 
     util_parser = subparsers.add_parser(
         "util",

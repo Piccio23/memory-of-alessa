@@ -33,6 +33,12 @@ PROJECT ?= silent-hill-3
 NON_MATCHING ?= 0
 GENERATE_LCF ?= 1
 GENERATE_REPORT ?= 0
+
+VERBOSE ?= 0
+TQDM_DISABLE ?= 1
+
+NPROC ?= $(call get_nproc)
+MAKE_OPTIONS ?= -j$(NPROC)
 ###############################################################
 SHELL := /bin/sh
 ARCH := $(shell uname -m)
@@ -40,7 +46,6 @@ KERNEL := $(shell uname -s)
 PLATFORM := $(if $(filter $(KERNEL),Darwin),macos,linux)
 OS := $(PLATFORM)-$(subst _,-,$(ARCH))
 
-MAKE := make
 GIT := git
 PYTHON := python3
 PIP := $(PYTHON) -m pip
@@ -57,6 +62,14 @@ INCLUDE = $(PROJECT)/include
 SRC = $(PROJECT)/src
 COMMON_INCLUDE = include
 
+Q := @
+ifeq ($(VERBOSE),1)
+	Q :=
+endif
+
+MAKE += MAKE_OPTIONS=""
+MAKEFLAGS += $(MAKE_OPTIONS)
+
 include $(PROJECT)/Makefile
 ###############################################################
 BINARIES := $(SERIAL) $(OVERLAYS)
@@ -70,7 +83,8 @@ OVERLAY_BINS := $(OVERLAYS:%=%.bin)
 OVERLAY_SOURCE_DIR = $(ROM)/overlay
 OVERLAY_SOURCES = $(OVERLAY_BINS:%=$(OVERLAY_SOURCE_DIR)/%)
 OVERLAY_TARGETS = $(OVERLAY_BINS:%=$(BUILD)/%)
-TARGETS = $(BUILD)/$(SERIAL) $(OVERLAY_TARGETS)
+TARGET_EXECUTABLE = $(BUILD)/$(SERIAL)
+TARGETS = $(TARGET_EXECUTABLE) $(OVERLAY_TARGETS)
 
 MACRO_INC := $(INCLUDE)/macro.inc
 LINKER_SCRIPT := $(LINKERS)/$(SERIAL).lcf
@@ -82,22 +96,21 @@ SPLAT_FILES := $(SPLAT_CONFIG) $(wildcard $(CONFIG)/*.txt)
 OVERLAY_SPLAT_FILES = $(CONFIG)/overlay/%_symbol_addrs.txt
 LINKER_TEMPLATE := $(INCLUDE)/$(SERIAL).inc.lcf
 ###############################################################
-
 BINUTILS_FLAVOR := mips-ps2-decompals
 BINUTILS := $(TOOLS)/binutils-$(BINUTILS_FLAVOR)
 BINUTILS_VERSION_FILE := $(BINUTILS)/version-0-10
 
 AS := $(BINUTILS)/$(BINUTILS_FLAVOR)-as
+MWCCGAP_AS_FLAGS := -mno-branch-relocs
 AS_FLAGS := \
-	-EL -march=r5900 -mabi=eabi -G=0 -mno-branch-relocs \
-	$(MWCCGAP_AS_FLAGS) -I$(INCLUDE) -I$(CONFIG) \
-	-I$(COMMON_INCLUDE)
+	-EL -march=r5900 -mabi=eabi -G=0 $(MWCCGAP_AS_FLAGS) \
+	-I$(INCLUDE) -I$(CONFIG) -I$(COMMON_INCLUDE)
 
 LD :=
 ifneq ($(NON_MATCHING),1)
 ifneq ($(LINK),0)
-	LD = $(WIBO) $(MWLD) -o "$@" $(MWLD_FLAGS) \
-			"$(LINKER_SCRIPT)" $(shell find $(BUILD) -name "*.o")
+	LD = $(WIBO) $(MWLD) -o "$@" -nostdlib $(MWLD_FLAGS) \
+			"$(LINKER_SCRIPT)" $(filter %.o, $^)
 endif
 endif
 
@@ -120,7 +133,8 @@ MWCCGAP_FLAGS := \
 MWCCGAP_PATCH_VERSION_FILE := $(TOOLS)/mwccgap/mwccgap.patch
 
 ifeq ($(NON_MATCHING),1)
-	CC = MWCIncludes="$(SRC)" $(WIBO) $(MWCC) $(MWCC_FLAGS) -c "$<" -o "$@"
+	CC = MWCIncludes="$(SRC)" $(WIBO) $(MWCC) $(MWCC_FLAGS) -c "$<" -o "$@" \
+		-u __FILE__ -d __FILE__=\"$(<F)\" -d NON_MATCHING=1 -d HOLY_CANDLE=1
 else
 	CC = MWCIncludes="$(SRC)" $(MWCCGAP) $(MWCCGAP_FLAGS) "$<" "$@" $(MWCC_FLAGS) \
 		 -u __FILE__ -d __FILE__=\"$(<F)\"
@@ -133,14 +147,19 @@ OBJDIFF_BINARY := objdiff-cli-$(PLATFORM)-$(ARCH)
 OBJDIFF := $(TOOLS)/$(OBJDIFF_BINARY)
 OBJDIFF_CONFIG := objdiff.json
 OBJDIFF_FRAGMENTS = $(patsubst $(CONFIG)/%.yaml, $(BUILD)/objdiff/%.json, $(YAMLS))
+CREATE_OBJDIFF_CONFIG = $(ALESSATOOL) merge objdiff \
+	--categories-path $(CONFIG)/categories.json \
+	--project $(PROJECT)
 
 ALESSATOOL := $(PYTHON) $(TOOLS)/alessatool/alessatool.py --verbose
 ALESSATOOL_OVERLAY_LOCK := $(OVERLAY_SOURCE_DIR)/.lock
-GENERATE := $(ALESSATOOL) generate \
+GENERATE := $(Q)TQDM_DISABLE=$(TQDM_DISABLE) \
+	$(ALESSATOOL) generate \
 	--template-path $(LINKER_TEMPLATE) \
 	--lcf-output-path $(LINKERS)/$(SERIAL).lcf \
 	--build-path $(BUILD) \
 	--config-path $(CONFIG) \
+	--main-executable-path $(TARGET_EXECUTABLE) \
 	--bss-alignment $(BSS_ALIGNMENT)
 EXTRACT := extract \
 	--archive-path $(SOURCE_OVERLAY_ARCHIVE) \
@@ -153,8 +172,8 @@ ifeq ($(GENERATE_REPORT),0)
 	GENERATE_FLAGS += --no-objdiff
 	GENERATE_OVERLAY_FLAGS += --no-objdiff
 else
-	GENERATE_FLAGS += --objdiff-output-path=$(BUILD)/objdiff/$*.json
-	GENERATE_OVERLAY_FLAGS += --objdiff-output-path=$(BUILD)/objdiff/overlay/$*.json
+	GENERATE_FLAGS += --objdiff-output-path=$(BUILD)/objdiff/$*.json --no-dependencies
+	GENERATE_OVERLAY_FLAGS += --objdiff-output-path=$(BUILD)/objdiff/overlay/$*.json --no-dependencies
 endif
 ifeq ($(GENERATE_LCF),0)
 	GENERATE_FLAGS += --no-lcf
@@ -164,7 +183,8 @@ GENERATE_EXPECTED := $(GENERATE) --no-lcf --make-full-disasm-for-code
 CHECK_MATCH_PERCENT :=
 ifneq ($(NON_MATCHING),1)
 ifneq ($(LINK),0)
-	CHECK_MATCH_PERCENT = @$(TOOLS)/scripts/diff.sh $(SERIAL) $(CONFIG) $(BUILD) $(OBJCOPY)
+	CHECK_MATCH_PERCENT = @$(TOOLS)/scripts/diff.sh $(SERIAL) $(CONFIG) $(BUILD) $(OBJCOPY) \
+		|| $(ALESSATOOL) debug --project=$(PROJECT)
 endif
 endif
 
@@ -179,17 +199,70 @@ OBJDIFF_HOST := https://github.com/encounter/objdiff/releases/download/v3.6.0
 ###############################################################
 all: $(TARGETS)
 
+setup: $(SETUP)
+
 report: $(SETUP) $(OBJDIFF) $(OBJDIFF_CONFIG)
+	@$(MAKE) clean-quick
 	@$(MAKE) expected
 	@$(OBJDIFF) report generate -o $(BUILD)/report.json
 
-split: $(D_FILES) $(SPLAT_FILES)
+build:
+	@$(MAKE) clean-quick
+	@$(MAKE)
 
-setup: $(SETUP)
+debug:
+	@$(ALESSATOOL) debug --project=$(PROJECT)
 
-rebuild:
+sh3:
+	@$(MAKE) PROJECT="silent-hill-3"
+
+sh2:
+	@$(MAKE) PROJECT="silent-hill-2"
+
+sh3-build:
+	@$(MAKE) PROJECT="silent-hill-3" build
+
+sh2-build:
+	@$(MAKE) PROJECT="silent-hill-2" build
+
+sh3-report:
+	@$(MAKE) PROJECT="silent-hill-3" report
+
+sh2-report:
+	@$(MAKE) PROJECT="silent-hill-2" report
+
+sh3-clean:
+	@$(MAKE) PROJECT="silent-hill-3" clean-project
+
+sh2-clean:
+	$(MAKE) PROJECT="silent-hill-2" clean-project
+
+sh3-debug:
+	@$(MAKE) PROJECT="silent-hill-3" debug
+
+sh2-debug:
+	@$(MAKE) PROJECT="silent-hill-2" debug
+
+clean:
+	@$(MAKE) PROJECT=silent-hill-3 clean-project
+	@$(MAKE) PROJECT=silent-hill-2 clean-project
+
+clean-build:
+	@$(MAKE) PROJECT=silent-hill-3 clean-project-build
+	@$(MAKE) PROJECT=silent-hill-2 clean-project-build
+
+clean-quick:
+	rm -f $(OBJDIFF_CONFIG)
+	rm -rf $(BUILD)/src
+
+clean-project-build:
 	rm -rf $(BUILD)
-	$(MAKE)
+
+clean-project:
+	rm -rf $(ASM)
+	rm -rf $(ASSETS)
+	rm -rf $(BUILD)
+	rm -rf $(LINKERS)
 
 death:
 	@$(MAKE) clean
@@ -200,63 +273,28 @@ death:
 	unlink $(ROM_SYMLINK)
 	$(GIT) submodule foreach --recursive $(GIT) reset --hard
 
-debug:
-	@echo "$(YAMLS)"
-	@echo "$(SOURCE_PREREQS)"
-	@echo "$(TARGETS)"
-	@echo "$(BINARIES:%=$(LINKERS)/%.d)"
-	@echo '---'
-
 diff:
 	$(CHECK_MATCH_PERCENT)
 
 expected: $(YAMLS)
 	@mkdir -p "$(@D)"
-	$(MAKE) $(OBJDIFF_CONFIG)
-	$(MAKE) NON_MATCHING=1 $(call get_c_objects)
-	$(MAKE) $(call get_asm_objects)
+	@$(MAKE) $(OBJDIFF_CONFIG)
+	@$(MAKE) NON_MATCHING=1 $(call get_c_objects)
+	@$(MAKE) $(call get_asm_objects)
 
 compiler-info:
 	$(WIBO) $(MWCC) -help
 
-alessatool:
-	$(ALESSATOOL)
+linker-info:
+	$(WIBO) $(MWLD) -help
 
 binutils: $(AS)
-
-clean:
-	@$(MAKE) PROJECT=silent-hill-3 clean-project
-	@$(MAKE) PROJECT=silent-hill-2 clean-project
-
-clean-project:
-	rm -rf $(ASM)
-	rm -rf $(ASSETS)
-	rm -rf $(BUILD)
-	rm -rf $(LINKERS)
 
 extract: $(SOURCE_OVERLAY_ARCHIVE)
 	$(ALESSATOOL) $(EXTRACT)
 
 overlays-lowercase:
 	$(ALESSATOOL) util lowercase --folder-path $(ROM)/overlay
-
-sh3:
-	$(MAKE) PROJECT="silent-hill-3"
-
-sh2:
-	$(MAKE) PROJECT="silent-hill-2"
-
-sh3-report:
-	$(MAKE) PROJECT="silent-hill-3" report
-
-sh2-report:
-	$(MAKE) PROJECT="silent-hill-2" report
-
-sh3-clean:
-	$(MAKE) PROJECT="silent-hill-3" clean-project
-
-sh2-clean:
-	$(MAKE) PROJECT="silent-hill-2" clean-project
 ###############################################################
 $(LINKERS)/%.d: $(CONFIG)/overlay/%.yaml $(OVERLAY_SPLAT_FILES) $(SETUP)
 	$(GENERATE) $(GENERATE_OVERLAY_FLAGS) $(SPLAT_CONFIG) $<
@@ -264,17 +302,20 @@ $(LINKERS)/%.d: $(CONFIG)/overlay/%.yaml $(OVERLAY_SPLAT_FILES) $(SETUP)
 $(LINKERS)/%.d: $(CONFIG)/%.yaml $(SPLAT_FILES) $(SETUP)
 	$(GENERATE) $(GENERATE_FLAGS) $(SPLAT_CONFIG) $<
 
-$(BUILD)/$(SERIAL): $(SETUP) $(OVERLAY_TARGETS) $(LINKER_SCRIPT)
-	$(LD)
+$(TARGET_EXECUTABLE): $(SETUP) $(OVERLAY_TARGETS) $(LINKER_SCRIPT)
+	@echo "* linking..."
+	$(Q)$(LD)
 	$(CHECK_MATCH_PERCENT)
 
 $(BUILD)/%.c.o: $(PROJECT)/%.c
 	@mkdir -p "$(@D)"
-	$(CC)
+	@echo "* $(@)"
+	$(Q)$(CC)
 
 $(BUILD)/%.s.o: $(CONFIG)/%.s
 	@mkdir -p "$(@D)"
-	$(AS) $(AS_FLAGS) -o "$@" "$<"
+	@echo "* $(@)"
+	$(Q)$(AS) $(AS_FLAGS) -o "$@" "$<"
 
 $(LINKER_SCRIPT): $(SPLAT_CONFIG) $(CONFIG)/$(SERIAL).yaml $(LINKER_TEMPLATE)
 	$(GENERATE) $(GENERATE_FLAGS) $(SPLAT_CONFIG) $(CONFIG)/$(SERIAL).yaml
@@ -311,7 +352,6 @@ $(OBJDIFF):
 	@chmod +x $@
 
 $(MWCCGAP_ENTRYPOINT):
-	@touch $(MWCCGAP_PATCH_VERSION_FILE)
 	$(GIT) submodule update --init --recursive
 
 $(BINUTILS_VERSION_FILE): $(AS)
@@ -345,12 +385,20 @@ $(patsubst $(ASM)/%.s,$(BUILD)/asm/%.s.o, \
 		-type d \( -name matchings -o -name nonmatchings \) \
 		-prune -false -o -type f -name '*.s'))
 endef
+define get_nproc
+$(strip $(if $(filter $(PLATFORM),linux), \
+	 		 $(shell nproc), \
+	 		 $(shell sysctl -n hw.logicalcpu)))
+endef
 ###############################################################
 PHONY_TARGETS := \
-	alessatool binutils clean clean-project compiler-info \
-	death debug deep-clean diff expected extract heaven hell \
-	progress overlays-lowercase rebuild report setup sh2 sh3 \
-	sh2-clean sh3-clean sh2-report sh3-report split
+	alessatool binutils build clean clean-build \
+	clean-quick clean-project clean-project-build \
+	compiler-info death debug deep-clean diff expected \
+	extract heaven hell linker-info progress \
+	overlays-lowercase rebuild report setup sh2 sh3 \
+	sh2-build sh3-build sh2-clean sh3-clean \
+	sh2-report sh3-report split
 .PHONY: $(PHONY_TARGETS)
 ifeq ($(filter $(PHONY_TARGETS) $(OBJDIFF_CONFIG),$(MAKECMDGOALS)),)
 -include $(BINARIES:%=$(LINKERS)/%.d)

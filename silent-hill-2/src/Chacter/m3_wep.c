@@ -1,7 +1,9 @@
 #include "Chacter/m3_wep.h"
+#include "sce/libvu0.h"
 #include "Chacter/m3_sc.h"
 #include "Chacter/chara_list.h"
 #include "Chacter/m3_play.h"
+#include "vec.h"
 
 /* static */ const AnimeInfo weapon_anim[9] = { // but does this belong here?
     // name,  frame, speed, start, end, loop, pad
@@ -68,7 +70,7 @@ void shUpdateWeaponMatrixAfterAnime(SubCharacter* this, short kind) {
     if (this != NULL) {
         
         GetPlayerPartsLocalMatrix(mat, 0x23);    
-        this->sk_top->src_m = mat;    
+        this->sk_top->src_m.d = mat;    
         this->sk_top->src_t = *(Vector4*)mat[3];
     
         player = shCharacterGetSubCharacter(kind, -1);        

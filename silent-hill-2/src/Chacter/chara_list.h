@@ -22,6 +22,8 @@
 #define OBJECT_X_CHARA_KIND_START                                (OBJECT_X_CHARA_KIND << 8)
 #define OBJECT_STAY_CHARA_KIND_START                          (OBJECT_STAY_CHARA_KIND << 8)
 
+#define GET_KIND_TYPE(_kind)                                                 ((_kind) >> 8)
+
 /* ===================================================================================== */
 /*                               characters (0x100 - 0x199)                              */
 /* ===================================================================================== */
@@ -104,8 +106,12 @@
  * The evil dog that rules the world.
  */
 #define INU_CHARA_KIND                                                                0x10d
+#define HUMAN_CHARA_KIND_END                                                          0x10d
 
 /* =========================== mirror models (0x120 - 0x12D) =========================== */
+
+#define MIRROR_MODE_CHARA_KIND_FLAG                                                (1 << 5)
+#define MIRROR_KIND(_kind)                          ((_kind) + MIRROR_MODE_CHARA_KIND_FLAG)
 
 /**
  * Mirror version of `LLL_JMS_CHARA_KIND`.
@@ -425,6 +431,7 @@
 #define ITEM_B_POP_CHARA_KIND                                                         0x531
 #define ITEM_3SK_CHARA_KIND                                                           0x532
 #define ITEM_XAG_CHARA_KIND                                                           0x534
+#define ITEM_MX2_EARLY_DEMO_CHARA_KIND                                                0x537
 #define ITEM_S00_CHARA_KIND                                                           0x53b
 #define ITEM_S01_CHARA_KIND                                                           0x53c
 #define ITEM_S02_CHARA_KIND                                                           0x53d
@@ -596,6 +603,7 @@
 /* ===================================================================================== */
 
 #define WEAPON_ID_START                                                               0x800
+#define WEAPON_ID_NONE                                                                0x800
 #define WEAPON_HANDGUN_CHARA_KIND                                                     0x801
 #define WEAPON_SHOTGUN_CHARA_KIND                                                     0x802
 #define WEAPON_RIFLGUN_CHARA_KIND                                                     0x803
@@ -603,9 +611,9 @@
 #define WEAPON_KAKUZAI_CHARA_KIND                                                     0x805
 #define WEAPON_PIPE_CHARA_KIND                                                        0x806
 #define WEAPON_CSAW_CHARA_KIND                                                        0x807
-#define WEAPON_CSAW_CHARA_KIND                                                        0x807
 #define WEAPON_NATA_CHARA_KIND                                                        0x808
 #define WEAPON_COLT_CHARA_KIND                                                        0x809
+#define WEAPON_ID_END                                                                 0x809
 #define WEAPON_CHINANIFE_CHARA_KIND                                                   0x80a
 #define RWEAPON_HANDGUN_CHARA_KIND                                                    0x821
 #define RWEAPON_SHOTGUN_CHARA_KIND                                                    0x822
@@ -619,5 +627,7 @@
 #define RWEAPON_COLT_NOTEX_CHARA_KIND                                                 0x829
 #define RWEAPON_CHINANIFE_CHARA_KIND                                                  0x82a
 #define RWEAPON_CHINANIFE_NOTEX_CHARA_KIND                                            0x82a
+
+#define WEAPON_ID(_kind)                                                    ((_kind) & 0xff)
 
 #endif // SH2_CHARA_KINDS_H

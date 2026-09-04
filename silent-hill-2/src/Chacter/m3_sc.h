@@ -2,6 +2,7 @@
 #define M3_SC_H
 
 #include "common.h"
+#include "sce/libvu0.h"
 #include "Chacter/character.h"
 #include "Chacter_Draw/clani.h"
 #include "Chacter/item_screen_obj.h"
@@ -25,11 +26,13 @@ AnimeInfo* shCharacterAnimeGetInfo(SubCharacter* scp /* r2 */);
 AnimeInfo* shCharacterAnimeGetInfo_(SubCharacter* scp /* r2 */, int ctrl_type /* r2 */);
 void shCharacterAnimeFrameSet(SubCharacter* scp /* r2 */, u_short frame /* r2 */);
 void shCharacterAnimeRestart(SubCharacter* scp /* r2 */);
+int shCharacterGetSkeltonNum(short kind);
 
 void shCharacterDelete(SubCharacter* scp);
 void shCharacterPlayingExecAnimeOne(SubCharacter * scp /* r16 */);
 void shCharacterDramaExecAnimeOne(SubCharacter * scp /* r16 */);
 
+SubCharacter* shCharacterCreate(u_int id, int model, int anime, int clani, int chr_id);
 short shCharacterGetModelID(SubCharacter* scp /* r2 */);
 SubCharacter* shCharacterGetSubCharacter(u_short kind /* r2 */, short id /* r2 */);
 int shCharacterAnimeOneFrameSize(u_short id);
@@ -40,8 +43,8 @@ void shCharacterUpdateAll(void);
 void shCharacterSetFunction(SubCharacter* scp /* r2 */, void (*func)(SubCharacter*) /* r2 */);
 void shCharacterExecFunctionAll(void);
 void shCharacterAnimeSet(SubCharacter* scp /* r19 */, int ctrl_type /* r2 */, int inter_type /* r18 */, AnimeInfo* anim_info /* r17 */, int anime /* r2 */);
-void SCSetModel(SubCharacter* scp /* r18 */, int model /* r2 */);
-void* shCharacterGetAnimeAdrForDrama(SubCharacter* scp /* r2 */, int arg1); // @note: additional arg not in dwarf
+void SCSetModel(SubCharacter* scp /* r18 */, int model /* r2 */, int anime);
+void* shCharacterGetAnimeAdrForDrama(SubCharacter* scp /* r2 */, int arg1); // @note: second arg not present in dwarf
 void* shCharacterGetClusterAnimeAdr(SubCharacter* scp);
 void SCAddPos(SubCharacter* scp, Vector4* pos);
 void SCSetRot(SubCharacter* scp, Vector4* rot);

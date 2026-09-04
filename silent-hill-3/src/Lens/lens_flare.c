@@ -1,5 +1,6 @@
 #include "common.h"
-#include "libgraph.h"
+#include "sce/libgraph.h"
+#include "sce/libvu0.h"
 
 #include "Lens/lens_flare.h"
 #include "Lens/lens_th_draw.h"
@@ -79,7 +80,6 @@ int shLensFlareLightCenterIsVisible(LensFlareWork* lf_info) {
 
 INCLUDE_ASM("asm/nonmatchings/Lens/lens_flare", shLensFlareSetLightSeed);
 
-// @todo: local names may be mixed up...
 static float shLensFlareOresenHokan(float* Y_ary, int Y_suu, float input_X, float min_X, float max_X) {
     float output_Y;
 
@@ -88,25 +88,24 @@ static float shLensFlareOresenHokan(float* Y_ary, int Y_suu, float input_X, floa
     } else if (input_X < min_X) {
         output_Y = *Y_ary;
     } else {
-        float amari;   // あまり
-        float kukan_w; // くかん
+        float amari; // くかん
+        float kukan_w; // あまり
         int kukan_no;
-        amari = (max_X - min_X) / (f32)(Y_suu - 1);
-        kukan_w = input_X - min_X, kukan_no = (int)(kukan_w / amari);
+        float tmp;
+
+        kukan_w = (max_X - min_X) / (Y_suu - 1);
+        tmp = input_X - min_X, kukan_no = (int)(tmp / kukan_w);
         if (kukan_no >= (Y_suu - 1)) {
             output_Y = Y_ary[Y_suu - 1];
         } else if (kukan_no < 0) {
             output_Y = *Y_ary;
         } else {
-
-            do {
-                float tmp = 0;
-            } while (0);
-            while (kukan_w >= amari) {
-                kukan_w -= amari;
+            amari = tmp;
+            while (amari >= kukan_w) {
+                amari -= kukan_w;
             }
 
-            output_Y = (Y_ary[kukan_no] * (amari - kukan_w) + kukan_w * (Y_ary[kukan_no + 1])) / amari;
+            output_Y = (Y_ary[kukan_no] * (kukan_w - amari) + amari * (Y_ary[kukan_no + 1])) / kukan_w;
         }
     }
 

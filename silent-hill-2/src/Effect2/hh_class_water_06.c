@@ -7,7 +7,8 @@
 #include "Effect2/hh_class_water_common.h"
 #include "Effect2/hh_math_wrapper.h"
 #include "SH2_common/pad.h"
-#include "libvifpk.h"
+#include "sce/libvifpk.h"
+#include "sce/libvu0.h"
 
 #pragma divbyzerocheck off
 

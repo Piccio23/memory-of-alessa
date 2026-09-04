@@ -3,7 +3,8 @@
 #include "Lens/lens_flare.h"
 #include "Lens/lens_th_draw.h"
 
-#include "libgraph.h"
+#include "sce/libgraph.h"
+#include "sce/libvu0.h"
 #include "Chacter/character.h"
 #include "Event/demoview.h"
 
@@ -159,34 +160,33 @@ void sh2gde_getWorldScreenMatrix(sceVu0FMATRIX wsm) {
     sceVu0CopyMatrix(wsm, cam0.world_screen);
 }
 
-// @todo: local names may be mixed up...
-static float shLensFlareOresenHokan(float* Y_ary /* r17 */, int Y_suu /* r16 */, float input_X /* r29+0x40 */, float min_X /* r29+0x40 */, float max_X /* r29+0x40 */) {
-    float output_Y; // r29+0x40
+
+static float shLensFlareOresenHokan(float* Y_ary, int Y_suu, float input_X, float min_X, float max_X) {
+    float output_Y;
 
     if (input_X >= max_X) {
         output_Y = Y_ary[Y_suu - 1];
     } else if (input_X < min_X) {
         output_Y = *Y_ary;
     } else {
-        float amari;   // あまり // r29+0x40
-        float kukan_w; // くかん // r20
-        int kukan_no;  // r2
-        amari = (max_X - min_X) / (Y_suu - 1);
-        kukan_w = input_X - min_X, kukan_no = (int)(kukan_w / amari);
+        float amari; // くかん
+        float kukan_w; // あまり
+        int kukan_no;
+        float tmp;
+
+        kukan_w = (max_X - min_X) / (Y_suu - 1);
+        tmp = input_X - min_X, kukan_no = (int)(tmp / kukan_w);
         if (kukan_no >= (Y_suu - 1)) {
             output_Y = Y_ary[Y_suu - 1];
         } else if (kukan_no < 0) {
             output_Y = *Y_ary;
         } else {
-
-            do {
-                float tmp = 0;
-            } while (0);
-            while (kukan_w >= amari) {
-                kukan_w -= amari;
+            amari = tmp;
+            while (amari >= kukan_w) {
+                amari -= kukan_w;
             }
 
-            output_Y = (Y_ary[kukan_no] * (amari - kukan_w) + kukan_w * (Y_ary[kukan_no + 1])) / amari;
+            output_Y = (Y_ary[kukan_no] * (kukan_w - amari) + amari * (Y_ary[kukan_no + 1])) / kukan_w;
         }
     }
 

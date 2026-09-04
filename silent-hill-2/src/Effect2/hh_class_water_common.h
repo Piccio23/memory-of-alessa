@@ -1,7 +1,8 @@
 #ifndef HH_CLASS_WATER_COMMON_H
 #define HH_CLASS_WATER_COMMON_H
 
-#include "eestruct.h"
+#include "sce/eestruct.h"
+#include "sce/libvu0.h"
 
 typedef struct Wave_Element {
     // total size: 0x54

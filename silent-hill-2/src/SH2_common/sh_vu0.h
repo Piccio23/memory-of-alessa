@@ -2,6 +2,7 @@
 #define SH_VU0_H
 
 #include "common.h"
+#include "sce/libvu0.h"
 
 float shAngleRegulate(float);
 float shAtanV(void*);
@@ -11,11 +12,11 @@ void sh_ecossin(void);
 float shSinF(float);
 float shCosF(float);
 void shSinCosV(void*, float);
-void shSinCosV_Scale(void*, float, float);
-void shRotVectorY(void);
-void shRotMatrixX(void);
-void shRotMatrixY(void);
-void shRotMatrixZ(void);
+void shSinCosV_Scale(sceVu0FVECTOR, float, float);
+void shRotVectorY(sceVu0FVECTOR*, sceVu0FVECTOR*, float); // @note: not sure if this is the correct signature
+void shRotMatrixX(sceVu0FMATRIX m0, sceVu0FMATRIX m1, float rx);
+void shRotMatrixY(sceVu0FMATRIX m0, sceVu0FMATRIX m1, float ry);
+void shRotMatrixZ(sceVu0FMATRIX m0, sceVu0FMATRIX m1, float rz);
 void sh_mulmatrix(void);
 void shSrand(int seed);
 void shPushRandSeed(int seed);
@@ -30,9 +31,9 @@ void shSway1f_asm(void);
 void shCreateNormal(float*, float*, float*, float*);
 void shSetMiniMaxN(float* min, float* max, float* v, int n);
 char shScreenClipI(int* v0);
-char shScreenClipF(float* v0);
+int shScreenClipF(float* v0); // @note: changed this from char to int
 void shQzero(void*, int);
 void shFill(void*, int, int);
-void shMulMatrix(float m0[4], float m1[4], float m2[4]);
+void shMulMatrix(sceVu0FMATRIX m0, sceVu0FMATRIX m1, sceVu0FMATRIX m2);
 
 #endif // SH_VU0_H

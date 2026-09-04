@@ -1,6 +1,8 @@
 #ifndef SH_VU0_H
 #define SH_VU0_H
 
+#include "sce/libvu0.h"
+
 float sh_ecossin(float);
 
 float shAtan_asm(float);
@@ -11,11 +13,11 @@ float shSway1f_asm(float, float);
 
 void shMulMatrix(float (*m0)[4], float (*m1)[4], float (*m2)[4]);
 
-void shRotMatrixY(float (*m0)[4], float (*m1)[4], float);
+void shRotMatrixX(sceVu0FMATRIX m0, sceVu0FMATRIX m1, float rx);
 
-void shRotMatrixX(float (*m0)[4], float (*m1)[4], float);
+void shRotMatrixY(sceVu0FMATRIX m0, sceVu0FMATRIX m1, float ry);
 
-void shMulMatrix(float (*m0)[4], float (*m1)[4], float (*m2)[4]);
+void shRotMatrixZ(sceVu0FMATRIX m0, sceVu0FMATRIX m1, float rz);
 
 float shAngleRegulate(float);
 

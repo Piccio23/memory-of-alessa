@@ -2,27 +2,18 @@
 #define MODEL3_VU0_N_H
 
 #include "common.h"
-#include "eestruct.h"
-#include "eeregs.h"
-#include "libgraph.h"
+#include "sce/eestruct.h"
+#include "sce/eeregs.h"
+#include "sce/libgraph.h"
 #include "model3_vu0_n.h"
 #include "model_common.h"
-#include "libdma.h"
-#include "libdmapk.h"
-#include "libvifpk.h"
+#include "sce/libdma.h"
+#include "sce/libdmapk.h"
+#include "sce/libvifpk.h"
 #include "GFW/sh3gfw_Init_ModelDrawData.h"
 #include "vifot/sh_kt_vif0.h"
 #include "light_n.h"
 #include "model3_sub_n.h"
-
-#define DMArefe (0<<28)
-#define DMAcnt  (1<<28)
-#define DMAnext (2<<28)
-#define DMAref  (3<<28)
-#define DMArefs (4<<28)
-#define DMAcall (5<<28)
-#define DMAret  (6<<28)
-#define DMAend  (7<<28)
 
 typedef struct TriangleNormal {
     // total size: 0xD0

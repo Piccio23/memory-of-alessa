@@ -1,4 +1,5 @@
 #include "common.h"
+#include "sce/libvu0.h"
 #include "GFW/sh3gfw_viewclip.h"
 #include "GFW/sh3_DrawEnvData.h"
 #include "vec.h"
@@ -228,7 +229,7 @@ INCLUDE_ASM("asm/nonmatchings/GFW/sh3gfw_viewclip", func_001AA9B0);
 
 INCLUDE_ASM("asm/nonmatchings/GFW/sh3gfw_viewclip", func_001AA9E0);
 
-#ifdef NON_MATCHING
+#ifdef BROKEN
 void func_001AAA90(Sh3Gfw_Work* arg0) {
     float sp20[4];
     float sp30[4][4];
@@ -249,7 +250,7 @@ void func_001AAB30(void) {
     sh3gfw_get_viewTriangle(Env_ctl.camera_mat);
 }
 
-#ifdef NON_MATCHING
+#ifdef BROKEN
 void func_001AAB60(Sh3Gfw_Work* arg0) {
     func_001AACD0();
     func_001AAD30(arg0);

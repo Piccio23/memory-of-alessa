@@ -3,13 +3,15 @@
 
 #include "sh2_common.h"
 
+#define SH2_CHARACTER_NUM_SKELTONS 400
+
 // total size: 0xF0
 typedef struct shSkelton {
     struct shSkelton* next;   // offset 0x0, size 0x4
     struct shSkelton* parent; // offset 0x4, size 0x4
-    sceVu0FMATRIX src_m;      // offset 0x10, size 0x40
+    Matrix4 src_m;            // offset 0x10, size 0x40
     Vector4 src_t;            // offset 0x50, size 0x10
-    sceVu0FMATRIX des_m;      // offset 0x60, size 0x40
+    Matrix4 des_m;            // offset 0x60, size 0x40
     Vector4 des_t;            // offset 0xA0, size 0x10
     Vector4 axis;             // offset 0xB0, size 0x10
     float theta;              // offset 0xC0, size 0x4
@@ -28,8 +30,17 @@ typedef struct shSkelton {
     void* untouchable;        // offset 0xE4, size 0x4
 } shSkelton;
 
+typedef struct shSkeltonWork {
+    // total size: 0x17710
+    shSkelton work[SH2_CHARACTER_NUM_SKELTONS]; // offset 0x0, size 0x17700
+    shSkelton* free;                            // offset 0x17700, size 0x4
+    int last;                                   // offset 0x17704, size 0x4
+} shSkeltonWork;
+
 void shCharacterInitSkeltons(void);
 void shCharacterFreeSkeltons(shSkelton* top /* r2 */);
 shSkelton* shCharacterGetSkeletons(int n /* r7 */, u_char* hrc /* r2 */);
+
+extern shSkeltonWork sh2skelton;
 
 #endif // SKELTON_H

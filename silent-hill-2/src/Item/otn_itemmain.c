@@ -1,12 +1,23 @@
 #include "sh2_common.h"
-#include "Event/item.h"
 #include "SH2_common/pad.h"
+#include "SH2_common/sh2sys.h"
 #include "SH2_common/playing_info.h"
-#include "FilesList/fileslist_bg.h"
+
+#include "sce/libgraph.h"
+#include "gs.h"
+
+#include "Event/item.h"
+#include "Event/event.h"
+
+#include "Item/otn_option.h"
+#include "Item/item_tgs_tmp.h"
+#include "Item/otn_itemmain.h"
+
 #include "sound/sh_sound.h"
 #include "Effect/screen_effect.h"
-#include "Item/otn_option.h"
-#include "Item/otn_itemmain.h"
+#include "Font/font.h"
+#include "Fog/spack.h"
+#include "FilesList/fileslist_bg.h"
 
 /* @todo: why does objdiff display this symbol as `unsigned short`? */
 static struct /* @anon8 */ {
@@ -65,6 +76,8 @@ static struct /* @anon8 */ {
     u_char pad_298[2];
 } t; // size: 0x2A0, address: 0x116E3D0
 
+extern u_short msg_buffer[32768]; // size: 0x10000, address: 0x11B7040
+
 
 #define ITEM_SELECT_COUNT 75
 extern struct /* @anon1 */ {
@@ -85,7 +98,216 @@ extern fsFileIndex data_pic_out_p_lostmemory_tex[1];
 
 INCLUDE_ASM("asm/nonmatchings/Item/otn_itemmain", itemmain);
 
+#ifdef NON_MATCHING
+#line 321
+void itemmainmain(void) {
+    // Range: 0x1CDDD0 -> 0x1CEC28
+    int i; // r16
+    int fog; // r17
+
+    item_fade_in();
+    item_fade_out();
+    if (t.fade_flag == 2) {
+        item_examine_fade_out();
+    }
+    
+    if (shPadPress(0, PAD_KEY_6) > 192) {
+        if (t.analog[2] < 2) t.analog[2]++;
+    } else
+        t.analog[2] = 0;
+    if (shPadPress(0, PAD_KEY_6) < 64) {
+        if (t.analog[1] < 2) t.analog[1]++;
+    } else
+        t.analog[1] = 0;
+    if (shPadPress(0, PAD_KEY_7) > 192) {
+        if (t.analog[0] < 2) t.analog[0]++;
+    } else
+        t.analog[0] = 0;
+    if (shPadPress(0, PAD_KEY_7) < 64) {
+        if (t.analog[3] < 2) t.analog[3]++;
+    } else
+        t.analog[3] = 0;
+
+    
+    t.shelf = GET_GAME_FLAG(416);
+    
+    
+    item_turn();
+    
+    
+    for (i = 0; i < t.item_count; i++)
+        if (item_select[i].count)
+            item_position(&item_select[i].pos[0], &item_select[i].pos[1], item_select[i].count, &item_select[i].rot);
+
+    if (t.prs_btn2 != 0) t.turnf = 0.0f;
+    else t.turnf += 0.02f;
+
+
+    
+    for (i = 0; i < t.item_count; i++) {
+    
+        if (item_select[i].count != 0) {
+        
+            
+            fog = (int) (( -item_select[i].pos[1] - 300.0f) / 5.5);
+            if (fog < 0) fog = 0;
+            TgsItemPitureDraw(item_select[i].kind, item_select[i].pos[0] * 2.5, 0, fog, 5, (0.3f + (-item_select[i].pos[1] / 1666.0f)) * item_select[i].item_scale);
+
+
+
+
+
+
+
+            
+            if (item_select[i].del == 0) {
+            
+                if ((item_select[i].count == 5) && ((item_select[i].item_scale < 1.0f)))
+                    item_select[i].item_scale += 0.1f;
+                else if (item_select[i].count != 5 && item_select[i].item_scale > 0.8f)
+                    item_select[i].item_scale = item_select[i].item_scale - 0.1f;
+                if ((item_select[i].count == 5) && !(item_select[i].item_scale <= 1.0f))
+                    item_select[i].item_scale = 1.0f;
+                if (item_select[i].item_scale < 0.8f)
+                    item_select[i].item_scale = 0.8f;
+            } else
+                item_select[i].item_scale -= 0.15f;
+            if (item_select[i].item_scale < 0.0f) item_select[i].item_scale = 0.0f;
+
+            if (item_select[i].count == 5) {
+                
+                t.item_kind = item_select[i].kind;
+            }
+            if (item_select[i].del != 0) {
+                
+                item_select[i].item_scale -= 0.15f;
+                if (item_select[i].item_scale < 0.0f) {
+                
+                    item_select[i].item_scale = 0.0f;
+                    item_select[i].kind = 0;
+                    item_select[i].del = 0;
+                }
+            }
+        }
+    }
+
+
+    
+    if (item.equip == 4) t.weapon_scale[0] += 0.4f;
+    else if (item.equip == 11) t.weapon_scale[1] += 0.4f;
+    else if (item.equip == 6) t.weapon_scale[2] += 0.4f;
+    else if (item.equip == 8) t.weapon_scale[3] += 0.4f;
+    else if (item.equip == 10) t.weapon_scale[4] += 0.4f;
+    else if (item.equip == 12) t.weapon_scale[5] += 0.4f;
+    else if (item.equip == 13) t.weapon_scale[6] += 0.4f;
+    else if (item.equip == 14) t.weapon_scale[7] += 0.4f;
+    
+    for (i = 0; i < 8; i++) {
+        
+        t.weapon_scale[i] -= 0.2f;
+        if (t.weapon_scale[i] > 0.9f) t.weapon_scale[i] = 0.9f;
+        if (t.weapon_scale[i] < 0.0f) t.weapon_scale[i] = 0.0f;
+    }
+    
+    TgsItemPitureDraw(4, 0, -2144, 0x80, 1, t.weapon_scale[0]);
+    TgsItemPitureDraw(11, 0, -2144, 0x80, 1, t.weapon_scale[1]);
+    TgsItemPitureDraw(6, 0, -2144, 0x80, 1, t.weapon_scale[2]);
+    TgsItemPitureDraw(8, 0, -2144, 0x80, 1, t.weapon_scale[3]);
+    TgsItemPitureDraw(10, 0, -2144, 0x80, 1, t.weapon_scale[4]);
+    TgsItemPitureDraw(12, 0, -2144, 0x80, 1, t.weapon_scale[5]);
+    TgsItemPitureDraw(13, 0, -2144, 0x80, 1, t.weapon_scale[6]);
+    TgsItemPitureDraw(14, 0, -2144, 0x80, 1, t.weapon_scale[7]);
+    
+    
+    look_hp();
+    
+    
+    if (t.fade_flag == 0) set_position(t.step);
+
+    
+    if ((t.box[0][0] == t.boxblur[1][0][0]) && (t.box[0][1] == t.boxblur[1][0][1])) t.prs_btn = 0;
+    else t.prs_btn = 1;
+
+    
+    if (t.sprite_time >= 2.0f) t.sprite_time = 0.0f;
+    if (t.prs_btn != 0) t.sprite_time = 0.0f;
+    t.sprite_time += 0.04f;
+    
+    
+    sprite();
+    
+    
+    if (Sh2sys.step[2] == 6) font_print();
+
+    
+    if (t.fade_flag == 0) cur_step();
+
+    
+    look_combine();
+    
+    
+    del_check();
+    
+    
+    if (((t.command_abe == 0) && (t.step == 1)) || ((t.command_abe == 0) && (t.step == 12))) {
+        
+        t.command_cur = t.command_light = t.command_volume = 0;
+    }
+    
+    look_command(t.gosa);
+    
+    
+    if ((t.step == 6) || (t.step == 7))
+        t.command_abe += 6;
+    else t.command_abe -= 6;
+    if (t.command_abe > 0x28) t.command_abe = 0x28;
+    if (t.command_abe < 0) t.command_abe = 0;
+    if (t.command_volume == 1) t.command_abe = 0;
+
+
+    if ((int)(t.allay_abe) != 0) item_allay();
+
+    
+    if (t.step == 1)
+        t.allay_abe += 4.0f;
+    else t.allay_abe -= 4.0f;
+    if (t.allay_abe > 32.0f) t.allay_abe = 32.0f;
+    if (t.allay_abe < 0.0f) t.allay_abe = 0.0f;
+    
+    
+    for (i = 6; i > 0; i--) t.boxblur[i] = *((sceVu0FMATRIX*)t.box + i);
+    t.boxblur[0] = t.box;
+    
+    
+    for (i = 0; i < 6; i++) {
+        int value;
+        t.boxblur[i][0][3] = (value = 20.0f * (1.0f - ((i / 7.0f))));
+        t.boxblur[i][1][3] = t.boxblur[i][2][3] = t.boxblur[i][3][3] = value;
+            
+        look_zanzo(t.boxblur[i][0], t.boxblur[i][1], t.boxblur[i+1][0], t.boxblur[i+1][1]);
+        look_zanzo(t.boxblur[i][1], t.boxblur[i][2], t.boxblur[i+1][1], t.boxblur[i+1][2]);
+        look_zanzo(t.boxblur[i][2], t.boxblur[i][3], t.boxblur[i+1][2], t.boxblur[i+1][3]);
+        look_zanzo(t.boxblur[i][3], t.boxblur[i][0], t.boxblur[i+1][3], t.boxblur[i+1][0]);
+    
+    
+    
+    
+    
+    }
+    
+    
+    if ((t.step != 12) && (t.step != 13)) {
+        lookline(t.box);
+    }
+
+    
+    look_blackscr(1);
+
+
+}
+#else
 INCLUDE_ASM("asm/nonmatchings/Item/otn_itemmain", itemmainmain);
+#endif
 
 INCLUDE_ASM("asm/nonmatchings/Item/otn_itemmain", cur_step);
 
@@ -478,7 +700,6 @@ void command_main(int command_step) {
 
 INCLUDE_ASM("asm/nonmatchings/Item/otn_itemmain", weapon_command_main);
 
-#ifdef NON_MATCHING
 void item_main_setup(void) {
     int i; // r2
     int j; // r3
@@ -523,9 +744,9 @@ void item_main_setup(void) {
     set_position(t.step);
     for (j = 0; j < 6; j++) {
         
-        for (i = 6; i > 0; i--) dword_struct_copy((u_int*) t.boxblur + i * 16, (u_int*) t.box + i * 16, sizeof(t.box));
+        for (i = 6; i > 0; i--) t.boxblur[i] = *((sceVu0FMATRIX*)t.box + i);
         
-        dword_struct_copy(t.boxblur, t.box, sizeof(t.box));
+        t.boxblur[0] = t.box;
     }
     j = 0;
     t.item_count = 0;
@@ -557,9 +778,6 @@ void item_main_setup(void) {
     enWaitAllInsect();
 
 }
-#else
-INCLUDE_ASM("asm/nonmatchings/Item/otn_itemmain", item_main_setup);
-#endif
 
 #ifdef NON_MATCHING
 void set_position(int step) {
@@ -708,13 +926,524 @@ INCLUDE_ASM("asm/nonmatchings/Item/otn_itemmain", examine_file_load);
 
 INCLUDE_ASM("asm/nonmatchings/Item/otn_itemmain", examine2_main);
 
-INCLUDE_ASM("asm/nonmatchings/Item/otn_itemmain", font_print);
+void font_print(void) {
+    int i;   // r2
+    float f; // r20
+    int kind;
+    f = (1.0 - t.fade) * 128.0 * (1.0 - t.fade);
+    fontSetColorDirect((u_char) f, (u_char) f, (u_char) f, 255);
+    fontCrushOn();
+    if (((t.item_kind != 0) || (t.use_item == 8)) && ((t.step == 1) || (t.step == 6) || (t.step == 9) || (t.step == 8) || (t.step == 11) || (t.step == 12) || (t.step == 13))) {
+        if ((t.item_kind != 0) && (t.use_item == 0)) {
+            kage_font(msg_buffer, ((((short) t.item_kind - 1) * 2) + 20), 20, 325);
+        }
+        if (t.use_item == 0) {
+            kage_font(msg_buffer, (((t.item_kind - 1) * 2) + 21), 45, 360);
+        } else {
+            if ((u_char) t.use_item == 1) {
+                kage_font(msg_buffer, 16, 45, 360);
+                if ((shPadTrigger(0, key_config.enter) != 0) || (shPadTrigger(0, key_config.cancel) != 0)) {
+                    t.step       = 1;
+                    t.prs_btn    = 1;
+                    t.use_item   = 0;
+                    t.combine[2] = 0;
+                    t.combine[1] = 0;
+                    t.combine[0] = 0;
+                }
+            } else if ((u_char) t.use_item == 2) {
+                kage_font(msg_buffer, 17, 45, 360);
+                if ((shPadTrigger(0, key_config.enter) != 0) || (shPadTrigger(0, key_config.cancel) != 0)) {
+                    t.step       = 1;
+                    t.prs_btn    = 1;
+                    t.use_item   = 0;
+                    t.combine[2] = 0;
+                    t.combine[1] = 0;
+                    t.combine[0] = 0;
+                }
+            } else if ((u_char) t.use_item == 3) {
+                kage_font(msg_buffer, 18, 45, 360);
+                if ((shPadTrigger(0, key_config.enter) != 0) || (shPadTrigger(0, key_config.cancel) != 0)) {
+                    t.step       = 1;
+                    t.prs_btn    = 1;
+                    t.use_item   = 0;
+                    t.combine[2] = 0;
+                    t.combine[1] = 0;
+                    t.combine[0] = 0;
+                }
+            } else if ((u_char) t.use_item == 4) {
+                t.use_item++;
+            } else if ((u_char) t.use_item == 5) {
+                if (t.item_kind == 21) {
+                    t.use_item++;
+                } else if (t.item_kind == 28) {
+                    t.use_item++;
+                } else if (t.item_kind == 40) {
+                    t.use_item++;
+                } else if (t.item_kind == 74) {
+                    t.use_item++;
+                } else if (t.item_kind == 26) {
+                    t.use_item++;
+                } else if (t.item_kind == 20) {
+                    kage_font(msg_buffer, 181, 45, 340);
+                    if ((shPadTrigger(0, key_config.enter) != 0) && (t.prs_btn == 0)) {
+                        t.use_item++;
+                    }
+                } else if (t.item_kind == 27) {
+                    kage_font(msg_buffer, 175, 45, 340);
+                    if ((shPadTrigger(0, key_config.enter) != 0) && (t.prs_btn == 0)) {
+                        t.use_item++;
+                    }
+                } else {
+                    t.use_item++;
+                }
+            } else if ((u_char) t.use_item == 6) {
+                if (t.item_kind == 21) {
+                    kage_font(msg_buffer, 168, 45, 340);
+                } else if (t.item_kind == 28) {
+                    kage_font(msg_buffer, 177, 45, 340);
+                } else if (t.item_kind == 40) {
+                    kage_font(msg_buffer, 180, 45, 340);
+                } else if (t.item_kind == 74) {
+                    kage_font(msg_buffer, 183, 45, 340);
+                } else if (t.item_kind == 26) {
+                    kage_font(msg_buffer, 173, 45, 340);
+                } else if (t.item_kind == 20) {
+                    kage_font(msg_buffer, 182, 45, 340);
+                } else if (t.item_kind == 27) {
+                    kage_font(msg_buffer, 174, 45, 340);
+                } else {
+                    t.step     = 1;
+                    t.use_item = 0;
+                }
+                if (((shPadTrigger(0, key_config.enter) != 0) || (shPadTrigger(0, key_config.cancel) != 0)) && (t.prs_btn == 0)) {
+                    t.step     = 1;
+                    t.use_item = 0;
+                    t.prs_btn  = 1;
+                }
+            } else if ((u_char) t.use_item == 7) {
+                if (t.item_kind == 29) {
+                    kage_font(msg_buffer, 178, 45, 340);
+                } else if (t.item_kind == 25) {
+                    kage_font(msg_buffer, 169, 45, 340);
+                } else if (t.item_kind == 38) {
+                    kage_font(msg_buffer, 179, 45, 340);
+                } else if (t.item_kind == 47) {
+                    kage_font(msg_buffer, 170, 45, 340);
+                } else if (t.item_kind == 48) {
+                    kage_font(msg_buffer, 171, 45, 340);
+                } else if (t.item_kind == 49) {
+                    kage_font(msg_buffer, 172, 45, 340);
+                }
+                if (t.step == 1) {
+                    t.use_item = 0;
+                }
+            } else if ((u_char) t.use_item == 8) {
+                if (t.item_kind != 0) {
+                    t.use_item_kind = t.item_kind;
+                }
+                if ((t.item_kind == t.use_item_kind) || (t.item_kind == 0)) {
+                    if (t.use_item_kind == 1) {
+                        fontPrintStrNum(msg_buffer, 190, 45, 360);
+                    }
+                    if (t.use_item_kind == 2) {
+                        fontPrintStrNum(msg_buffer, 191, 45, 360);
+                    }
+                    if (t.use_item_kind == 3) {
+                        fontPrintStrNum(msg_buffer, 192, 45, 360);
+                    }
+                    if (t.use_item_kind == 4) {
+                        fontPrintStrNum(msg_buffer, 193, 45, 360);
+                    }
+                    if (t.use_item_kind == 5) {
+                        fontPrintStrNum(msg_buffer, 194, 45, 360);
+                    }
+                    if (t.use_item_kind == 6) {
+                        fontPrintStrNum(msg_buffer, 195, 45, 360);
+                    }
+                    if (t.use_item_kind == 7) {
+                        fontPrintStrNum(msg_buffer, 196, 45, 360);
+                    }
+                    if (t.use_item_kind == 8) {
+                        fontPrintStrNum(msg_buffer, 197, 45, 360);
+                    }
+                    if (t.use_item_kind == 9) {
+                        fontPrintStrNum(msg_buffer, 198, 45, 360);
+                    }
+                    if (t.use_item_kind == 10) {
+                        fontPrintStrNum(msg_buffer, 199, 45, 360);
+                    }
+                    if (t.use_item_kind == 11) {
+                        fontPrintStrNum(msg_buffer, 200, 45, 360);
+                    }
+                    if (t.use_item_kind == 12) {
+                        fontPrintStrNum(msg_buffer, 201, 45, 360);
+                    }
+                    if (t.use_item_kind == 13) {
+                        fontPrintStrNum(msg_buffer, 202, 45, 360);
+                    }
+                    if (t.use_item_kind == 14) {
+                        fontPrintStrNum(msg_buffer, 203, 45, 360);
+                    }
+                    if (t.use_item_kind == 15) {
+                        fontPrintStrNum(msg_buffer, 204, 45, 360);
+                    }
+                    if (t.use_item_kind == 16) {
+                        fontPrintStrNum(msg_buffer, 205, 45, 360);
+                    }
+                    if (t.use_item_kind == 17) {
+                        fontPrintStrNum(msg_buffer, 206, 45, 360);
+                    }
+                    if (t.use_item_kind == 18) {
+                        fontPrintStrNum(msg_buffer, 207, 45, 360);
+                    }
+                    if (t.use_item_kind == 19) {
+                        fontPrintStrNum(msg_buffer, 208, 45, 360);
+                    }
+                    if (t.use_item_kind == 21) {
+                        fontPrintStrNum(msg_buffer, 209, 45, 360);
+                    }
+                    if (t.use_item_kind == 22) {
+                        fontPrintStrNum(msg_buffer, 218, 45, 360);
+                    }
+                    if (t.use_item_kind == 30) {
+                        fontPrintStrNum(msg_buffer, 210, 45, 360);
+                    }
+                    if (t.use_item_kind == 40) {
+                        fontPrintStrNum(msg_buffer, 211, 45, 360);
+                    }
+                    if (t.use_item_kind == 63) {
+                        fontPrintStrNum(msg_buffer, 212, 45, 360);
+                    }
+                    if (t.use_item_kind == 64) {
+                        fontPrintStrNum(msg_buffer, 213, 45, 360);
+                    }
+                    if (t.use_item_kind == 65) {
+                        fontPrintStrNum(msg_buffer, 214, 45, 360);
+                    }
+                    if (t.use_item_kind == 71) {
+                        fontPrintStrNum(msg_buffer, 215, 45, 360);
+                    }
+                    if (t.use_item_kind == 73) {
+                        fontPrintStrNum(msg_buffer, 216, 45, 360);
+                    }
+                    if (t.use_item_kind == 74) {
+                        fontPrintStrNum(msg_buffer, 217, 45, 360);
+                    }
+                }
+                if ((shPadTrigger(0, key_config.enter) != 0) || (shPadTrigger(0, key_config.cancel) != 0) || (shPadTrigger(0, 2048) != 0) || (shPadTrigger(0, 1024) != 0) || (t.analog[0] == 1) || (t.analog[3] == 1) || (t.prs_btn2 != 0)) {
+                    t.use_item = 0;
+                }
+            } else {
+                t.use_item = 0;
+            }
+        }
+    } else if ((item.equip != 0) && ((t.step == 5) || (t.step == 7))) {
+        kage_font(msg_buffer, ((((item.equip & 255) - 1) * 2) + 20) & 65535, 20, 325);
+        kage_font(msg_buffer, (((item.equip - 1) * 2) + 21) & 65535, 45, 360);
+    }
+    fontCrushOff();
+    i = (u_char) f / 4;
+    fontSetColorDirect(i, i, i, 255);
+    if (MemoCommandCheck() == 0) {
+        fontPrintStrNum(msg_buffer, 11, 391, 428);
+    }
+    fontSetColorDirect(f, f, f, 255);
+    fontPrintStrNum(msg_buffer, 9U, 64, 428);
+    fontPrintStrNum(msg_buffer, 10, 240, 428);
+    if (MemoCommandCheck() != 0) {
+        fontPrintStrNum(msg_buffer, 11, 391, 428);
+    }
+    fontPrintStrNum(msg_buffer, 12, 69, 50);
+    fontPrintStrNum(msg_buffer, 13, 205, 50);
+    fontPrintStrNum(msg_buffer, 14, 368, 50);
+    if ((t.step == 6) || (t.step == 7)) {
+        fontSetColorDirect(f, f, f, 255);
+    } else {
+        fontSetColorDirect(i, i, i, 255);
+    }
+    if ((t.step != 7) && (t.step != 5)) {
+        kind = command_kind(t.item_kind);
+    } else {
+        kind = command_kind(item.equip);
+    }
+    if (t.shelf != 0) {
+        switch (kind) { /* switch 5 */
+            case 1:     /* switch 5 */
+                fontPrintStrNum(msg_buffer, 19, 360, 95);
+                fontPrintStrNum(msg_buffer, 0U, 360, 120);
+                break;
+            case 2: /* switch 5 */
+                fontPrintStrNum(msg_buffer, 19, 360, 95);
+                fontPrintStrNum(msg_buffer, 0U, 360, 120);
+                break;
+            case 3: /* switch 5 */
+                fontPrintStrNum(msg_buffer, 19, 360, 95);
+                if ((item.equip != t.item_kind) && (t.step != 7) && (t.step != 5)) {
+                    fontPrintStrNum(msg_buffer, 7U, 360, 120);
+                } else {
+                    fontPrintStrNum(msg_buffer, 8U, 360, 120);
+                }
+                break;
+            case 4: /* switch 5 */
+                fontPrintStrNum(msg_buffer, 19, 360, 80);
+                if ((item.equip != t.item_kind) && (t.step != 7) && (t.step != 5)) {
+                    fontPrintStrNum(msg_buffer, 7U, 360, 105);
+                } else {
+                    fontPrintStrNum(msg_buffer, 8U, 360, 105);
+                }
+                fontPrintStrNum(msg_buffer, 1U, 360, 130);
+                break;
+            case 5: /* switch 5 */
+                fontPrintStrNum(msg_buffer, 19, 360, 95);
+                fontPrintStrNum(msg_buffer, 1U, 360, 120);
+                break;
+            case 6: /* switch 5 */
+                if (t.command_light == 0) {
+                    fontPrintStrNum(msg_buffer, 19, 350, 95);
+                    fontPrintStrNum(msg_buffer, 3U, 350, 120);
+                } else {
+                    fontPrintStrNum(msg_buffer, 3U, 350, 80);
+                    fontPrintStrNum(msg_buffer, 4U, 360, 105);
+                    fontPrintStrNum(msg_buffer, 5U, 360, 130);
+                }
+                break;
+            case 7: /* switch 5 */
+                if (t.command_volume == 0) {
+                    fontPrintStrNum(msg_buffer, 19, 350, 80);
+                    fontPrintStrNum(msg_buffer, 3U, 350, 105);
+                    fontPrintStrNum(msg_buffer, 2U, 350, 130);
+                } else if (t.command_volume == 2) {
+                    fontPrintStrNum(msg_buffer, 3U, 350, 80);
+                    fontPrintStrNum(msg_buffer, 4U, 360, 105);
+                    fontPrintStrNum(msg_buffer, 5U, 360, 130);
+                } else {
+                    fontPrintStrNum(msg_buffer, 2U, 350, 90);
+                }
+                break;
+            case 8: /* switch 5 */
+                fontPrintStrNum(msg_buffer, 19, 360, 80);
+                fontPrintStrNum(msg_buffer, 0U, 360, 105);
+                fontPrintStrNum(msg_buffer, 6U, 360, 130);
+                break;
+            case 9: /* switch 5 */
+                fontPrintStrNum(msg_buffer, 19, 360, 80);
+                fontPrintStrNum(msg_buffer, 0U, 360, 105);
+                fontPrintStrNum(msg_buffer, 6U, 360, 130);
+                break;
+            case 10: /* switch 5 */
+                fontPrintStrNum(msg_buffer, 19, 360, 80);
+                fontPrintStrNum(msg_buffer, 0U, 360, 105);
+                fontPrintStrNum(msg_buffer, 6U, 360, 130);
+                break;
+            case 11: /* switch 5 */
+                fontPrintStrNum(msg_buffer, 19, 360, 80);
+                fontPrintStrNum(msg_buffer, 0U, 360, 105);
+                fontPrintStrNum(msg_buffer, 6U, 360, 130);
+                break;
+        }
+    } else {
+        switch (kind) { /* switch 6 */
+            case 1:     /* switch 6 */
+                fontPrintStrNum(msg_buffer, 0U, 360, 95);
+                fontPrintStrNum(msg_buffer, 15, 360, 120);
+                break;
+            case 2: /* switch 6 */
+                fontPrintStrNum(msg_buffer, 0U, 360, 105);
+                break;
+            case 3: /* switch 6 */
+                if ((item.equip != t.item_kind) && (t.step != 7) && (t.step != 5)) {
+                    fontPrintStrNum(msg_buffer, 7U, 360, 105);
+                } else {
+                    fontPrintStrNum(msg_buffer, 8U, 360, 105);
+                }
+                break;
+            case 4: /* switch 6 */
+                if ((item.equip != t.item_kind) && (t.step != 7) && (t.step != 5)) {
+                    fontPrintStrNum(msg_buffer, 7U, 360, 95);
+                } else {
+                    fontPrintStrNum(msg_buffer, 8U, 360, 95);
+                }
+                fontPrintStrNum(msg_buffer, 1U, 360, 120);
+                break;
+            case 5: /* switch 6 */
+                fontPrintStrNum(msg_buffer, 1U, 360, 105);
+                break;
+            case 6: /* switch 6 */
+                if (t.command_light == 0) {
+                    fontPrintStrNum(msg_buffer, 3U, 350, 105);
+                } else {
+                    fontPrintStrNum(msg_buffer, 3U, 350, 80);
+                    fontPrintStrNum(msg_buffer, 4U, 360, 105);
+                    fontPrintStrNum(msg_buffer, 5U, 360, 130);
+                }
+                break;
+            case 7: /* switch 6 */
+                if (t.command_volume == 0) {
+                    fontPrintStrNum(msg_buffer, 3U, 350, 95);
+                    fontPrintStrNum(msg_buffer, 2U, 350, 120);
+                } else if (t.command_volume == 2) {
+                    fontPrintStrNum(msg_buffer, 3U, 350, 80);
+                    fontPrintStrNum(msg_buffer, 4U, 360, 105);
+                    fontPrintStrNum(msg_buffer, 5U, 360, 130);
+                } else {
+                    fontPrintStrNum(msg_buffer, 2U, 350, 90);
+                }
+                break;
+            case 8: /* switch 6 */
+                fontPrintStrNum(msg_buffer, 0U, 360, 95);
+                fontPrintStrNum(msg_buffer, 6U, 360, 120);
+                break;
+            case 9: /* switch 6 */
+                fontPrintStrNum(msg_buffer, 0U, 360, 95);
+                fontPrintStrNum(msg_buffer, 6U, 360, 120);
+                break;
+            case 10: /* switch 6 */
+                fontPrintStrNum(msg_buffer, 0U, 360, 80);
+                fontPrintStrNum(msg_buffer, 15, 360, 105);
+                fontPrintStrNum(msg_buffer, 6U, 360, 130);
+                break;
+            case 11: /* switch 6 */
+                fontPrintStrNum(msg_buffer, 0U, 360, 95);
+                fontPrintStrNum(msg_buffer, 6U, 360, 120);
+                break;
+        }
+    }
+    fontSetColorDirect((u_char) f, (u_char) f, (u_char) f, 255);
+    if ((t.item_kind != 0) && ((command_kind((short) t.item_kind) == 2) || (command_kind((s32) t.item_kind) == 4) || (command_kind((s32) t.item_kind) == 5)) && (t.prs_btn2 == 0)) {
+        if (item.number[t.item_kind] < 10) {
+            fontPrintDec(item.number[t.item_kind], 236, 289, 3, 0);
+            stock_line(31, 0);
+        } else if (item.number[t.item_kind] < 100) {
+            fontPrintDec(item.number[t.item_kind], 243, 289, 3, 0);
+            stock_line(45, 0);
+        } else {
+            fontPrintDec(item.number[t.item_kind], 250, 289, 3, 0);
+            stock_line(59, 0);
+        }
+    }
+    if (t.prs_btn2 == 0) {
+        if (t.item_kind == 15) {
+            if (item.light_switch != 0) {
+                fontPrintStrNum(msg_buffer, 4U, 264, 290);
+            } else {
+                fontPrintStrNum(msg_buffer, 5U, 261, 290);
+            }
+            stock_line(50, 0);
+        } else if (t.item_kind == 16) {
+            if (item.radio_switch != 0) {
+                fontPrintStrNum(msg_buffer, 4U, 264, 290);
+            } else {
+                fontPrintStrNum(msg_buffer, 5U, 261, 290);
+            }
+            stock_line(50, 0);
+        }
+    }
+    if (t.step != 12) {
+        switch (item.equip) {
+            case 4:
+            case 6:
+            case 8:
+                break;
+            default:
+                return;
+        }
+        if (item.number[item.equip] < 10) {
+            fontPrintDec(item.number[item.equip], 262, 160, 3, 0);
+            stock_line(31, 1);
+            return;
+        }
+        fontPrintDec(item.number[item.equip], 269, 160, 3, 0);
+        stock_line(45, 1);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/Item/otn_itemmain", kage_font);
 
 INCLUDE_ASM("asm/nonmatchings/Item/otn_itemmain", lookline);
 
-INCLUDE_ASM("asm/nonmatchings/Item/otn_itemmain", item_allay);
+#line 2353
+void item_allay(void) {
+    int rgb; 
+
+    if (350 < t.allay_time) t.allay_time = 50;
+    
+    rgb = t.allay_time < 200 ? t.allay_time : 400 - t.allay_time;
+    t.allay_time += 30.0f * (6.0f * shGetDT());
+   
+    spkOpenDGiftag(SCE_GIF_SET_TAG(0, 1, 0, 0, SCE_GIF_PACKED, 1), SCE_GIF_PACKED_AD, -65534, 0);
+    spkAddressData(SCE_GS_SET_TEST(0, 0, 0, 0, 0, 0, 1, 1), SCE_GS_TEST_1);
+    spkCloseOpenDGiftag(SCE_GIF_SET_TAG(0, 1, 0, 0, SCE_GIF_REGLIST, 8), GIF_REGLIST(SCE_GS_PRIM, SCE_GS_RGBAQ, SCE_GS_XYZF2, SCE_GS_XYZF2, SCE_GS_XYZF2, SCE_GS_XYZF2, SCE_GS_XYZF2, SCE_GS_XYZF2));
+    (*spack.pos++) = SCE_GS_SET_PRIM(SCE_GS_PRIM_TRI, 0, 0, 0, SCE_GS_TRUE /* alpha blending */, 0, 0, 0, 0);
+    (*spack.pos++) = SCE_GS_SET_RGBAQ(rgb, rgb, rgb, (int) t.allay_abe, 0);
+    (*spack.pos++) = SCE_GS_SET_XYZF(zs(78), zs(-11), zs(0), 1);
+    (*spack.pos++) = SCE_GS_SET_XYZF(zs(78), zs(11), zs(0), 1);
+    (*spack.pos++) = SCE_GS_SET_XYZF(zs(95), zs(0), zs(0), 1);
+    (*spack.pos++) = SCE_GS_SET_XYZF(zs(95), zs(-11), zs(0), 1);
+    (*spack.pos++) = SCE_GS_SET_XYZF(zs(95), zs(11), zs(0), 1);
+    (*spack.pos++) = SCE_GS_SET_XYZF(zs(112), zs(0), zs(0), 1);
+    spkCloseGiftag();
+    
+    spkOpenDGiftag(SCE_GIF_SET_TAG(0, 1, 0, 0, SCE_GIF_PACKED, 1), SCE_GIF_PACKED_AD, -65534, 0);
+    spkAddressData(SCE_GS_SET_TEST(0, 0, 0, 0, 0, 0, 1, 1), SCE_GS_TEST_1);
+    spkCloseOpenDGiftag(SCE_GIF_SET_TAG(0, 1, 0, 0, SCE_GIF_REGLIST, 8), GIF_REGLIST(SCE_GS_PRIM, SCE_GS_RGBAQ, SCE_GS_XYZF2, SCE_GS_XYZF2, SCE_GS_XYZF2, SCE_GS_XYZF2, SCE_GS_XYZF2, SCE_GS_XYZF2));
+    (*spack.pos++) = SCE_GS_SET_PRIM(SCE_GS_PRIM_TRI, 0, 0, 0, SCE_GS_TRUE /* alpha blending */, 0, 0, 0, 0);
+    (*spack.pos++) = SCE_GS_SET_RGBAQ(rgb, rgb, rgb, (int) t.allay_abe, 0);
+    (*spack.pos++) = SCE_GS_SET_XYZF(zs(-78), zs(-11), zs(0), 1);
+    (*spack.pos++) = SCE_GS_SET_XYZF(zs(-78), zs(11), zs(0), 1);
+    (*spack.pos++) = SCE_GS_SET_XYZF(zs(-95), zs(0), zs(0), 1);
+    (*spack.pos++) = SCE_GS_SET_XYZF(zs(-95), zs(-11), zs(0), 1);
+    (*spack.pos++) = SCE_GS_SET_XYZF(zs(-95), zs(11), zs(0), 1);
+    (*spack.pos++) = SCE_GS_SET_XYZF(zs(-112), zs(0), zs(0), 1);
+    spkCloseGiftag();
+
+
+
+    
+    spkOpenDGiftag( SCE_GIF_SET_TAG(0, 1, 0, 0, SCE_GIF_PACKED, 1), SCE_GIF_PACKED_AD, -65534, 0);
+    spkAddressData(SCE_GS_SET_TEST(0, 0, 0, 0, 0, 0, 1, 1), SCE_GS_TEST_1);
+    spkCloseOpenDGiftag(SCE_GIF_SET_TAG(0, 1, 0, 0, SCE_GIF_REGLIST, 6), GIF_REGLIST(SCE_GS_PRIM, SCE_GS_RGBAQ, SCE_GS_XYZF2, SCE_GS_XYZF2, SCE_GS_XYZF2, SCE_GS_XYZF2));
+    (*spack.pos++) = SCE_GS_SET_PRIM(SCE_GS_PRIM_LINESTRIP, 0, 0, 0, SCE_GS_TRUE /* alpha blending */, 0, 0, 0, 0);
+    (*spack.pos++) = SCE_GS_SET_RGBAQ(0x80, 0x80, 0x80, (int) t.allay_abe * 5, 0);
+    (*spack.pos++) = SCE_GS_SET_XYZF(zs(78), zs(-11), zs(0), 1);
+    (*spack.pos++) = SCE_GS_SET_XYZF(zs(78), zs(11), zs(0), 1);
+    (*spack.pos++) = SCE_GS_SET_XYZF(zs(95), zs(0), zs(0), 1);
+    (*spack.pos++) = SCE_GS_SET_XYZF(zs(78), zs(-11), zs(0), 1);
+    spkCloseGiftag();
+
+    spkOpenDGiftag(SCE_GIF_SET_TAG(0, 1, 0, 0, SCE_GIF_PACKED, 1), SCE_GIF_PACKED_AD, -65534, 0);
+    spkAddressData(SCE_GS_SET_TEST(0, 0, 0, 0, 0, 0, 1, 1), SCE_GS_TEST_1);
+    spkCloseOpenDGiftag(SCE_GIF_SET_TAG(0, 1, 0, 0, SCE_GIF_REGLIST, 6), GIF_REGLIST(SCE_GS_PRIM, SCE_GS_RGBAQ, SCE_GS_XYZF2, SCE_GS_XYZF2, SCE_GS_XYZF2, SCE_GS_XYZF2));
+    (*spack.pos++) = SCE_GS_SET_PRIM(SCE_GS_PRIM_LINESTRIP, 0, 0, 0, SCE_GS_TRUE /* alpha blending */, 0, 0, 0, 0);
+    (*spack.pos++) = SCE_GS_SET_RGBAQ(0x80, 0x80, 0x80, (int) t.allay_abe * 5, 0);
+    (*spack.pos++) = SCE_GS_SET_XYZF(zs(95), zs(-11), zs(0), 1);
+    (*spack.pos++) = SCE_GS_SET_XYZF(zs(95), zs(11), zs(0), 1);
+    (*spack.pos++) = SCE_GS_SET_XYZF(zs(112), zs(0), zs(0), 1);
+    (*spack.pos++) = SCE_GS_SET_XYZF(zs(95), zs(-11), zs(0), 1);
+    spkCloseGiftag();
+
+    spkOpenDGiftag(SCE_GIF_SET_TAG(0, 1, 0, 0, SCE_GIF_PACKED, 1), SCE_GIF_PACKED_AD, -65534, 0);
+    spkAddressData(SCE_GS_SET_TEST(0, 0, 0, 0, 0, 0, 1, 1), SCE_GS_TEST_1);
+    spkCloseOpenDGiftag(SCE_GIF_SET_TAG(0, 1, 0, 0, SCE_GIF_REGLIST, 6), GIF_REGLIST(SCE_GS_PRIM, SCE_GS_RGBAQ, SCE_GS_XYZF2, SCE_GS_XYZF2, SCE_GS_XYZF2, SCE_GS_XYZF2));
+    (*spack.pos++) = SCE_GS_SET_PRIM(SCE_GS_PRIM_LINESTRIP, 0, 0, 0, SCE_GS_TRUE /* alpha blending */, 0, 0, 0, 0);
+    (*spack.pos++) = SCE_GS_SET_RGBAQ(0x80, 0x80, 0x80, (int) t.allay_abe * 5, 0);
+    (*spack.pos++) = SCE_GS_SET_XYZF(zs(-78), zs(-11), zs(0), 1);
+    (*spack.pos++) = SCE_GS_SET_XYZF(zs(-78), zs(11), zs(0), 1);
+    (*spack.pos++) = SCE_GS_SET_XYZF(zs(-95), zs(0), zs(0), 1);
+    (*spack.pos++) = SCE_GS_SET_XYZF(zs(-78), zs(-11), zs(0), 1);
+    spkCloseGiftag();
+
+    spkOpenDGiftag(SCE_GIF_SET_TAG(0, 1, 0, 0, SCE_GIF_PACKED, 1), SCE_GIF_PACKED_AD, -65534, 0);
+    spkAddressData(SCE_GS_SET_TEST(0, 0, 0, 0, 0, 0, 1, 1), SCE_GS_TEST_1);
+    spkCloseOpenDGiftag(SCE_GIF_SET_TAG(0, 1, 0, 0, SCE_GIF_REGLIST, 6), GIF_REGLIST(SCE_GS_PRIM, SCE_GS_RGBAQ, SCE_GS_XYZF2, SCE_GS_XYZF2, SCE_GS_XYZF2, SCE_GS_XYZF2));
+    (*spack.pos++) = SCE_GS_SET_PRIM(SCE_GS_PRIM_LINESTRIP, 0, 0, 0, SCE_GS_TRUE /* alpha blending */, 0, 0, 0, 0);
+    (*spack.pos++) = SCE_GS_SET_RGBAQ(0x80, 0x80, 0x80, (int) t.allay_abe * 5, 0);
+    (*spack.pos++) = SCE_GS_SET_XYZF(zs(-95), zs(-11), zs(0), 1);
+    (*spack.pos++) = SCE_GS_SET_XYZF(zs(-95), zs(11), zs(0), 1);
+    (*spack.pos++) = SCE_GS_SET_XYZF(zs(-112), zs(0), zs(0), 1);
+    (*spack.pos++) = SCE_GS_SET_XYZF(zs(-95), zs(-11), zs(0), 1);
+    spkCloseGiftag();
+
+}
 
 INCLUDE_ASM("asm/nonmatchings/Item/otn_itemmain", sprite);
 

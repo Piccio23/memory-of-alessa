@@ -1,18 +1,34 @@
 #include "sound/sh_sound.h"
 #include "sound/sh_sd_call.h"
-#include "DBG/dbflag.h"
-#include "SH2_common/sh_vu0.h"
-#include "SH2_common/playing_info.h"
-#include "debug.h"
-#include "SH2_common/sh2sys.h"
+
 #include "Chacter/character.h"
-#include "Event/event.h"
-#include "Chacter/sh2_character_manage.h"
-#include "Chacter/sh_character_battle.h"
-#include "FilesList/fileslist_bg.h"
-#include "SH2_common/sh2dt.h"
-#include "Multi_thr/filesys/fcread.h"
 #include "Chacter/chara_list.h"
+#include "Chacter/sh_character_battle.h"
+#include "Chacter/sh2_character_manage.h"
+
+#include "data/fs_structs.h"
+
+#include "DBG/dbflag.h"
+
+#include "debug.h"
+
+#include "Event/event.h"
+
+#include "Multi_thr/filesys/fcread.h"
+
+#include "shared/Fog/fog.h" // added only for float_sign, should be probably moved somewhere else
+
+#include "SH2_common/playing_info.h"
+#include "sce/libvu0.h"
+#include "SH2_common/sh_vu0.h"
+
+#include "SH2_common/sh2dt.h"
+#include "SH2_common/sh2sys.h"
+
+#include "vec.h"
+
+#include "view/vb_main.h"
+#include "view/vc_main.h"
 
 #pragma fast_fptosi on
 
@@ -154,11 +170,57 @@ INCLUDE_ASM("asm/nonmatchings/sound/sh_sound", SeCallPos);
 
 INCLUDE_ASM("asm/nonmatchings/sound/sh_sound", SeCallPosChange);
 
-INCLUDE_ASM("asm/nonmatchings/sound/sh_sound", SeCallPosDirection);
+int SeCallPosDirection(float* pos) {
+    sceVu0FVECTOR fv; // r29
+    sceVu0FVECTOR pos0; // r29+0x10
+    float sign; // r29+0x20
 
-INCLUDE_ASM("asm/nonmatchings/sound/sh_sound", SeCallPosDistance);
+    vec_copy_vu0(pos0, pos);
+    vu0_transform_vector_alt(fv, pos0, VbWvsMatrix.wvm);
+    fv[0] -= 750.0f;
+    fv[1] = 0.0f;
+    vec_normalize(fv, fv);
+    sign = float_sign(-fv[0]);
+    return (sign * (70.0f - (70.0f * fv[2])));
+}
 
-INCLUDE_ASM("asm/nonmatchings/sound/sh_sound", SeCallPosDistanceF);
+int SeCallPosDistance(float volume, float* pos) {
+    sceVu0FVECTOR fvec; // r29
+    sceVu0FVECTOR pos0; // r29+0x10
+    float len; /* r29+0x20 */ float work_0; /* r29+0x20 */ float work_1; // r29+0x20
+
+
+    vec_copy_vu0(pos0, pos);
+    vu0_sub_vector(fvec, vcWork.cam_pos, &sh2jms.player->pos);
+    len = vec3_lenght_alt(fvec);    
+    work_0 = (len - 1500.0f) * 0.000100000005f;
+    work_0 = 1.0f - float_min(float_max(0.0f, work_0), 1.0f);
+    vu0_sub_vector(fvec, pos0, &sh2jms.player->pos);
+    len = vec3_lenght_alt(fvec);    
+    work_1 = (len - 1500.0f) * 0.000100000005f;
+    work_1 = 1.0f - float_min(float_max(0.0f, work_1), 1.0f);
+
+    return 255.0f - (volume * (255.0f * work_0 * work_1));
+}
+
+float SeCallPosDistanceF(float* pos) {
+    sceVu0FVECTOR fvec; // r29
+    sceVu0FVECTOR pos0; // r29+0x10
+    float len; /* r29+0x20 */ float work_0; /* r29+0x20 */ float work_1; // r29+0x20
+
+
+    vec_copy_vu0(pos0, pos);
+    vu0_sub_vector(fvec, vcWork.cam_pos, &sh2jms.player->pos);
+    len = vec3_lenght_alt(fvec);    
+    work_0 = (len - 1500.0f) * 0.000100000005f;
+    work_0 = 1.0f - float_min(float_max(0.0f, work_0), 1.0f);
+    vu0_sub_vector(fvec, pos0, &sh2jms.player->pos);
+    len = vec3_lenght_alt(fvec);    
+    work_1 = (len - 1500.0f) * 0.000100000005f;
+    work_1 = 1.0f - float_min(float_max(0.0f, work_1), 1.0f);
+
+    return work_0 * work_1;
+}
 
 int Se3dPlayCheck(int sd_no /* r2 */) {
     int i; // r5
@@ -458,7 +520,7 @@ void Se2dManager(void) {
             if ((room != 0) && (room != se_2d_manage_data[i].room)) {
                 SeStop(se_2d_manage_data[i].sd);
             } else {
-                switch (Sh2sys.step[2]) {
+                switch (Sh2sys.step[SH2SYS_PLAYABLE_MAIN]) {
                     case 5:
                     case 6:
                     case 7:
@@ -603,7 +665,7 @@ void SeBgmChange(void) {
     int room;
 
     if (dbFlag(1) == 0) {
-        if (Sh2sys.step[0] == 2) {
+        if (Sh2sys.step[SH2SYS_MAIN] == 2) {
             shQzero(&snd_data_buffer, 0x5000);
             FcRead(sdb_list[0], &snd_data_buffer);
             fsSync(0, -1);
@@ -824,7 +886,7 @@ int BgmPageSet(void) {
     float temp_f0;
     float temp_f2;
 
-    if ((Sh2sys.step[2] >= 4) && (stage != NULL) && (stage->bgm_control != NULL)) {
+    if ((Sh2sys.step[SH2SYS_PLAYABLE_MAIN] >= 4) && (stage != NULL) && (stage->bgm_control != NULL)) {
         ret = stage->bgm_control();
     } else {
         ret = 0;

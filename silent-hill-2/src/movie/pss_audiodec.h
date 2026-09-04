@@ -1,7 +1,7 @@
 #ifndef PSS_AUDIODEC_H
 #define PSS_AUDIODEC_H
 
-#include "eetypes.h"
+#include "sce/eetypes.h"
 
 
 // ///////////////////////////////////////////////////////
@@ -91,5 +91,7 @@ int audioDecSendToIOP(AudioDec *ad);
 void audioDecReset(AudioDec *ad);
 void audioDecPause(AudioDec *ad);
 void audioDecResume(AudioDec *ad);
+
+extern AudioDec audioDec;
 
 #endif // PSS_AUDIODEC_H

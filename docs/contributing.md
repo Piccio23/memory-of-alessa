@@ -21,9 +21,9 @@ Otherwise, see [how it works](#how-it-works).
 ## quickstart
 
 To dive right in, use the [setup guide](../README.md) and find an assembly
-function in `silent-hill-3/config/SLUS_206.22/asm`. The functions in the `Event`
-folder are often small and good for a first attempt. Here's an example of what
-we're looking for below.
+function in `silent-hill-3/config/SLUS_206.22/asm`. The functions in the
+`Event/stage` folder are often small and good for a first attempt. Here's an
+example of what we're looking for below.
 
 ```s
 glabel func_01F6D6C0_heaven_00
@@ -52,6 +52,31 @@ context until the assembly matches. On decomp.me, the `m2c` decompiler will give
 a decent starting point, and the goal is to fix all of the errors and mismatches
 until it is a 100% match.
 
+## what's next?
+
+If you've completed the quickstart above, thank you so much!
+
+Submitting changes to the repository looks like so:
+
+1. Locate the C file where the code belongs. For example, the above function
+   lives in
+   [`silent-hill-3/src/Event/stage/heaven_00.c`](https://github.com/dreamingmoths/memory-of-alessa/blob/main/silent-hill-3/src/Event/stage/heaven_00.c).
+   If a C file doesn't exist, you may have to update the Splat YAML file to
+   change `asm` -> `c` and `rodata` -> `.rodata` (see the [Splat
+   docs](https://github.com/ethteck/splat/wiki/General-Workflow) for more
+   information).
+2. Find the `INCLUDE_ASM` line where the function is referenced and replace it with the decompiled code.
+3. Update or create any other files as needed, including header files.
+4. Run `make clean`, then `make sh3-report`. We recommend using the
+   [objdiff gui](https://github.com/encounter/objdiff/releases) from the root directory
+   of this repository to check the status of the functions and troubleshoot any
+   issues.
+5. Run `make clean`, then `make` to make sure the build is passing.
+
+Once that's done, feel free to [submit a pull request](https://github.com/dreamingmoths/memory-of-alessa/pulls)! Please try
+your best to submit changes that keep the build matching, but if you run into
+issues you may make a PR anyway so we can help troubleshoot.
+
 ## how it works
 
 The following is an overview of how this project was set up, which may be
@@ -73,7 +98,7 @@ Because we have debug information in Silent Hill 2 from a 2001 demo release, the
 filenames listed in its YAML are exactly the same as the original filenames
 found in that release. These YAMLs help us produce assembly (`.s`) files that
 are found in `silent-hill-3/config/SLUS_206.22/asm` and
-`silent-hill-3/config/SLUS_202.28/asm`, respectively.
+`silent-hill-2/config/SLUS_202.28/asm`, respectively.
 
 ### step 2: assembly files → binary (again)
 
