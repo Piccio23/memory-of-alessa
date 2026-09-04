@@ -1,9 +1,12 @@
 #include "sh2_common.h"
 
+#include "gs.h"
+
 #include "Event/event.h"
 
 #include "GFW/sh2_GsAllEnv.h"
 #include "GFW/sh2gfw_2d_filters.h"
+#include "GFW/sh2gfw_macros.h"
 
 #include "SH2_common/sh2dt.h"
 
@@ -12,13 +15,8 @@
 #include "data/daily.thu/data_movie.h"
 #include "data/daily.thu/data_demo_first_toilet.h"
 
-// data
-
+/* data */
 static float stg_toilet_wvp[4] = { 0.0f, 0.0f, 450.0f, 1.0f };
-
-// bss
-
-static union Q_WORDDATA stg_toilet_qwd_01F02890[32];
 
 INCLUDE_ASM("asm/nonmatchings/Event/stage/stg_toilet", stg_toilet_EvProgPrologueInToilet);
 
@@ -33,76 +31,83 @@ INCLUDE_ASM("asm/nonmatchings/Event/stage/stg_toilet", stg_toilet_EvProgPrologue
     return !GET_GAME_FLAG(GAME_FLAG_33) ? 4 : 0;
 }
 
+/* @todo migrate */
+#line 207
 int stg_toilet_Kari_hisyakai(int KeyAlpha) {
+    static Q_WORDDATA qwd[32];
+    sceVu0IVECTOR ivt; // r29+0x30
+    sceVu0FMATRIX wsm; // r29+0x40
+    int id = 0; // r2
 
-    int ivt[4]; // r29+0x30
-    float wsm[4][4]; // r29+0x40
-    int id; // r2
-
+    
+    
     sceVu0CopyMatrix(wsm, cam0.view_screen);
     sceVu0RotTransPers(ivt, wsm, stg_toilet_wvp, 1);
 
-    stg_toilet_qwd_01F02890[0].ui32[0] = 0x10000007;
-    stg_toilet_qwd_01F02890[0].ui32[1] = 0;
-    stg_toilet_qwd_01F02890[0].ui32[2] = 0;
-    stg_toilet_qwd_01F02890[0].ui32[3] = 0x50000007;
+    SET_DMATAG(qwd, id, DMAcnt | 7, 0, 0, SCE_VIF1_SET_DIRECT(7, 0));
 
-    stg_toilet_qwd_01F02890[1].ui32[3] = 0;
-    stg_toilet_qwd_01F02890[1].ui32[2] = 0xE;
-    stg_toilet_qwd_01F02890[1].ui32[1] = 0x10000000;
-    stg_toilet_qwd_01F02890[1].ui32[0] = 0x8006;
+    SET_GIFTAG(qwd, id, SCE_GIF_SET_TAG(6, SCE_GS_TRUE, 0, 0, SCE_GIF_PACKED, 1), SCE_GIF_PACKED_AD);
 
-    stg_toilet_qwd_01F02890[2] = shGs_AllEnv.Now_DrawEnv.frame_normal;
+    qwd[id++] = shGs_AllEnv.Now_DrawEnv.frame_normal;
 
-    stg_toilet_qwd_01F02890[3].ul64[1] = 0x47;
-    stg_toilet_qwd_01F02890[3].ul64[0] = 0x00058002;
 
-    stg_toilet_qwd_01F02890[4].ul64[1] = 0x4E;
-    stg_toilet_qwd_01F02890[4].ul64[0] = 0x3A0001c0;
+    
+    
+    
+    
+    
+    
+    
+    
+    SET_ADDRESS_DATA(qwd, id, SCE_GS_TEST_1, SCE_GS_SET_TEST(SCE_GS_FALSE, SCE_GS_ALPHA_ALWAYS, 0, 0, 0, 1, SCE_GS_TRUE, SCE_GS_DEPTH_GEQUAL));
 
-    stg_toilet_qwd_01F02890[5].ul64[0] = 0x60;
-    stg_toilet_qwd_01F02890[5].ul64[1] = 0x14;
+    
+    
+    
+    
+    SET_ADDRESS_DATA(qwd, id, SCE_GS_ZBUF_1, SCE_GS_SET_ZBUF(0xE0000 / 2048, SCE_GS_PSMZ16S, SCE_GS_FALSE));
 
-    stg_toilet_qwd_01F02890[6].ul64[1] = 8;
-    stg_toilet_qwd_01F02890[6].ul64[0] = 5;
 
-    stg_toilet_qwd_01F02890[7].ul64[1] = 0x42;
-    stg_toilet_qwd_01F02890[7].ul64[0] = 0xFF00000068ULL;
+    
+    
+    qwd[id].ul64[0] = SCE_GS_SET_TEX1(0, 0, SCE_GS_LINEAR, SCE_GS_LINEAR, 0, 0, 0); qwd[id++].ul64[1] = SCE_GS_TEX1_1;
 
-    stg_toilet_qwd_01F02890[8].ui32[0] = 0x10000005;
-    stg_toilet_qwd_01F02890[8].ui32[1] = 0;
-    stg_toilet_qwd_01F02890[8].ui32[2] = 0;
-    stg_toilet_qwd_01F02890[8].ui32[3] = 0x50000005;
 
-    stg_toilet_qwd_01F02890[9].ul64[0] = 0x4023400000008001ULL;
-    stg_toilet_qwd_01F02890[9].ul64[1] = 0x5151;
 
-    stg_toilet_qwd_01F02890[10].ui32[0] = 0;
-    stg_toilet_qwd_01F02890[10].ui32[1] = 0;
-    stg_toilet_qwd_01F02890[10].ui32[2] = 0;
-    stg_toilet_qwd_01F02890[10].ui32[3] = KeyAlpha;
+    SET_ADDRESS_DATA(qwd, id, SCE_GS_CLAMP_1, SCE_GS_SET_CLAMP(SCE_GS_CLAMP, SCE_GS_CLAMP, 0, 0, 0, 0));
 
-    stg_toilet_qwd_01F02890[11].ul64[0] = 0x0000700000007000ULL;
-    stg_toilet_qwd_01F02890[11].ul64[1] = ivt[2];
 
-    stg_toilet_qwd_01F02890[12].ui32[0] = 0;
-    stg_toilet_qwd_01F02890[12].ui32[1] = 0;
-    stg_toilet_qwd_01F02890[12].ui32[2] = 0;
-    stg_toilet_qwd_01F02890[12].ui32[3] = KeyAlpha;
+    
+    SET_ADDRESS_DATA(qwd, id, SCE_GS_ALPHA_1, SCE_GS_SET_ALPHA(0, 2, 2, 1, 255));
 
-    stg_toilet_qwd_01F02890[13].ul64[0] = 0x0000900000009000ULL;
-    stg_toilet_qwd_01F02890[13].ul64[1] = ivt[2];
+    
+    SET_DMATAG(qwd, id, DMAcnt | 5, 0, 0, SCE_VIF1_SET_DIRECT(5, 0));
+    qwd[id].ul64[0] = SCE_GIF_SET_TAG(1, SCE_GS_TRUE, SCE_GS_TRUE, 
+                                      SCE_GS_SET_PRIM(SCE_GS_PRIM_SPRITE, 0, 0, 0, SCE_GS_TRUE /* alpha blending */, 0, 0, 0, 0), SCE_GIF_PACKED, 4);
+    qwd[id++].ul64[1] = GIF_REGLIST(SCE_GS_RGBAQ, SCE_GS_XYZ2, SCE_GS_RGBAQ, SCE_GS_XYZ2);
 
-    stg_toilet_qwd_01F02890[14].ul128 = 0;
-    stg_toilet_qwd_01F02890[14].ui32[0] = 0x70000000;
+    
+    SET_QWORD_U32(qwd, id, 0, 0, 0, KeyAlpha);
 
-    d1cSend(stg_toilet_qwd_01F02890);
-    id = ivt[2] >> 4;
-    return id;
+    qwd[id].ul64[0] = SH_GIF_PACK_XY(Q4(1792.0f), Q4(1792.0f)), qwd[id++].ul64[1] = ivt[2];
+
+    SET_QWORD_U32(qwd, id, 0, 0, 0, KeyAlpha);
+
+    qwd[id].ul64[0] = SH_GIF_PACK_XY(Q4(2304.0f), Q4(2304.0f)), qwd[id++].ul64[1] = ivt[2];
+
+    qwd[id].ul128 = 0;
+    qwd[id++].ui32[0] = DMAend; /* SET_DMA_END(qwd); */
+
+    d1cSend(qwd);
+    
+    return ivt[2] >> 4;
+
 }
+#undef qwd
 
 /* static */ float stg_toilet_LinearTrim(float Yen, float Yst, float Xen, float Xst, float Parm) {
     return Yst + (((Yen - Yst) * (Parm - Xst)) / (Xen - Xst));
 }
 
-INCLUDE_ASM("asm/nonmatchings/Event/stage/stg_toilet", stg_toilet_Toilet_Dof_Filter); // https://decomp.me/scratch/dHOre
+// https://decomp.me/scratch/dHOre
+INCLUDE_ASM("asm/nonmatchings/Event/stage/stg_toilet", stg_toilet_Toilet_Dof_Filter);
