@@ -752,7 +752,8 @@ segments:
       - { start: 0x0027bc08,    type: .data,      name: movie/pss_videodec                               }
       - { start: 0x0027bc10,    type: data,       name: data_0x27bc10                                    }
       - { start: 0x0027bfd8,    type: .data,      name: sound/sh_sd_call                                 }
-      - { start: 0x0027bfe0,    type: data,       name: data_0x27bfe0                                    }
+      - { start: 0x0027bfe0,    type: .data,       name: Effect2/hh_class_blood_04                        }
+      - { start: 0x0027c210,    type: data,       name: data_0x27c210                                    }
       - { start: 0x0027c230,    type: .data,      name: Effect2/hh_memory_manage                         }
       - { start: 0x0027c240,    type: data,       name: data_0x27c240                                    }
       - { start: 0x0027e280,    type: data,       name: vudata/model2_vu_load                            }
