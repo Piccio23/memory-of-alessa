@@ -32,6 +32,6 @@ typedef struct Vertex_Infomeation_List {
 
 u_int HH_Class_Prefix_Blood_04(void);
 u_int HH_Class_Suffix_Blood_04(void);
-u_int HH_Class_Blood_04(void* pBlock, ImpactQueue_Element* pElement)
+u_int HH_Class_Blood_04(void* pBlock, ImpactQueue_Element* pElement);
 
 #endif // HH_CLASS_BLOOD_04_H
