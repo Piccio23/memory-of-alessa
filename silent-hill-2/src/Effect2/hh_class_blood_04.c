@@ -10,25 +10,76 @@ static void ParabolaMotion_Calculator(HH_Object_Blood_04* pThis, ImpactQueue_Ele
 static u_int Object_Motion_00(HH_Object_Blood_04* pThis, ImpactQueue_Element* pElement);
 static u_int Object_Draw(HH_Object_Blood_04* pThis, ImpactQueue_Element* pElement, float* Current_Position);
 
-extern /* static */ float _visc; // size: 0x4, address: 0x37B8E0
-extern /* static */ float _mass; // size: 0x4, address: 0x37B8E8
-extern /* static */ float _radius; // size: 0x4, address: 0x37B8F0
-extern /* static */ float _suppress_coff_0; // size: 0x4, address: 0x37B8F8
-extern /* static */ float _suppress_coff_1; // size: 0x4, address: 0x37B900
-extern /* static */ float _suppress_coff_xy; // size: 0x4, address: 0x37B908
-extern /* static */ float _square_00_vertex[4][4]; // size: 0x40, address: 0x37B910
-extern /* static */ float _square_00_normal[4][4]; // size: 0x40, address: 0x37B950
-extern /* static */ float _square_00_stq[4][4]; // size: 0x40, address: 0x37B990
-extern /* static */ float _square_01_stq[4][4]; // size: 0x40, address: 0x37B9D0
-extern /* static */ float _square_10_stq[4][4]; // size: 0x40, address: 0x37BA10
-extern /* static */ float _square_11_stq[4][4]; // size: 0x40, address: 0x37BA50
-extern /* static */ float (* _square_0x_stq_list_0x0037BA90[4])[4]; // size: 0x10, address: 0x37BA90
-extern /* static */ Vertex_Infomeation_List _vertex_info_list_0x0037BAA0[1]; // size: 0x10, address: 0x37BAA0
-extern /* static */ float _rgba_start_list_0x0037BAB0[1]; // size: 0x4, address: 0x37BAB0
-extern /* static */ float _rgba_end_list_0x0037BAB8[1]; // size: 0x4, address: 0x37BAB8
-extern /* static */ float _scale_start_list_0x0037BAC0[1]; // size: 0x4, address: 0x37BAC0
-extern /* static */ float _scale_end_list_0x0037BAC8[1]; // size: 0x4, address: 0x37BAC8
-extern /* static */ struct Motion_Table_Infomeation _motion_info_0x0037BAD0[3]; // size: 0x24, address: 0x37BAD0
+static float _visc = 0.000182f; // size: 0x4, address: 0x37B8E0
+static float _mass = 0.00000001f; // size: 0x4, address: 0x37B8E8
+static float _radius = 0.001f; // size: 0x4, address: 0x37B8F0
+static float _suppress_coff_0 = 0.28f; // size: 0x4, address: 0x37B8F8
+static float _suppress_coff_1 = 0.05f; // size: 0x4, address: 0x37B900
+static float _suppress_coff_xy = 0.4f; // size: 0x4, address: 0x37B908
+
+static sceVu0FMATRIX _square_00_vertex_0x0037B910 = { // size: 0x40, address: 0x37B910
+    { -200.0f, -200.0f, 0.0f, 1.0f },
+    { -200.0f,  200.0f, 0.0f, 1.0f },
+    {  200.0f, -200.0f, 0.0f, 1.0f },
+    {  200.0f,  200.0f, 0.0f, 1.0f }
+};
+
+static sceVu0FMATRIX _square_00_normal_0x0037B950 = { // size: 0x40, address: 0x37B950
+    { 0.0f, 0.0f, -1.0f, 1.0f },
+    { 0.0f, 0.0f, -1.0f, 1.0f },
+    { 0.0f, 0.0f, -1.0f, 1.0f },
+    { 0.0f, 0.0f, -1.0f, 1.0f }
+};
+
+static sceVu0FMATRIX _square_00_stq_0x0037B990 = { // size: 0x40, address: 0x37B990
+    { 0.5f,        0.5f,        1.0f, 0.0f },
+    { 0.5f,        0.74804688f, 1.0f, 0.0f },
+    { 0.74804688f, 0.5f,        1.0f, 0.0f },
+    { 0.74804688f, 0.74804688f, 1.0f, 0.0f }
+};
+
+static sceVu0FMATRIX _square_01_stq_0x0037B9D0 = { // size: 0x40, address: 0x37B9D0
+    { 0.75f,       0.5f,        1.0f, 0.0f },
+    { 0.75f,       0.74804688f, 1.0f, 0.0f },
+    { 0.99804688f, 0.5f,        1.0f, 0.0f },
+    { 0.99804688f, 0.74804688f, 1.0f, 0.0f }
+};
+
+static sceVu0FMATRIX _square_10_stq_0x0037BA10 = { // size: 0x40, address: 0x37BA10
+    { 0.5f,        0.75f,       1.0f, 0.0f },
+    { 0.5f,        0.99804688f, 1.0f, 0.0f },
+    { 0.74804688f, 0.75f,       1.0f, 0.0f },
+    { 0.74804688f, 0.99804688f, 1.0f, 0.0f }
+};
+
+static sceVu0FMATRIX _square_11_stq_0x0037BA50 = { // size: 0x40, address: 0x37BA50
+    { 0.75f,       0.75f,       1.0f, 0.0f },
+    { 0.75f,       0.99804688f, 1.0f, 0.0f },
+    { 0.99804688f, 0.75f,       1.0f, 0.0f },
+    { 0.99804688f, 0.99804688f, 1.0f, 0.0f }
+};
+
+static float (* _square_0x_stq_list_0x0037BA90[4])[4] = { // size: 0x10, address: 0x37BA90
+    _square_00_stq_0x0037B990,
+    _square_01_stq_0x0037B9D0,
+    _square_10_stq_0x0037BA10,
+    _square_11_stq_0x0037BA50
+};
+
+static Vertex_Infomeation_List _vertex_info_list_0x0037BAA0[1] = { // size: 0x10, address: 0x37BAA0
+    { _square_00_vertex_0x0037B910, _square_00_normal_0x0037B950, 4, 4 }
+};
+
+static float _rgba_start_list_0x0037BAB0[1] = { 0.0f }; // size: 0x4, address: 0x37BAB0
+static float _rgba_end_list_0x0037BAB8[1] = { 120.0f }; // size: 0x4, address: 0x37BAB8
+static float _scale_start_list_0x0037BAC0[1] = { 0.1f }; // size: 0x4, address: 0x37BAC0
+static float _scale_end_list_0x0037BAC8[1] = { 1.0f }; // size: 0x4, address: 0x37BAC8
+
+static Motion_Table_Infomeation _motion_info_0x0037BAD0[3] = { // size: 0x24, address: 0x37BAD0
+    { 0.0f, 0.0f,  0.0f },
+    { 3.0f, 0.7f,  1.0f },
+    { 5.0f, 0.5f, -1.0f }
+};
 
 static u_int Object_Initialize(HH_Object_Blood_04* pThis, ImpactQueue_Element* pElement) {
     u_int result = 0;
