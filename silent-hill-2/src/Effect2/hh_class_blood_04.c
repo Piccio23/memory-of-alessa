@@ -6,7 +6,7 @@
 #include "sce/libvifpk.h"
 
 static u_int Object_Initialize(HH_Object_Blood_04* pThis, ImpactQueue_Element* pElement);
-static void ParabolaMotion_Calculator(HH_Object_Blood_04* pThis , float Time, float* Position);
+static void ParabolaMotion_Calculator(HH_Object_Blood_04* pThis, ImpactQueue_Element* pElement, float Time, float* Position);
 static u_int Object_Motion_00(HH_Object_Blood_04* pThis, ImpactQueue_Element* pElement);
 static u_int Object_Draw(HH_Object_Blood_04* pThis, ImpactQueue_Element* pElement, float* Current_Position);
 
@@ -79,7 +79,7 @@ static void ParabolaMotion_Calculator(HH_Object_Blood_04* pThis, ImpactQueue_Ele
     sceVu0ApplyMatrix(Position, time_mat, pThis->Verocity_0);    
 }
 
-static u_int Object_Motion_00(HH_Object_Blood_04* pThis) {
+static u_int Object_Motion_00(HH_Object_Blood_04* pThis, ImpactQueue_Element* pElement) {
     u_int result = 0;
     u_int kind;
     float Rgba_s;
