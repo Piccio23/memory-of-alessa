@@ -316,7 +316,7 @@ u_int HH_Class_Suffix_Blood_05(void) {
 u_int HH_Class_Blood_05(void* pBlock, ImpactQueue_Element* pElement) {
     u_int result = 1;
     HH_Object_Blood_05* pThis;
-    static sceVu0FVECTOR add_vec_539 = { 0.0f, 1.0f, 0.0f, 0.0f }; // @ 0x0037D500
+    static sceVu0FVECTOR add_vec_539 = { 0.0f, -100.0f, 0.0f, 0.0f }; // @ 0x0037D500
 
     pThis = pBlock;
 
