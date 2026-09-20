@@ -211,17 +211,17 @@ u_int Object_Motion_00(HH_Object_Water_20* pThis, ImpactQueue_Element* pElement)
 }
 
 u_int Object_Draw(HH_Object_Water_20* pThis, ImpactQueue_Element* pElement, float* Current_Position) {
-    /* $v0       */ unsigned int result = 0;
-    /* $s0       */ sceVif1Packet* pPk = HH_Vif1Packet_Current_Get();
-    /* $v0       */ Vertex_Infomeation_List* pInfo;
-    /* $s1       */ sceVu0FVECTOR *pVertex = _vertex_info_list_0x00370310->pVertex_List;
-    /* $s2       */ sceVu0FVECTOR *pStq = _square_0x_stq_list_0x00370300[pThis->Vertex_Kind];
-    /* $sp+0x80  */ sceVu0FMATRIX lwm;
-    /* $sp+0xC0  */ sceVu0FMATRIX lsm;
-    /* $sp+0x100 */ sceVu0FMATRIX clip_mat;
-    /* $sp+0x140 */ sceVu0IVECTOR xyzf;
-    /* $sp+0x150 */ sceVu0IVECTOR rgba;
-    /* $sp+0x160 */ sceVu0FVECTOR stq_dummy;
+    unsigned int result = 0;
+    sceVif1Packet* pPk = HH_Vif1Packet_Current_Get();
+    Vertex_Infomeation_List* pInfo;
+    sceVu0FVECTOR *pVertex = _vertex_info_list_0x00370310->pVertex_List;
+    sceVu0FVECTOR *pStq = _square_0x_stq_list_0x00370300[pThis->Vertex_Kind];
+    sceVu0FMATRIX lwm;
+    sceVu0FMATRIX lsm;
+    sceVu0FMATRIX clip_mat;
+    sceVu0IVECTOR xyzf;
+    sceVu0IVECTOR rgba;
+    sceVu0FVECTOR stq_dummy;
     
     
     HH_ClassWrapper_WorldScreenMatrix_Get(lsm);  
@@ -246,13 +246,13 @@ u_int Object_Draw(HH_Object_Water_20* pThis, ImpactQueue_Element* pElement, floa
     
     
     
-    {
-    static float add_a_86 = 12.0f; /* @ 0x00370380 */
-    /* $sp+0x170 */ sceVu0FVECTOR Base_Rgba = { 240.0f, 255.0f, 230.0f, pThis->Alpha };
-    /* $sp+0x180 */ sceVu0FVECTOR Rgba; /* $sp+0x190 */ sceVu0FVECTOR view_dir;
-    /* $sp+0x1A0 */ sceVu0FVECTOR pos; /* $sp+0x1B0 */ sceVu0FVECTOR dir;
-    /* $sp+0x1C0 */ sceVu0FVECTOR light_color; /* $sp+0x1D0 */ sceVu0FVECTOR parameter;
-    /* $sp+0x1E0 */ float color_scale = 0.0f;
+    {    
+    sceVu0FVECTOR Base_Rgba = { 240.0f, 255.0f, 230.0f, pThis->Alpha };
+    static float add_a_86 = 12.0f; 
+    sceVu0FVECTOR Rgba; sceVu0FVECTOR view_dir;
+    sceVu0FVECTOR pos; sceVu0FVECTOR dir;
+    sceVu0FVECTOR light_color; sceVu0FVECTOR parameter;
+    float color_scale = 0.0f;
 
     
     HH_ClassWrapper_ViewDirection_Get(view_dir);
