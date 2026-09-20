@@ -210,7 +210,101 @@ u_int Object_Motion_00(HH_Object_Water_20* pThis, ImpactQueue_Element* pElement)
     return result;
 }
 
-INCLUDE_ASM("asm/nonmatchings/Effect2/hh_class_water_20", Object_Draw);
+u_int Object_Draw(HH_Object_Water_20* pThis, ImpactQueue_Element* pElement, float* Current_Position) {
+    /* $v0       */ unsigned int result = 0;
+    /* $s0       */ sceVif1Packet* pPk = HH_Vif1Packet_Current_Get();
+    /* $v0       */ Vertex_Infomeation_List* pInfo;
+    /* $s1       */ sceVu0FVECTOR *pVertex = _vertex_info_list_0x00370310->pVertex_List;
+    /* $s2       */ sceVu0FVECTOR *pStq = _square_0x_stq_list_0x00370300[pThis->Vertex_Kind];
+    /* $sp+0x80  */ sceVu0FMATRIX lwm;
+    /* $sp+0xC0  */ sceVu0FMATRIX lsm;
+    /* $sp+0x100 */ sceVu0FMATRIX clip_mat;
+    /* $sp+0x140 */ sceVu0IVECTOR xyzf;
+    /* $sp+0x150 */ sceVu0IVECTOR rgba;
+    /* $sp+0x160 */ sceVu0FVECTOR stq_dummy;
+    
+    
+    HH_ClassWrapper_WorldScreenMatrix_Get(lsm);  
+    
+    
+    HH_ClassWrapper_AlwaysFront_WorldView_Matrix_Get(lwm);
+
+    
+    sceVu0ScaleVector(lwm[0], lwm[0], pThis->Scale);
+    sceVu0ScaleVector(lwm[1], lwm[1], pThis->Scale);
+    sceVu0ScaleVector(lwm[2], lwm[2], pThis->Scale); 
+    
+    
+    sceVu0TransMatrix(lwm, lwm, pElement->Option.Vector[0]);
+    sceVu0TransMatrix(lwm, lwm, Current_Position);
+    
+    sceVu0MulMatrix(lsm, lsm, lwm);
+    
+    
+    HH_ClassWrapper_ViewFrustum_Primitive_ClipMatrix_Get(clip_mat);
+    sceVu0MulMatrix(clip_mat, clip_mat, lwm);
+    
+    
+    
+    {
+    static float add_a_86 = 12.0f; /* @ 0x00370380 */
+    /* $sp+0x170 */ sceVu0FVECTOR Base_Rgba = { 240.0f, 255.0f, 230.0f, pThis->Alpha };
+    /* $sp+0x180 */ sceVu0FVECTOR Rgba; /* $sp+0x190 */ sceVu0FVECTOR view_dir;
+    /* $sp+0x1A0 */ sceVu0FVECTOR pos; /* $sp+0x1B0 */ sceVu0FVECTOR dir;
+    /* $sp+0x1C0 */ sceVu0FVECTOR light_color; /* $sp+0x1D0 */ sceVu0FVECTOR parameter;
+    /* $sp+0x1E0 */ float color_scale = 0.0f;
+
+    
+    HH_ClassWrapper_ViewDirection_Get(view_dir);
+    
+    HH_ClassWrapper_SpotLight_EnvironmentParameter_Get(pos, dir, light_color,parameter);
+    
+    if (HH_ClassWrapper_SpotLight_Enable_Check() != 0) {
+    
+        color_scale = HH_ClassWrapper_SpotLight_ColorRatio_Calculator(pos, dir, lwm[3], parameter[0], parameter[2]);
+        color_scale = HH_ClassWrapper_Float_Clamp(color_scale, 0.0f, 1.0f);
+    }
+    sceVu0CopyVector(Rgba, Base_Rgba);
+    Rgba[3] *= color_scale;
+    Rgba[3] += add_a_86;
+    
+        
+    sceVu0ClampVector(Rgba, Rgba, 0.0f, 255.0f);
+    sceVu0FTOI0Vector(rgba, Rgba);
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    HH_Vif1PacketBuffer_GifTag_Open();
+    
+    HH_Vif1Packet_GeneralGifTag_Sprite_Open();
+    ((u_long128 *)pPk->pCurrent)[0] = *(u_long128 *)(&rgba);
+    
+    HH_ClassWrapper_Transform_PerspectiveProjection_Clip_N(xyzf, stq_dummy, lsm, clip_mat, pVertex[0], 0x3F);
+    ((u_long128 *)pPk->pCurrent)[1] = *(u_long128 *)(&pStq[0]);
+    xyzf[2] += 0xA0;
+    ((u_long128 *)pPk->pCurrent)[2] = *(u_long128 *)(&xyzf);
+    
+    HH_ClassWrapper_Transform_PerspectiveProjection_Clip_N(xyzf, stq_dummy, lsm, clip_mat, pVertex[3], 0x3F);
+    ((u_long128 *)pPk->pCurrent)[3] = *(u_long128 *)(&pStq[3]);
+    xyzf[2] += 0xA0;
+    ((u_long128 *)pPk->pCurrent)[4] = *(u_long128 *)(&xyzf);
+    pPk->pCurrent += 0x14;
+    sceVif1PkCloseGifTag(pPk);
+    
+    HH_Vif1PacketBuffer_GifTag_Close();
+    
+    return result;
+}
+
 
 u_int HH_Class_Prefix_Water_20(void) {
     u_long tex0; sceVif1Packet* pPk; u_int result = 1;
