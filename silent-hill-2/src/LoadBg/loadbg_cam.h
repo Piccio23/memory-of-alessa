@@ -3,6 +3,8 @@
 
 #include "sh2_common.h"
 
+#define LBM_CAM_SLOTS 17
+
 // total size: 0x114
 typedef struct loadBgCAM_Ctrl {
     // Members
