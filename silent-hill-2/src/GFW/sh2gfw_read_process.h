@@ -3,15 +3,13 @@
 
 #include "sh2_common.h"
 
-
-
 void sh2gfw_Set_TrTex(void* pT);
 int sh2gfw_LoadSet_SemiTransTEX(int mapid, void* fl);
 void sh2gfw_LOAD_AREADATA_ID(u_int stage);
 
 // int sh2gfw_Process_AREAtoMAN(add args);
 
-u_int sh2gfw_process_AreaDATA(u_int map_id);
+// u_int sh2gfw_process_AreaDATA(u_int map_id); @todo: fix signature
 
 // void sh2gfw_Free_BlockLocalTex(struct sh2gfw_ALLTEXSYNC_MAN* pATSM, struct sh2gfw_BLOCK_MAN* pB_man);
 
