@@ -461,7 +461,7 @@ segments:
       - { start: 0x0014DA58,    type: asmtu,      name: sdk/lib_0024D358                                 } 
       - { start: 0x0014e750,    type: asmtu,      name: sound/shd_vs_sp                                  }
       - { start: 0x00151530,    type: asm,        name: GFW/sh2_DrawEnvData, ld_align_segment_start: 16  }
-      - { start: 0x001521e0,    type: asm,        name: LoadBg/loadbg_camdata                            }
+      - { start: 0x001521e0,    type: c,          name: LoadBg/loadbg_camdata                            }
       - { start: 0x001522f0,    type: c,          name: LoadBg/loadbg_common                             }
       - { start: 0x00152850,    type: c,          name: DBG/dbsw_map                                     }
       - { start: 0x00152c10,    type: c,          name: Chacter/chara_saveinfo                           }
@@ -514,8 +514,8 @@ segments:
       - { start: 0x001711d0,    type: asm,        name: LoadBg/loadbg_all                                }
       - { start: 0x00172180,    type: asm,        name: LoadBg/loadbg_cam                                }
       - { start: 0x001726c0,    type: c,          name: LoadBg/loadbg_cld                                }
-      - { start: 0x00172ab0,    type: asm,        name: LoadBg/loadbg_kg2                                }
-      - { start: 0x00172eb0,    type: asm,        name: LoadBg/loadbg_map                                }
+      - { start: 0x00172ab0,    type: c,          name: LoadBg/loadbg_kg2                                }
+      - { start: 0x00172eb0,    type: c,          name: LoadBg/loadbg_map                                }
       - { start: 0x001736f0,    type: asm,        name: LoadBg/loadbg_mem                                }
       - { start: 0x001753a0,    type: asm,        name: Fog/fog_blow                                     }
       - { start: 0x00175fa0,    type: c,          name: Chacter/chara_bound                              }
@@ -779,8 +779,8 @@ segments:
       - { start: 0x00270c50,    type: data,       name: data_0x270c50                                    }
       - { start: 0x00272f90,    type: data,       name: LoadBg/loadbg_cam                                }
       - { start: 0x002730b0,    type: .data,      name: LoadBg/loadbg_cld                                }
-      - { start: 0x002731c0,    type: data,       name: LoadBg/loadbg_kg2                                }
-      - { start: 0x00273210,    type: data,       name: LoadBg/loadbg_map                                }
+      - { start: 0x002731c0,    type: .data,      name: LoadBg/loadbg_kg2                                }
+      - { start: 0x00273210,    type: .data,      name: LoadBg/loadbg_map                                }
       - { start: 0x00273270,    type: data,       name: data_0x273270                                    }
       - { start: 0x00273ed0,    type: .data,      name: Effect2/hh_class_water_03                        }
       - { start: 0x002742f8,    type: .data,      name: Effect2/hh_class_water_04                        }
@@ -1038,8 +1038,8 @@ segments:
       - { start: 0x0029a160,    type: rodata,     name: MC/savedata                                      }
       - { start: 0x0029a230,    type: .rodata,    name: Event/stage/stg_tgs_trial                        }
       - { start: 0x0029a280,    type: rodata,     name: GFW/sh2_DrawEnvData                              }
-      - { start: 0x0029a310,    type: rodata,     name: LoadBg/loadbg_camdata                            }
-      - { start: 0x0029a360,    type: .rodata,     name: LoadBg/loadbg_common                            }
+      - { start: 0x0029a310,    type: .rodata,    name: LoadBg/loadbg_camdata                            }
+      - { start: 0x0029a360,    type: .rodata,    name: LoadBg/loadbg_common                             }
       - { start: 0x0029a3a0,    type: .rodata,    name: DBG/dbsw_map                                     }
       - { start: 0x0029a640,    type: rodata,     name: view/vc_newest_rodata                            }
       - { start: 0x0029a650,    type: rodata,     name: Multi_thr/scf/sh2_scf                            }
@@ -1062,8 +1062,8 @@ segments:
       - { start: 0x0029aee0,    type: rodata,     name: LoadBg/loadbg_2x2                                }
       - { start: 0x0029b0c0,    type: rodata,     name: LoadBg/loadbg_cam                                }
       - { start: 0x0029b200,    type: .rodata,    name: LoadBg/loadbg_cld                                }
-      - { start: 0x0029b2d0,    type: rodata,     name: LoadBg/loadbg_kg2                                }
-      - { start: 0x0029b3a0,    type: rodata,     name: LoadBg/loadbg_map                                }
+      - { start: 0x0029b2d0,    type: .rodata,    name: LoadBg/loadbg_kg2                                }
+      - { start: 0x0029b3a0,    type: .rodata,    name: LoadBg/loadbg_map                                }
       - { start: 0x0029b720,    type: rodata,     name: LoadBg/loadbg_mem                                }
       - { start: 0x0029bf50,    type: .rodata,    name: sh2shd/sh2shd_shadow_env                         }
       - { start: 0x0029bfd0,    type: rodata,     name: rodata_0x29bfd0                                  }
