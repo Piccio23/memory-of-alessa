@@ -18,7 +18,26 @@ static int _loadBgKG2_Delete(int slot) {
     return (addr != NULL);  
 }
 
-INCLUDE_ASM("asm/nonmatchings/LoadBg/loadbg_kg2", _loadBgKG2_Regist);
+static int _loadBgKG2_Regist(int slot, int mapid, void* addr, int size) {
+    SHADOW_OUTDOOR_HEAD* header = addr; 
+    ASSERT_ON_LINE(0<=slot && slot<LBM_KG2_SLOTS, 33);
+    if ((mapid == lbKG2_Ctrl.mapid[slot]) &&
+        (lbKG2_Ctrl.addr[slot] == addr) &&
+        (lbKG2_Ctrl.size[slot] == size)) {
+        
+        return 0;
+    }
+    lbKG2_Ctrl.mapid[slot] = mapid;
+    lbKG2_Ctrl.addr[slot] = addr;
+    lbKG2_Ctrl.size[slot] = size;
+    if (header != NULL) {
+        header->kind = (mapid >> 0x10) & 0xFFFF;
+        header->map_id = mapid & 0xFFFF;
+    }
+    
+    return 1;
+
+}
 
 static int _loadBgKG2_Replace(int slot, int mapid, void* addr, int size) {
     int ret = 0; 
