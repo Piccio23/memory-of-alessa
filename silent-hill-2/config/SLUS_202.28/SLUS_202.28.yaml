@@ -513,7 +513,7 @@ segments:
       - { start: 0x00170010,    type: asm,        name: LoadBg/loadbg_2x2                                }
       - { start: 0x001711d0,    type: asm,        name: LoadBg/loadbg_all                                }
       - { start: 0x00172180,    type: asm,        name: LoadBg/loadbg_cam                                }
-      - { start: 0x001726c0,    type: asm,        name: LoadBg/loadbg_cld                                }
+      - { start: 0x001726c0,    type: c,          name: LoadBg/loadbg_cld                                }
       - { start: 0x00172ab0,    type: asm,        name: LoadBg/loadbg_kg2                                }
       - { start: 0x00172eb0,    type: asm,        name: LoadBg/loadbg_map                                }
       - { start: 0x001736f0,    type: asm,        name: LoadBg/loadbg_mem                                }
@@ -777,6 +777,11 @@ segments:
       - { start: 0x00270a88,    type: .data,      name: Effect2/hh_class_water_30                        }
       - { start: 0x00270c30,    type: .data,      name: Effect2/hh_class_water_splash_phenomenon_00      }
       - { start: 0x00270c50,    type: data,       name: data_0x270c50                                    }
+      - { start: 0x00272f90,    type: data,       name: LoadBg/loadbg_cam                                }
+      - { start: 0x002730b0,    type: .data,      name: LoadBg/loadbg_cld                                }
+      - { start: 0x002731c0,    type: data,       name: LoadBg/loadbg_kg2                                }
+      - { start: 0x00273210,    type: data,       name: LoadBg/loadbg_map                                }
+      - { start: 0x00273270,    type: data,       name: data_0x273270                                    }
       - { start: 0x00273ed0,    type: .data,      name: Effect2/hh_class_water_03                        }
       - { start: 0x002742f8,    type: .data,      name: Effect2/hh_class_water_04                        }
       - { start: 0x002749a8,    type: .data,      name: Effect2/hh_class_water_06                        }
@@ -1056,7 +1061,7 @@ segments:
       - { start: 0x0029aea0,    type: rodata,     name: Chacter/m3_inu_rodata                            }
       - { start: 0x0029aee0,    type: rodata,     name: LoadBg/loadbg_2x2                                }
       - { start: 0x0029b0c0,    type: rodata,     name: LoadBg/loadbg_cam                                }
-      - { start: 0x0029b200,    type: rodata,     name: LoadBg/loadbg_cld                                }
+      - { start: 0x0029b200,    type: .rodata,    name: LoadBg/loadbg_cld                                }
       - { start: 0x0029b2d0,    type: rodata,     name: LoadBg/loadbg_kg2                                }
       - { start: 0x0029b3a0,    type: rodata,     name: LoadBg/loadbg_map                                }
       - { start: 0x0029b720,    type: rodata,     name: LoadBg/loadbg_mem                                }
