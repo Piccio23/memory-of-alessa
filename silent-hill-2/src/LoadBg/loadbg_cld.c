@@ -51,18 +51,12 @@ int loadBgCLD_Replace(int slot, int mapid, void* addr, int size) {
     ret = _loadBgCLD_Replace(slot, mapid, addr, size);
     switch (ret) {
     case 1:
-        // VERBOSE_ON_LINE(84, 1, "- cld(%d)\n", slot);
-        // VERBOSE(1, "- cld(%d)\n", slot);
         verbose(1, "- cld(%d)\n", slot);
         break;
     case 2:
-        // VERBOSE_ON_LINE(87, 1, " +cld(%d):0x%08x(@0x%08x+0x%08x)\n", slot, mapid, addr, size);
-        // VERBOSE(1, " +cld(%d):0x%08x(@0x%08x+0x%08x)\n", slot, mapid, addr, size);
         verbose(1, " +cld(%d):0x%08x(@0x%08x+0x%08x)\n", slot, mapid, addr, size);
         break;
     case 3:
-        // VERBOSE_ON_LINE(90, 1, "-+cld(%d):0x%08x(@0x%08x+0x%08x)\n", slot, mapid, addr, size);
-        // VERBOSE(1, "-+cld(%d):0x%08x(@0x%08x+0x%08x)\n", slot, mapid, addr, size);
         verbose(1, "-+cld(%d):0x%08x(@0x%08x+0x%08x)\n", slot, mapid, addr, size);
         break;
     }
