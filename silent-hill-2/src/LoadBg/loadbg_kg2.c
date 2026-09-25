@@ -58,15 +58,12 @@ int loadBgKG2_Replace(int slot, int mapid, void* addr, int size) {
     ret = _loadBgKG2_Replace(slot, mapid, addr, size);
     switch (ret) {
     case 1:
-        // VERBOSE_ON_LINE(91, 1, "- cld(%d)\n", slot);
         verbose(1, "- kg2(%d)\n", slot);
         break;
     case 2:
-        //VERBOSE_ON_LINE(94, 1, " +cld(%d):0x%08x(@0x%08x+0x%08x)\n", slot, mapid, addr, size);
         verbose(1, " +kg2(%d):0x%08x(@0x%08x+0x%08x)\n", slot, mapid, addr, size);
         break;
     case 3:
-        //VERBOSE_ON_LINE(97, 1, "-+cld(%d):0x%08x(@0x%08x+0x%08x)\n", slot, mapid, addr, size);
         verbose(1, "-+kg2(%d):0x%08x(@0x%08x+0x%08x)\n", slot, mapid, addr, size);
         break;
     }
