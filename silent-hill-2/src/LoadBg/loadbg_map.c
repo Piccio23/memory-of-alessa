@@ -204,7 +204,7 @@ static int loadBgMAP_BlockInit(int slot, int init) {
     
     
 
-    VERBOSE_ON_LINE(237, 1, "Block(0x%08x): removed\n", mapid); // did they make a mistake? mapid could not be initialized 
+    VERBOSE_ON_LINE(237, 1, "Block(0x%08x): removed\n", mapid); // @bug: did they make a mistake? mapid could not be initialized 
     sh2gfw_Delete_BlockLocal(slot);
     
     
