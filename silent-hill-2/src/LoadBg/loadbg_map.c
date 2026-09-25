@@ -134,19 +134,19 @@ static int loadBgTEX_AreaInit(int init) {
         if ((mapid != 0) && (addr != NULL)) {
             if (size > 0x40000) { // @todo: add define
                 sh2gfw_Set_GB_Tex(addr);
-                verbose(1, "loadbg_map.c:165> GB tex: registed\n");
+                VERBOSE_ON_LINE(165, 1, "GB tex: registed\n");
             } else {
-                printf("loadbg_map.c:167> GB tex: probably, illegal size(%d)!!\n", size);                
+                DEBUG_LOG_ON_LINE(167, "GB tex: probably, illegal size(%d)!!\n", size); 
             }
         } else {
-            printf("loadbg_map.c:170> GB tex: not exist!!\n");
+            DEBUG_LOG_ON_LINE(170, "GB tex: not exist!!\n");
         }
     } else {
         
         
         
         sh2gfw_Delete_GB_Tex();
-        verbose(1, "loadbg_map.c:177> GB tex: removed\n");
+        VERBOSE_ON_LINE(177, 1, "GB tex: removed\n");
     }
     
     return 1;
@@ -165,19 +165,19 @@ static int loadBgTEX_RoomInit(int init) {
         if ((mapid != 0) && (addr != NULL)) {
             if (size > 0x40000) {
                 sh2gfw_Set_TR_Tex(addr);
-                verbose(1, "loadbg_map.c:197> TR tex: registed\n");
+                VERBOSE_ON_LINE(197, 1, "TR tex: registed\n");
             } else {
-                printf("loadbg_map.c:199> TR tex: probably, illegal size(%d)!!\n", size);
+                DEBUG_LOG_ON_LINE(199, "TR tex: probably, illegal size(%d)!!\n", size);
             }
         } else {
-            printf("loadbg_map.c:202> TR tex: not exist!!\n");
+            DEBUG_LOG_ON_LINE(202, "TR tex: not exist!!\n");
         }
     } else {
         
         
         
         sh2gfw_Delete_TR_Tex();
-        verbose(1, "loadbg_map.c:209> TR tex: removed\n");
+        VERBOSE_ON_LINE(209, 1, "TR tex: removed\n");
     }
         
     return 1;
@@ -195,16 +195,16 @@ static int loadBgMAP_BlockInit(int slot, int init) {
         size = lbMAP_Ctrl.size[slot + 2];
         if ((mapid != 0) && (addr != NULL) && (size > 0)) {
             sh2gfw_Set_BlockLocal(slot, addr, mapid);
-            verbose(1, "loadbg_map.c:228> Block(0x%08x): registed\n", mapid);
+            VERBOSE_ON_LINE(228, 1, "Block(0x%08x): registed\n", mapid);
         } else {
-            printf("loadbg_map.c:230> Block(0x%08x): not exist!!\n", mapid);
+            DEBUG_LOG_ON_LINE(230, "Block(0x%08x): not exist!!\n", mapid);
         }
         return 1;
     }
     
     
-    
-    verbose(1, "loadbg_map.c:237> Block(0x%08x): removed\n", mapid); // did they make a mistake? mapid could not be initialized 
+
+    VERBOSE_ON_LINE(237, 1, "Block(0x%08x): removed\n", mapid); // did they make a mistake? mapid could not be initialized 
     sh2gfw_Delete_BlockLocal(slot);
     
     
