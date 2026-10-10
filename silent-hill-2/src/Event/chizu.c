@@ -49,6 +49,7 @@ extern float chizu_center_y; // size: 0x4, address: 0x116DBB8
 extern float chizu_center_x; // size: 0x4, address: 0x116DBC0
 
 extern /* static */ Chizu_CurrentBlock chz_crt_block[190]; // size: 0x8E8, address: 0x33BEF0
+extern /* static */ Chizu_ConnectInfo chz_connect[36]; // size: 0x90, address: 0x33C7E0
 
 void ChizuMain(void) {
     
