@@ -164,7 +164,7 @@ segments:
       - { start: 0x000ac650,    type: c,          name: Event/event_sub                                  }
       - { start: 0x000adf60,    type: c,          name: Event/item                                       }
       - { start: 0x000aea60,    type: asm,        name: Event/picture                                    }
-      - { start: 0x000af7a0,    type: asm,        name: Event/stg_name                                   }
+      - { start: 0x000af7a0,    type: c,          name: Event/stg_name                                   }
       - { start: 0x000b1450,    type: asm,        name: Event/vu0_func                                   }
       - { start: 0x000b1480,    type: c,          name: Event/demoview                                   }
       - { start: 0x000b3e30,    type: c,          name: Font/font                                        }
@@ -908,7 +908,7 @@ segments:
       - { start: 0x002915c0,    type: .rodata,    name: Event/event                                      }
       - { start: 0x002917d0,    type: .rodata,    name: Event/event_sub                                  }
       - { start: 0x00291810,    type: .rodata,    name: Event/item                                       }
-      - { start: 0x002918e0,    type: rodata,     name: Event/stg_name                                   }
+      - { start: 0x002918e0,    type: .rodata,    name: Event/stg_name                                   }
       - { start: 0x00291980,    type: .rodata,    name: Event/demoview                                   }
       - { start: 0x00291ac0,    type: .rodata,    name: Font/font                                        }
       - { start: 0x00291c20,    type: rodata,     name: Multi_thr/filesys/filecmd                        }
