@@ -1,19 +1,32 @@
 #include "Event/chara_data_load.h"
+#include "Event/chara_admin.h"
 #include "Event/event.h"
-#include "SH2_common/sh_vu0.h"
-#include "GFW/sh2gfw_Init_ModelDrawData.h"
+#include "Event/stg_name.h"
+
+#include "Chacter/bg_chara.h"
+#include "Chacter/chara_list.h"
 #include "Chacter/sh2_character_manage.h"
+
+#include "data/daily.thu/data_chr_mar.h"
+#include "data/daily.thu/data_chr_jms.h"
+#include "data/daily.thu/data_chr_wp.h"
+
+#include "GFW/sh2gfw_Init_ModelDrawData.h"
+
 #include "LoadBg/loadbg_event.h"
-#include "SH2_common/sh2sys.h"
+
 #include "Multi_thr/filesys/fcread.h"
+
 #include "SH2_common/data_load.h"
+#include "SH2_common/sh_vu0.h"
+#include "SH2_common/sh2sys.h"
 
 extern /* static */ CharaData_ItemFile bullet_and_drug_file[6];
 extern /* static */ CharaData_StandardList enemy_list[15];
 extern /* static */ CharaData_WeaponFile weapon_file[10];
 extern /* static */ CharaData_StandardList item_list[168];
 
-static void CharaDataLoadExecItem(CharaData_EntryList* entry_list_p /* r18 */);
+static void CharaDataLoadExecItem(CharaData_EntryList* entry_list_p);
 
 static void CharaDataLoadExecWeapon(CharaData_EntryList* entry_list_p);
 
@@ -22,8 +35,8 @@ static int CharaDeleteNoUseOne(void);
 static void CharaDataInfoFree(CharaData_MemAdmin* admin_p, int del);
 static void CharaDataInfoFreeSub(CharaData_MemAdmin_One* maop);
 static void CharaDataUseFree(u_long128* adr, int size);
-static int SeekMemAdminCtgry(int category /* r16 */);
-static int SeekMemAdminKind(int kind /* r2 */);
+static int SeekMemAdminCtgry(int category);
+static int SeekMemAdminKind(int kind);
 
 void CharaDataLoadInit(void) {
     shQzero(&mem_admin, sizeof(mem_admin));
@@ -39,7 +52,7 @@ void CharaDataLoadInit(void) {
 }
 
 void CharaDataLoadItem(void) {
-    CharaData_EntryList entry_list[6]; // r29+0x10
+    CharaData_EntryList entry_list[6];
     int i; // r6
 
     
@@ -53,7 +66,7 @@ void CharaDataLoadItem(void) {
 }
 
 void CharaDataLoadWeapon(void) {
-    CharaData_EntryList entry_list[3]; // r29+0x20
+    CharaData_EntryList entry_list[3];
     int i; // r3
     
     for (i = 0; weapon_file[i].equip != -1; i++)
@@ -84,8 +97,8 @@ void CharaDataLoadWeapon(void) {
     }
 }
 
-void CharaDataLoadEnemy(int kind /* r2 */) {
-    CharaData_EntryList entry_list; // r29+0x30
+void CharaDataLoadEnemy(int kind) {
+    CharaData_EntryList entry_list;
     int i; // r5
 
     for (i = 0; enemy_list[i].kind != 0; i++)
@@ -103,8 +116,8 @@ void CharaDataLoadEnemy(int kind /* r2 */) {
 }
 
 void CharaDataLoadStage(void) {
-    CharaData_EntryList entry_list[2]; // r29+0x20
-    int i; // r3
+    CharaData_EntryList entry_list[2];
+    int i;
     
     for (i = 0; weapon_file[i].equip != -1; i++)
         if (weapon_file[i].equip == item.equip) break;    
@@ -132,18 +145,109 @@ void CharaDataLoadStage(void) {
     CharaDataLoadExec(entry_list, 2, 0);
 }
 
-INCLUDE_ASM("asm/nonmatchings/Event/chara_data_load", CharaDataLoadRoom);
-
-const char pad_0x00398ed8[] = "\0\0\0\0";
-
-INCLUDE_RODATA("asm/nonmatchings/Event/chara_data_load", @1120_0x00398EE0);
-
-INCLUDE_RODATA("asm/nonmatchings/Event/chara_data_load", @1121_0x00398F10);
+void CharaDataLoadRoom(int room) {
+    CharaData_EntryList entry_list[32];
+    Enemy_List* ep;
+    Model_List* mp;
+    int entry_number;
+    int i;  
+    int j;
+   
+    if (stage->chara_data_clear != NULL) {
+        if (stage->chara_data_clear()) CharaDataDeleteAll();
+    }
+    CharaDataDeleteExtra();
+    
+    entry_number = 0;
+    shQzero(entry_list, sizeof(entry_list));
+    
+    
+    for (i = 0; i < 32; i++) {
+        if (mem_admin[i].priority == 1) {
+            mem_admin[i].priority = 3;
+        } else if (mem_admin[i].priority > 1) {
+            mem_admin[i].priority++;
+            if (mem_admin[i].priority > 64) 
+                mem_admin[i].priority = 64;
+        }
+    }
+    
+    if (GET_GAME_FLAG(GAME_FLAG_15)) {
+        entry_list[entry_number].category = 4;
+        entry_list[entry_number].kind = LLL_MAR_CHARA_KIND;
+        entry_list[entry_number].model.file = data_chr_mar_lll_mar_mdl;
+        entry_list[entry_number].animation.file = data_chr_mar_lll_mar_anm;
+        entry_list[entry_number].shadow.file = data_chr_mar_hhh_mar_kg1;
+        entry_number++;
+    }
+    
+    for (ep = stage->en_list; ep != NULL && ep->kind != 0; ep++) {
+        if (CharaAdminEnemyEntryCheck(ep, room)) {
+            for (i = 0; enemy_list[i].kind != 0; i++) 
+                if (ep->kind == enemy_list[i].kind) break;                            
+            if (enemy_list[i].kind) {            
+                for (j = 0; j < entry_number; j++) 
+                    if (ep->kind == entry_list[j].kind) break;                    
+                if ((entry_number <= 0) ||
+                    (j == entry_number)) {                    
+                    entry_list[entry_number].category = 4;
+                    entry_list[entry_number].kind = enemy_list[i].kind;
+                    entry_list[entry_number].model.file = enemy_list[i].model;
+                    entry_list[entry_number].animation.file = enemy_list[i].animation;
+                    entry_list[entry_number].shadow.file = enemy_list[i].shadow;
+                    entry_number++;
+                }}}}    
+    
+    for (mp = stage->mdl_list; mp != NULL && mp->kind != 0; mp++) {
+        if (mp->kind >> 8 == 3) {
+                        
+            BgCharaRelocateSet(stage->glb_crd, mp->pos[0], mp->pos[2], mp->kind);
+            
+            
+        }
+        else if (!mp->flag_off || (!GET_GAME_FLAG(mp->flag_off))) {
+            
+        
+            if (room == RoomName(0, mp->pos[0], mp->pos[2])) {
+                
+                for (i = 0; item_list[i].kind != 0; i++) 
+                    if (mp->kind == item_list[i].kind) break;    
+                ASSERT_ON_LINE(item_list[i].kind, 795);
+                for (j = 0; j < entry_number; j++) 
+                    if (mp->kind == entry_list[j].kind) break;            
+                if ((entry_number <= 0) ||
+                    (j == entry_number)) {
+                    entry_list[entry_number].category = 4;
+                    entry_list[entry_number].kind = item_list[i].kind;
+                    entry_list[entry_number].model.file = item_list[i].model;
+                    entry_list[entry_number].animation.file = item_list[i].animation;
+                    entry_list[entry_number].shadow.file = item_list[i].shadow;
+                    entry_number++;
+        }}}}
+        
+    
+    if ((room == 1) || (room == 0x24)) { // @todo:add room ids
+        entry_list[entry_number].category = 4;
+        if (stage->pc_model == 1) {
+            entry_list[entry_number].kind = RHLL_JMS_CHARA_KIND;
+            entry_list[entry_number].model.file = data_chr_jms_rhll_jms_mdl;
+        } else {
+            entry_list[entry_number].kind = RLLL_JMS_CHARA_KIND;
+            entry_list[entry_number].model.file = data_chr_jms_rlll_jms_mdl;
+        }
+        entry_number++;
+        SET_BIT(Sh2sys.main_status, 4);
+    } else {
+        UNSET_BIT(Sh2sys.main_status, 4);
+    }
+    
+    CharaDataLoadExec(entry_list, entry_number, 0);
+}
 
 void CharaDataLoadDemo(CharaData_DemoList* dlp, int status) {
-    CharaData_EntryList entry_list[32]; // r29+0x40
-    int entry_number; // r16
-    int i; // r5
+    CharaData_EntryList entry_list[32];
+    int entry_number;
+    int i;
 
     entry_number = 0;
     shQzero(&entry_list, sizeof(entry_list));
@@ -172,7 +276,7 @@ void CharaDataLoadCancel(CharaData_DemoList* dlp) {
 
 INCLUDE_ASM("asm/nonmatchings/Event/chara_data_load", CharaDataLoadExec);
 
-static void CharaDataLoadExecItem(CharaData_EntryList* entry_list_p /* r18 */) {
+static void CharaDataLoadExecItem(CharaData_EntryList* entry_list_p) {
     int size; // r16
     int i; // r2
     
@@ -290,9 +394,9 @@ static void CharaDataLoadExecStandardSub0(CharaData_EntryList* entry_list, int* 
 
 }
 
-void CharaDataWeaponTranslation(int kind /* r22 */, union fsFileIndex* file_anm /* r21 */, void* adr_anm /* r20 */, union fsFileIndex* file_mdl /* r19 */, void* adr_mdl /* r23 */) { // not line matched
-    struct SubCharacter* scp; // r16
-    struct chr_mge_files load_files[3]; // r29+0x90
+void CharaDataWeaponTranslation(int kind /* r22 */, fsFileIndex* file_anm /* r21 */, void* adr_anm /* r20 */, fsFileIndex* file_mdl /* r19 */, void* adr_mdl /* r23 */) { // not line matched
+    SubCharacter* scp; // r16
+    chr_mge_files load_files[3]; // r29+0x90
     int i; // r17                                                                                                                                                                                         
     int j; // r16
 
@@ -334,7 +438,7 @@ void CharaDataWeaponTranslation(int kind /* r22 */, union fsFileIndex* file_anm 
     }
 }
 
-u_long128* CharaDataExtraTranslation(union fsFileIndex* file, void* adress) {
+u_long128* CharaDataExtraTranslation(fsFileIndex* file, void* adress) {
     u_long128* free_adr; // r16
     int size; // r17
 
@@ -346,7 +450,7 @@ u_long128* CharaDataExtraTranslation(union fsFileIndex* file, void* adress) {
     return free_adr;
 }
 
-u_long128* CharaDataAnimSetExtra(int kind, union fsFileIndex* file, u_long128* adress, int free) { // not line matched
+u_long128* CharaDataAnimSetExtra(int kind, fsFileIndex* file, u_long128* adress, int free) { // not line matched
     struct SubCharacter* scp; // r17
     struct chr_mge_files load_files[2]; // r29+0x80
     u_long128* ret_adr; // r2
@@ -397,7 +501,7 @@ u_long128* CharaDataAnimAdressExchange(SubCharacter* scp, u_long128* adr) {
     return ret;
 }
 
-u_long128* CharaDataLoadExtra(union fsFileIndex* file, int status) { // not line matched
+u_long128* CharaDataLoadExtra(fsFileIndex* file, int status) { // not line matched
     u_long128* adr; // r16
     int size; // r17    
     int del; // r2
@@ -533,7 +637,7 @@ void CharaDataDeleteExtra(void) {
     
 }
 
-int CharaDataFileSearch(union fsFileIndex** file /* r2 */, int kind /* r2 */) {
+int CharaDataFileSearch(fsFileIndex** file /* r2 */, int kind) {
     int i; // r3
     for (i = 0; item_list[i].kind != 0; i++) {
         if (item_list[i].kind == kind) {
@@ -550,7 +654,7 @@ void CharaDataBackLoadInit(void) {
     LoadBgEventInit(chara_adress, 0x800000);
 }
 
-void CharaDataBackInit(CharaData_DemoList* dlp /* r18 */) {
+void CharaDataBackInit(CharaData_DemoList* dlp) {
     struct SubCharacter * scp; // r16
     int i; // r16    
     int j; // r19
@@ -569,7 +673,7 @@ void CharaDataBackInit(CharaData_DemoList* dlp /* r18 */) {
     
 }
 
-static int SeekMemAdminCtgry(int category /* r16 */) {
+static int SeekMemAdminCtgry(int category) {
     int i; // r2
 
     for (i = 0; i < 32; i++) 
@@ -587,7 +691,7 @@ static int SeekMemAdminCtgry(int category /* r16 */) {
     return i;
 }
 
-static int SeekMemAdminKind(int kind /* r2 */) {
+static int SeekMemAdminKind(int kind) {
     int i; // r2
     for (i = 0; i < 32; i++) 
         if (kind == mem_admin[i].kind) break;            
