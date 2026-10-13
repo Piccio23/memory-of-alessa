@@ -29,7 +29,7 @@ extern /* static */ CharaData_StandardList item_list[168];
 static void CharaDataLoadExecItem(CharaData_EntryList* entry_list_p);
 
 static void CharaDataLoadExecWeapon(CharaData_EntryList* entry_list_p);
-
+static void CharaDataLoadExecStandard(CharaData_EntryList *entry_list, int* no, int* entry_no, int status);
 static void CharaDataLoadExecStandardSub0(CharaData_EntryList* entry_list, int* no, int* entry_no, int status);
 static int CharaDeleteNoUseOne(void);
 static void CharaDataInfoFree(CharaData_MemAdmin* admin_p, int del);
@@ -350,11 +350,134 @@ static void CharaDataLoadExecWeapon(CharaData_EntryList* entry_list_p) {
     }
 }
 
-INCLUDE_RODATA("asm/nonmatchings/Event/chara_data_load", @1412);
+static void CharaDataLoadExecStandard(CharaData_EntryList *entry_list, int* no, int* entry_no, int status) {
+    CharaData_EntryList* entry_list_p;
+    CharaData_EntryList_One* elop;
+    CharaData_MemAdmin* map;
+    CharaData_MemAdmin_One* maop;
+    u_long128 *adr;
+    int i;
+    int j;
+    entry_list_p = &entry_list[*no];
+    
+    
+    
+    for (i = 0; i < 32; i++) {
+        if (entry_list_p->kind == mem_admin[i].kind) {
+            if ((mem_admin[i].model.file == entry_list_p->model.file) &&
+                (mem_admin[i].animation.file == entry_list_p->animation.file) &&
+                (mem_admin[i].shadow.file == entry_list_p->shadow.file) &&
+                (mem_admin[i].cluster.file == entry_list_p->cluster.file)) {
+                mem_admin[i].priority = 1;
+                return;
+            }
+            break;
+        }
+    }
+    
+    if (i == 32) map = NULL;
+    else {
+        entry_list_p->delete = mem_admin[i].kind;
+        map = &mem_admin[i];
+    }
+    
+    for (j = 0; j < 4; j++) {
+        maop = NULL;
+        switch (j) {                                    
+            default:
+            case 0: elop = &entry_list_p->model;                
+                if (map != NULL) maop = &map->model;                
+                break;
+            case 1: elop = &entry_list_p->animation;                
+                if (map != NULL) maop = &map->animation;                
+                break;
+            case 2: elop = &entry_list_p->shadow;
+                if (map != NULL) maop = &map->shadow;                
+                break;
+            case 3: elop = &entry_list_p->cluster;
+                if (map != NULL) maop = &map->cluster;  
+                break;
+        }
+        
+        if (elop->file == NULL) {
+            
+            if ((maop != NULL) && (maop->file != NULL)) {
+                entry_list_p->delete = map->kind;
+                elop->load = 1;
+                CharaDataInfoFree(map, 1 << j);
+            }
+            continue;
+        }
+        
+        if (maop != NULL) {
+            if (maop->file == elop->file) {
+                elop->adress = maop->adress;
+                continue;
+            }
+            entry_list_p->delete = map->kind;
+            elop->load = 1;
+            CharaDataInfoFree(map, 1 << j);
+        }
+        
+        while (true) {
+            adr = (u_long*)CharaDataFreeSearch((FcGetFileSize(elop->file) + 0x1FFF) & ~0x1FFF);
+            
+            if (adr != NULL) break;
+            if (!CharaDeleteNoUseOne()) {
+                ASSERT_ON_LINE(!( status & ( 1 << 1 ) ), 1270);
+                entry_list_p->delete = 0;
+                CharaDataUseFree(entry_list_p->model.adress, (FcGetFileSize(entry_list_p->model.file) + 0x1FFF) & ~0x1FFF);
+                
+                CharaDataUseFree(entry_list_p->animation.adress,(FcGetFileSize(entry_list_p->animation.file) + 0x1FFF) & ~0x1FFF);
+                
+                
+                CharaDataUseFree(entry_list_p->shadow.adress, (FcGetFileSize(entry_list_p->shadow.file) + 0x1FFF) & ~0x1FFF);
+                
+                CharaDataUseFree(entry_list_p->cluster.adress, (FcGetFileSize(entry_list_p->cluster.file) + 0x1FFF) & ~0x1FFF);
+                
+                CharaDataLoadExecStandardSub0(entry_list, no, entry_no, status);
+                
+                return;
+            }
+        }
+        elop->adress = adr;
+        elop->load = 1;
+    }
+    
+    if (map == NULL) {
+        i = SeekMemAdminCtgry(0);
+        map = &mem_admin[i];
+        map->category = entry_list_p->category;
+        map->kind = entry_list_p->kind;
+    }
+    
+    map->priority = 1;
+    
+    if (entry_list_p->model.load) {
+        mem_admin[i].model.file = entry_list_p->model.file;
+        mem_admin[i].model.adress = entry_list_p->model.adress;
+        mem_admin[i].model.size = (FcGetFileSize(entry_list_p->model.file) + 0x1FFF) & ~0x1FFF;
+        
+    }
+    if (entry_list_p->animation.load) {
+        mem_admin[i].animation.file = entry_list_p->animation.file;
+        mem_admin[i].animation.adress = entry_list_p->animation.adress;
+        mem_admin[i].animation.size = (FcGetFileSize(entry_list_p->animation.file) + 0x1FFF) & ~0x1FFF;
+    }
+    
+    if (entry_list_p->shadow.load) {
+        mem_admin[i].shadow.file = entry_list_p->shadow.file;
+        mem_admin[i].shadow.adress = entry_list_p->shadow.adress;
+        mem_admin[i].shadow.size = (FcGetFileSize(entry_list_p->shadow.file) + 0x1FFF) & ~0x1FFF;
+    }
+    
+    if (entry_list_p->cluster.load) {
+        mem_admin[i].cluster.file = entry_list_p->cluster.file;
+        mem_admin[i].cluster.adress = entry_list_p->cluster.adress;
+        mem_admin[i].cluster.size = (FcGetFileSize(entry_list_p->cluster.file) + 0x1FFF) & ~0x1FFF;
+    }
 
-INCLUDE_RODATA("asm/nonmatchings/Event/chara_data_load", @1413);
-
-INCLUDE_ASM("asm/nonmatchings/Event/chara_data_load", CharaDataLoadExecStandard);
+}
 
 static void CharaDataLoadExecStandardSub0(CharaData_EntryList* entry_list, int* no, int* entry_no, int status) {
     CharaData_EntryList entry_list_bak[32];
@@ -451,8 +574,8 @@ u_long128* CharaDataExtraTranslation(fsFileIndex* file, void* adress) {
 }
 
 u_long128* CharaDataAnimSetExtra(int kind, fsFileIndex* file, u_long128* adress, int free) { // not line matched
-    struct SubCharacter* scp; // r17
-    struct chr_mge_files load_files[2]; // r29+0x80
+    SubCharacter* scp; // r17
+    chr_mge_files load_files[2]; // r29+0x80
     u_long128* ret_adr; // r2
     int i; // r2    
     int j; // r4
