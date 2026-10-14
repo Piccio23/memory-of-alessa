@@ -3,9 +3,8 @@
 
 #include "sh2_common.h"
 
-// total size: 0x14
-typedef struct _JumpMenuUserData {
-    // Members
+typedef struct /* anonymous in the dwarf info */ {
+    // total size: 0x14
     int x;       // offset 0x0, size 0x4
     int z;       // offset 0x4, size 0x4
     int flg;     // offset 0x8, size 0x4
