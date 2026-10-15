@@ -14,7 +14,7 @@ extern /* static */ u_long _GifTag_TriangleFan[2]; // size: 0x8, address: 0x3717
 extern /* static */ Queue_Object* pQueue; // size: 0x4, address: 0x371780
 
 sceVif1Packet _Vif1_Packet; // size: 0x20, address: 0x1202290
-static Queue_Object _queue; // size: 0x30, address: 0x1202260
+/* static */ Queue_Object _queue; // size: 0x30, address: 0x1202260
 
 static void QueueObject_Initialize(Queue_Object* pQueue);
 static u_int QueueObject_enQueue(Queue_Object* pQueue, Queue_Element* pElement);
