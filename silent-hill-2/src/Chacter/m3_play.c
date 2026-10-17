@@ -3445,7 +3445,7 @@ void PlayerCheckStraightLine(SubCharacter* this, float spd_roty) {
     
     
     
-    ep[1] = -150.0f + this->pos.y + 900.0f * shSinF(-0.5235988f) / shCosF(-0.5235988f);
+    ep[1] = -150.0f + this->pos.y + 900.0f * shSinF(TO_RAD(-30)) / shCosF(TO_RAD(-30));
     
     
     
