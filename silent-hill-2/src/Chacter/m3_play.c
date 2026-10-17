@@ -3433,8 +3433,8 @@ void PlayerCheckStraightLine(SubCharacter* this, float spd_roty) {
     
     sh2jms.rot_y = roty;
 
-    ep[0] = sp[0] + (900.0f * shSinF(roty));
-    ep[2] = sp[2] + (900.0f * shCosF(roty));
+    ep[0] = sp[0] + 900.0f * shSinF(roty);
+    ep[2] = sp[2] + 900.0f * shCosF(roty);
     
     
     sp[1] = ep[1] = this->eye_y;
