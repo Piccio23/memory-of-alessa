@@ -9,6 +9,8 @@
 #include "Event/demoview.h"
 #include "Event/picture.h"
 
+#include "Collision/cl_main.h"
+
 #include "Chacter/chara_list.h"
 #include "Chacter/m3_sc.h"
 
@@ -1197,7 +1199,90 @@ INCLUDE_ASM("asm/nonmatchings/Event/stage/stg_apart_e2f", stg_apart_e2f_EvProgSu
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/Event/stage/stg_apart_e2f", stg_apart_e2f_EvAllTimeFunc);
+extern /* static */ CL_HITPOLY_PLANE stg_apart_e2f_clActWallList_ap42[24]; // size: 0x780, address: 0x1F064A0
+
+extern /* static */ CL_HITPOLY_PLANE stg_apart_e2f_clActFloorList_ap42[8]; // size: 0x280, address: 0x1F06C20
+
+extern /* static */ u_char stg_apart_e2f_corpse_on[8][2]; // @ 0x01F07750
+
+extern /* static */ u_char stg_apart_e2f_corpse_off[5][2]; // @ 0x01F07760
+
+/* static */ void stg_apart_e2f_EvAllTimeFunc(void) {
+    SubCharacter* scp; // r16
+    sceVu0FVECTOR pos; // r29+0x20
+    sceVu0FVECTOR rot; // r29+0x30
+    float volume; // r29+0x60 
+    int disp_ctrl_list[7]; // r29+0x40
+    int room; // r2
+    int i; // r16
+
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    disp_ctrl_list[0] = 0;
+    room = RoomNameJms();
+    
+    if (room == 0x17) {
+        if (!GET_ITEM_FLAG(15)) sh2gde_SetSpot_JmsOrBG(0);        
+        if (GET_GAME_FLAG(7) ||
+            GET_GAME_FLAG(8) ||
+            GET_GAME_FLAG(9)) 
+            EvDispControlModelEntry(disp_ctrl_list, 0x20, 0);
+        else 
+            EvDispControlModelEntry(disp_ctrl_list, 0x20, -1);        
+    } else if (room == 0x18) {
+        sh2shd_add_map_to_shadow_off_work(0x2A);
+        if (GET_GAME_FLAG(69)) {
+            for (i = 0; i < 8; i++) EvDispControlModelEntry(disp_ctrl_list, stg_apart_e2f_corpse_on[i][0], stg_apart_e2f_corpse_on[i][1]);
+            
+            clAddDynamicWall(&stg_apart_e2f_clActWallList_ap42[10]);
+            clAddDynamicFloor(&stg_apart_e2f_clActFloorList_ap42[0]);
+            sh2shd_off_obj(0x2A, 0x3F);
+        } else {
+            for (i = 0; i < 5; i++) EvDispControlModelEntry(disp_ctrl_list, stg_apart_e2f_corpse_off[i][0], stg_apart_e2f_corpse_off[i][1]);
+            
+            clAddDynamicWall(&stg_apart_e2f_clActWallList_ap42[16]);
+            clAddDynamicFloor(&stg_apart_e2f_clActFloorList_ap42[4]);
+            clAddDynamicWall(&stg_apart_e2f_clActWallList_ap42[21]);
+            clAddDynamicFloor(&stg_apart_e2f_clActFloorList_ap42[6]);
+            sh2shd_off_obj(0x2A, 0x3E);
+        }
+        if (GET_GAME_FLAG(82)) 
+            clAddDynamicWall(&stg_apart_e2f_clActWallList_ap42[0]);
+        else clAddDynamicWall(&stg_apart_e2f_clActWallList_ap42[5]);        
+        scp = shCharacterGetSubCharacter(ITEM_B_CLO_CHARA_KIND, 0);
+        shCharacterStayObjectNthPartsGet1st(scp, 2, pos, rot);
+        rot[2] += shAngleRegulate((TAU * itof(game_flag.clock % 3840)) / 3840.0f);
+        
+        shCharacterStayObjectNthPartsSet(scp, 2, pos, rot);
+        shCharacterStayObjectNthPartsGet1st(scp, 3, pos, rot);
+        rot[2] += shAngleRegulate(QUARTER_TURN + (TAU * itof(game_flag.clock) / 46080.0f));
+        
+        shCharacterStayObjectNthPartsSet(scp, 3, pos, rot);
+        
+        volume = SeCallPosDistanceF(stg_apart_e2f_tv_pos);
+        if ((sh2jms.player->pos.x > -59750.0f) && (sh2jms.player->pos.z > 21300.0f)) {
+            volume *= 1.0f - ((59750.0f + sh2jms.player->pos.x) / 4000.0f);
+        }
+        
+        Se2dManageDataVolumeChange(0x3E80, 0.4f * volume);
+    }
+    EvDispControlModelExec(disp_ctrl_list);
+}
 
 /* static */ void stg_apart_e2f_Delete_RedPointLight(void) {
     int* mp; // r17
