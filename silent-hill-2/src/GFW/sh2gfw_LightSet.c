@@ -156,7 +156,7 @@ void sh2gfw_Get_DemoSpotPosDirCol(float* pos, float* dir, float* col) {
 
 }
 
-void sh2gfw_Set_SpotLight(float* dir, float* pos, float* color, float falloff_start, float falloff_end, float spread_pi) {
+void sh2gfw_Set_SpotLight(float* dir, float* pos, float* color, int unused, float falloff_start, float falloff_end, float spread_pi) {
     
     DemoLightWork.Spot = 1;
     
