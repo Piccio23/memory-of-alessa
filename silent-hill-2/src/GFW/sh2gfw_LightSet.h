@@ -63,7 +63,7 @@ int sh2gfw_Get_DemoPointLight(int n, float* pos, float* col, float* decay);
 int sh2gfw_Check_DemoSpotLight(void);
 void sh2gfw_Get_DemoSpotParm(float* svt);
 void sh2gfw_Get_DemoSpotPosDirCol(float* pos, float* dir, float* col);
-void sh2gfw_Set_SpotLight(float* dir, float* pos, float* color, float falloff_start, float falloff_end, float spread_pi);
+void sh2gfw_Set_SpotLight(float* dir, float* pos, float* color, int unused, float falloff_start, float falloff_end, float spread_pi); // @note: singature different from DWARF
 void sh2gfw_setparal3LGT_blk(void* pbman, float* light_dir0, float* light_dir1, float* light_dir2, float* col0, float* col1, float* col2, float* ambient);
 void sh2gfw_LightSet_ForBG(void* pb_man);
 void sh2gfw_Store_SpotLight(void);
