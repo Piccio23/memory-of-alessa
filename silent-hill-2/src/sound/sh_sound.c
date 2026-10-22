@@ -38,11 +38,11 @@ static int SeChange2Dto3D(int se /* r2 */);
 static int SeChange3Dto2D(int se /* r2 */);
 
 int se_3d_channel_max;
-Se_BgmBuffer bgm;
-u_char snd_data_buffer[20480];
+Se_BgmBuffer bgm; // size: 0x4C, address: 0x10E5880
+u_char snd_data_buffer[20480] __attribute__((aligned(64))); // size: 0x5000, address: 0x10E0880
 float se_f_work;
-Se2D_ManageData se_2d_manage_data[4];
-Se3D_ChannelData se_3d_channel_data[8];
+Se2D_ManageData se_2d_manage_data[4]; // size: 0x100, address: 0x10E0750
+Se3D_ChannelData se_3d_channel_data[8]; // size: 0x180, address: 0x10E05D0
 int se_3d_channel_number;
 int se_load_data;
 int se_3d_load_data;
