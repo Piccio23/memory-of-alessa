@@ -600,10 +600,10 @@ int loadBgMem_CheckRequest(loadBgMem_LoadCtrl* ctrl, int* reqUnits) {
     for (; Units > 0; Units--, UnitL++, UnitR++) {
         
         switch (_loadBgMem_CmpUnitLR(UnitL, UnitR)) {
-            case -3:
-            case 2:
             case 3:
                 ret++; req++; break;
+            case -3:
+            case 2:
             case 4:
                 break;
             case 1:
@@ -657,6 +657,7 @@ int _loadBgMem_CleanupNonRequest(loadBgMem_LoadCtrl* ctrl) {
             
             
             case -3:
+            case 2:
                 if (_loadBgMem_ClearUnitL(UnitL) != 1) {
             
                     ret = 0;
@@ -665,7 +666,6 @@ int _loadBgMem_CleanupNonRequest(loadBgMem_LoadCtrl* ctrl) {
             case -1:
             case 0:
             case 1:
-            case 2:
             case 3:
             case 4:
             case -2:
