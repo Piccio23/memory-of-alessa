@@ -961,6 +961,7 @@ void SeBgmChange(void) {
 }
 
 void SeBgmCall(int bgm_no /* r2 */) {
+    // @todo: identify values (and are they decimal?)
     static int bgm_list[43][2] = { 
         { 0x0000, 0x0000 },
         { 0x13C9, 0xC3C2 },
