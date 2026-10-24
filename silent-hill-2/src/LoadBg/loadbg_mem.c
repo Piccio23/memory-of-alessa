@@ -461,7 +461,7 @@ int loadBgMem_SetRequest(loadBgMem_LoadCtrl* ctrl, loadBgMem_Sect** SectList) {
         unitNoE = sofsE / UnitSize;
         sUnits = unitNoE - unitNoS;
         UnitR = &UnitRArray[unitNoS];
-        ASSERT_ON_LINE(unitNoE<= Units, 782);
+        ASSERT_ON_LINE(unitNoE<=Units, 782);
 
 
         if (Dir < 0) {
