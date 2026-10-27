@@ -208,6 +208,8 @@ void enNSEInitData(EnLOCAL_DATA* dp) {
     }
 }
 #else
+short vitarity_0x002AA680[5] = { 400, 500, 800, 1500, 9999 }; // r29+0x60
+float endurance_0x002AA690[5] = { 10.0f, 190.0f, 285.0f, 380.0f, 450.0f }; // r29+0x40    
 INCLUDE_ASM("asm/nonmatchings/Enemy/en_nse", enNSEInitData);
 #endif
 
@@ -942,13 +944,13 @@ static void enNSESetMoveCount(EnLOCAL_DATA* dp) {
     enSetAnimeCount(dp, n * 2048);
 }
 
+#pragma divbyzerocheck off
+
 static void enNSESetDc(EnLOCAL_DATA* dp) {
     enSetTimer(dp, 200);
     dp->nse.dc = 0;
     dp->nse.dcm = ((shRandI() >> 10) % (enGetMode() + 3)) + 4;
 }
-
-#pragma divbyzerocheck off
 
 static void enNSESoundSigns(EnLOCAL_DATA* dp) {
     int signs;
